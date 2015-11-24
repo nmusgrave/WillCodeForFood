@@ -16,3 +16,7 @@ $ open http://localhost:5000
 
 ## Remote
 https://stark-inlet-9527.herokuapp.com/
+
+### Package Structure
+Client: views, public
+Server: bin, node_modules, routes
