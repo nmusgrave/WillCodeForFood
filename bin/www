@@ -32,9 +32,10 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 /**
- * Set up web socket
+ * Set up web socket routes
  */
 io.on('connection', function (socket) {
+  // send some response to the client for a connection
   socket.emit('news', { hello: 'world' });
   socket.on('my other event', function (data) {
     console.log(data);
