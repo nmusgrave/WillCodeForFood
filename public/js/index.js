@@ -12,11 +12,11 @@ socket.on('news', function (data) {
  * several ms.
  */
 socket.on('ping', function (data) {
-  var latency = +new Date() - data.startTime;
-  // distance = rate * time
-  var lightSpeed = 2 * 10^8; // meters per s, in optical fiber
-  var distance = (lightSpeed * latency * 0.001) * 0.001;
-  console.log(latency + ' ' + distance + ' km');
+  var curTime = +new Date();
+  var latencyServer = curTime - data.serverTime;
+  var latencyRTT = curTime - data.startTime;
+  console.log('ToServer: ' + latencyServer + ' RTT: ' +
+   latencyRTT);
 });
 
 setInterval(function () {
