@@ -14,8 +14,8 @@ socket.on('news', function (data) {
 socket.on('ping', function (data) {
   var latency = +new Date() - data.startTime;
   // distance = rate * time
-  var lightSpeed = 3 * 10^8; // meters per s
-  var distance = (lightSpeed * latency / 1000) / 1000;
+  var lightSpeed = 2 * 10^8; // meters per s, in optical fiber
+  var distance = (lightSpeed * latency * 0.001) * 0.001;
   console.log(latency + ' ' + distance + ' km');
 });
 
