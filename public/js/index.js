@@ -11,7 +11,7 @@ socket.on('ping', function (data) {
   var curTime = +new Date();
   var latencyServer = curTime - data.serverTime;
   var latencyRTT = curTime - data.startTime;
-  console.log('ToServer: ' + latencyServer + ' RTT: ' + latencyRTT);
+  //console.log('ToServer: ' + latencyServer + ' RTT: ' + latencyRTT);
 });
 
 setInterval(function () {
@@ -57,5 +57,6 @@ socket.on('update', function (data) {
     $('ul').append($('<li>').attr('id', data.id).text(''));
   }
   // Update the text of the list item
-  $('#' + data.id).text(data.update.text);
+  console.log(data.color);
+  $('#' + data.id).css('color', data.color).text(data.update.text);
 });
