@@ -1,13 +1,13 @@
 /**
  * Retreive client input, and send out updates from other users
  */
-var inputs = [];
-
+var userInputs = {};
 var input = function(socket) {
   socket.on('input', function (data) {
-    inputs.push(data);
     console.log('accepted: ' + data);
+    userInputs[socket.id] = data;
     socket.broadcast.emit('update', {
+      id: socket.id,
       update: data
     });
   });

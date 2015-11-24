@@ -23,15 +23,26 @@ setInterval(function () {
  * Update web page with user input
  */
 // Grab text from a user, and send to server
-$(document).ready(function() {  
+// Keep track of all users contributing text
+var socketIDs = new Set();
+socketIDs.add(socket.id);
+
+$(document).ready(function() {
+  // Create list element for this client
+  var createdLI = false;
   $('input').keyup(function() {
+    // Insert new list element when user first types
+    if (!createdLI) {
+      $('ul').append($('<li>').attr('id', socket.id).text(''));
+      createdLI = true;
+    }
     if (this.value.length === 0) {
       return;
     }
     var userInput = this.value;
     console.log('input: ' + userInput);
     // Display this user's input
-    $('ul').append($('<li>').text(userInput));
+    $('#' + socket.id).text(userInput);
     // Notify server of input
     socket.emit('input', { text: userInput, });
   });
@@ -40,5 +51,11 @@ $(document).ready(function() {
 // Display updates from other users
 socket.on('update', function (data) {
   console.log('update: ' + data.update.text);
-  $('ul').append($('<li>').text(data.update.text));
+  if (!socketIDs.has(data.id)) {
+    // Save this new ID and create an html list item
+    socketIDs.add(data.id);
+    $('ul').append($('<li>').attr('id', data.id).text(''));
+  }
+  // Update the text of the list item
+  $('#' + data.id).text(data.update.text);
 });
