@@ -13,7 +13,10 @@ socket.on('news', function (data) {
  */
 socket.on('ping', function (data) {
   var latency = +new Date() - data.startTime;
-  console.log(latency);
+  // distance = rate * time
+  var lightSpeed = 3 * 10^8; // meters per s
+  var distance = (lightSpeed * latency / 1000) / 1000;
+  console.log(latency + ' ' + distance + ' km');
 });
 
 setInterval(function () {
