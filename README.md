@@ -10,6 +10,9 @@ $ npm install
 ## Launch server
 
 ```
-$ npm start
-$ open http://localhost:3000
+$ heroku local
+$ open http://localhost:5000
 ```
+
+## Remote
+https://stark-inlet-9527.herokuapp.com/
