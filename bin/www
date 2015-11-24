@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('WillCodeForFood:server');
 var http = require('http');
+var ping = require('../routes/ping');
 
 /**
  * Get port from environment and store in Express.
@@ -20,7 +21,6 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-
 var io = require('socket.io')(server);
 
 /**
@@ -40,14 +40,9 @@ io.on('connection', function (socket) {
   socket.on('my other event', function (data) {
     console.log(data);
   });
-  // Pass back current time to the client
-  socket.on('ping', function(data) {
-    socket.emit('ping', {
-      startTime: data.startTime,
-      serverTime: +new Date()
-    });
-  });
+  ping(socket);
 });
+
 
 /**
  * Normalize a port into a number, string, or false.

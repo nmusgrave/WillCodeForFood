@@ -2,10 +2,14 @@
  * Respond to client with current time
  */
 
-// Return ms
-var ping = socket.on('ping', function(data) {
-  console.log('received ping');
-  return +new Date();
-});
+// Pass back current time (ms) to the client
+var ping = function(socket) {
+  socket.on('ping', function(data) {
+    socket.emit('ping', {
+      startTime: data.startTime,
+      serverTime: +new Date()
+    });
+  });
+};
 
-module.exports.ping = ping
+module.exports = ping;
