@@ -8,8 +8,11 @@ var socket = io.connect();
  * several ms.
  */
 socket.on('ping', function (data) {
-  var latency = +new Date() - data.startTime;
-  console.log(latency);
+  var curTime = +new Date();
+  var latencyServer = curTime - data.serverTime;
+  var latencyRTT = curTime - data.startTime;
+  console.log('ToServer: ' + latencyServer + ' RTT: ' +
+   latencyRTT);
 });
 
 setInterval(function () {
