@@ -3,11 +3,6 @@
  */
 var socket = io.connect();
 
-socket.on('news', function (data) {
-  //console.log(data);
-  socket.emit('my other event', { my: 'data' });
-});
-
 /**
  * Calculate latency of connecting to server, every
  * several ms.
@@ -16,8 +11,7 @@ socket.on('ping', function (data) {
   var curTime = +new Date();
   var latencyServer = curTime - data.serverTime;
   var latencyRTT = curTime - data.startTime;
-  console.log('ToServer: ' + latencyServer + ' RTT: ' +
-   latencyRTT);
+  console.log('ToServer: ' + latencyServer + ' RTT: ' + latencyRTT);
 });
 
 setInterval(function () {
@@ -29,17 +23,22 @@ setInterval(function () {
  * Update web page with user input
  */
 // Grab text from a user, and send to server
-$(document).ready(function() {
-  $('input').keypress(function() {
+$(document).ready(function() {  
+  $('input').keyup(function() {
+    if (this.value.length === 0) {
+      return;
+    }
     var userInput = this.value;
+    console.log('input: ' + userInput);
+    // Display this user's input
+    $('ul').append($('<li>').text(userInput));
+    // Notify server of input
     socket.emit('input', { text: userInput, });
   });
 });
 
+// Display updates from other users
 socket.on('update', function (data) {
-  console.log('updating ' + data);
-  $(document).ready(function(data) {
-    console.log('appending ' + data);
-    $('ul').append(data);
-  });
+  console.log('update: ' + data.update.text);
+  $('ul').append($('<li>').text(data.update.text));
 });

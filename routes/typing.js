@@ -7,10 +7,10 @@ var input = function(socket) {
   socket.on('input', function (data) {
     inputs.push(data);
     console.log('accepted: ' + data);
-    sockets.broadcast.emit('update', {
+    socket.broadcast.emit('update', {
       update: data
     });
   });
 };
 
-module.exports = input
+module.exports = input;
