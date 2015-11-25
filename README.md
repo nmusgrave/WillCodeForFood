@@ -1,7 +1,8 @@
 # WillCodeForFood
 CSE461 Project 3, Autumn 2015
 
-# Get dependencies
+# Setup
+## Get dependencies
 
 ```
 $ npm install
@@ -17,9 +18,9 @@ $ open http://localhost:5000
 ## Remote
 https://stark-inlet-9527.herokuapp.com/
 
-### Package Structure
+# Package Structure
 
-#### Client
+## Client
 
 *views/* contains .jade files. [Jade](http://jade-lang.com/) is a templating language that is more succinct than HTML. The templates are rendered by the server. The client's view of the website is initialized during a preliminary GET request (see routes/index.js). The client sends the GET request to the server with the Jade templates, and the server responds with HTML for the browser to render. 
 
@@ -31,7 +32,7 @@ https://stark-inlet-9527.herokuapp.com/
 
 *public/* TODO
 
-#### Server
+## Server
 
 *bin/* TODO
 
@@ -39,7 +40,7 @@ https://stark-inlet-9527.herokuapp.com/
 
 *routes/* TODO
 
-## Latency Theoretical Limit
+# Latency Theoretical Limit
 
 1. Find distance between both lat/lng:
 http://freegeoip.net/json/
