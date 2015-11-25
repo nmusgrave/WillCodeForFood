@@ -3,6 +3,7 @@
  */
 var socket = io.connect();
 
+var Matter = window.Matter;//require('../node_modules/matter-js/build/matter.min.js');
 
 /**
  * Calculate latency of connecting to server, every
@@ -64,36 +65,30 @@ socket.on('update', function (data) {
 
 
 /**
- * Move circles on canvas from user input
+ * Create a physics environment, and draw within it.
  */
-var canvas, ctx;
-var center = {x:0, y:0};
-var radius = 20;
-var startAngle = 0;       // radians
-var endAngle = Math.PI*2; // radians
-var move = {dx:5, dy:5};
+// run the engine
+var Engine = Matter.Engine,
+    World = Matter.World,
+    Bodies = Matter.Bodies;
+var engine;
+function createWorld() {
+  // create two boxes and a ground
+  var boxA = Bodies.rectangle(400, 200, 80, 80);
+  var boxB = Bodies.rectangle(450, 50, 80, 80);
+  var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
-function drawCircle() {
-  ctx.beginPath();
-  ctx.arc(center.x, center.y, radius, startAngle, endAngle);
-  ctx.fillStyle = 'bisque';
-  ctx.fill();
-  ctx.closePath();
-};
-
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawCircle();
-  center.x += move.dx;
-  center.y += move.dy;
+  // add all of the bodies to the world
+  World.add(engine.world, [boxA, boxB, ground]);
+  Engine.run(engine);
 }
 
 $(document).ready(function() {
-  canvas = document.getElementById('canvas');
-  ctx = canvas.getContext('2d');
   drawBulletChat();
-  setInterval(draw, 30);
-});
 
+  // create a Matter.js engine
+  engine = Engine.create(document.getElementById('canvas-container'));
+  createWorld();
+});
 
 
