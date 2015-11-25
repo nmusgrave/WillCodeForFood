@@ -30,16 +30,28 @@ https://stark-inlet-9527.herokuapp.com/
   
   views/error.jade: error page
 
-*public/* TODO
+*public/* contains additional information for the client to render and interact with the website. 
 
+  public/images/ and public/stylesheets/: make the page pretty
+  
+  public/js/: Javascript controllers for the client's experience. Manipulates DOM elements (using [JQuery](http://api.jquery.com/)) due to user input and input from the server. Sends any necessary updates to the server.
+  
 ## Server
 
-*bin/* TODO
+Written in [ExpressJS](http://expressjs.com/) and [NodeJS](https://nodejs.org/en/). Both provide functionality to write server-side applications. They provide a framework, and handle things like page routing (ExpressJS), HTTP requests (ExpressJS), and asynchronous event-driven applications (NodeJS). NodeJS also provides a huge package manager (npm), that makes installing dependencies very easy.
 
-*node_modules/* TODO
+*app.js*: loads dependencies, initializes the server-side application, routing, error handling, etc.
+  
+*[Procfile](https://devcenter.heroku.com/articles/procfile#procfile-naming-and-location)*: used by Heroku to create various processes while hosting the application.
 
-*routes/* TODO
+*bin/www*: second initialization step for the app. 
 
+*node_modules/*: contains installed dependencies. Additional modules can be installed using npm.
+
+*routes/*: server-side controllers.
+
+  *routes/index.js*: responds to client's request for HTML to render, allows the web page to be created.
+  
 # Latency Theoretical Limit
 
 1. Find distance between both lat/lng:
