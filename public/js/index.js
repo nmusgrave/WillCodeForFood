@@ -3,6 +3,7 @@
  */
 var socket = io.connect();
 
+
 /**
  * Calculate latency of connecting to server, every
  * several ms.
@@ -19,6 +20,7 @@ setInterval(function () {
   socket.emit('ping', { startTime: startTime });
 }, 100);
 
+
 /**
  * Update web page with user input
  */
@@ -26,8 +28,7 @@ setInterval(function () {
 // Keep track of all users contributing text
 var socketIDs = new Set();
 socketIDs.add(socket.id);
-
-$(document).ready(function() {
+function drawBulletChat() {
   // Create list element for this client
   var createdLI = false;
   $('input').keyup(function() {
@@ -46,7 +47,7 @@ $(document).ready(function() {
     // Notify server of input
     socket.emit('input', { text: userInput, });
   });
-});
+};
 
 // Display updates from other users
 socket.on('update', function (data) {
@@ -60,3 +61,39 @@ socket.on('update', function (data) {
   console.log(data.color);
   $('#' + data.id).css('color', data.color).text(data.update.text);
 });
+
+
+/**
+ * Move circles on canvas from user input
+ */
+var canvas, ctx;
+var center = {x:0, y:0};
+var radius = 20;
+var startAngle = 0;       // radians
+var endAngle = Math.PI*2; // radians
+var move = {dx:5, dy:5};
+
+function drawCircle() {
+  ctx.beginPath();
+  ctx.arc(center.x, center.y, radius, startAngle, endAngle);
+  ctx.fillStyle = 'bisque';
+  ctx.fill();
+  ctx.closePath();
+};
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawCircle();
+  center.x += move.dx;
+  center.y += move.dy;
+}
+
+$(document).ready(function() {
+  canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
+  drawBulletChat();
+  setInterval(draw, 30);
+});
+
+
+

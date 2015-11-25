@@ -19,6 +19,7 @@ https://stark-inlet-9527.herokuapp.com/
 
 ### Package Structure
 Client: views, public
+
 Server: bin, node_modules, routes
 
 ## Latency Theoretical Limit
