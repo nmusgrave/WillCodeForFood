@@ -24,17 +24,17 @@ https://stark-inlet-9527.herokuapp.com/
 
 *views/* contains .jade files. [Jade](http://jade-lang.com/) is a templating language that is more succinct than HTML. The templates are rendered by the server. The client's view of the website is initialized during a preliminary GET request (see routes/index.js). The client sends the GET request to the server with the Jade templates, and the server responds with HTML for the browser to render. 
 
-  views/layout.jade: frame for the web page
+  *views/layout.jade*: frame for the web page
   
-  views/index.jade: contents are inserted into views/layout.jade:11, at the "block content" tag.
+  *views/index.jade*: contents are inserted into views/layout.jade:11, at the "block content" tag.
   
-  views/error.jade: error page
+  *views/error.jade*: error page
 
 *public/* contains additional information for the client to render and interact with the website. 
 
-  public/images/ and public/stylesheets/: make the page pretty
+  *public/images/* and *public/stylesheets/*: make the page pretty
   
-  public/js/: Javascript controllers for the client's experience. Manipulates DOM elements (using [JQuery](http://api.jquery.com/)) due to user input and input from the server. Sends any necessary updates to the server.
+  *public/js/*: Javascript controllers for the client's experience. Manipulates DOM elements (using [JQuery](http://api.jquery.com/)) due to user input and input from the server. Sends any necessary updates to the server.
   
 ## Server
 
