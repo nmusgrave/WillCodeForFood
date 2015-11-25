@@ -21,15 +21,23 @@ https://stark-inlet-9527.herokuapp.com/
 
 #### Client
 
-views/ contains .jade files. [Jade](http://jade-lang.com/) is a templating language that is more succinct than HTML. The templates are rendered by the server. The client's view of the website is initialized during a preliminary GET request (see routes/index.js). The client sends the GET request to the server with the Jade templates, and the server responds with HTML for the browser to render. 
+*views/* contains .jade files. [Jade](http://jade-lang.com/) is a templating language that is more succinct than HTML. The templates are rendered by the server. The client's view of the website is initialized during a preliminary GET request (see routes/index.js). The client sends the GET request to the server with the Jade templates, and the server responds with HTML for the browser to render. 
 
   views/layout.jade: frame for the web page
+  
   views/index.jade: contents are inserted into views/layout.jade:11, at the "block content" tag.
+  
   views/error.jade: error page
 
-public/
+*public/* TODO
 
-Server: bin, node_modules, routes
+#### Server
+
+*bin/* TODO
+
+*node_modules/* TODO
+
+*routes/* TODO
 
 ## Latency Theoretical Limit
 
