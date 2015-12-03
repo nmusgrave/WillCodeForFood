@@ -3,7 +3,7 @@
  */
 var socket = io.connect();
 
-var Matter = window.Matter;//require('../node_modules/matter-js/build/matter.min.js');
+var Matter = window.Matter;
 
 /**
  * Calculate latency of connecting to server, every
@@ -48,7 +48,7 @@ function drawBulletChat() {
     // Notify server of input
     socket.emit('input', { text: userInput, });
   });
-};
+}
 
 // Display updates from other users
 socket.on('update', function (data) {
@@ -64,31 +64,14 @@ socket.on('update', function (data) {
 });
 
 
-/**
- * Create a physics environment, and draw within it.
+/*
+ *  Set up and run physics engine
  */
-// run the engine
-var Engine = Matter.Engine,
-    World = Matter.World,
-    Bodies = Matter.Bodies;
-var engine;
-function createWorld() {
-  // create two boxes and a ground
-  var boxA = Bodies.rectangle(400, 200, 80, 80);
-  var boxB = Bodies.rectangle(450, 50, 80, 80);
-  var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
-
-  // add all of the bodies to the world
-  World.add(engine.world, [boxA, boxB, ground]);
-  Engine.run(engine);
-}
-
 $(document).ready(function() {
   drawBulletChat();
 
-  // create a Matter.js engine
-  engine = Engine.create(document.getElementById('canvas-container'));
-  createWorld();
+  // create and run a Matter.js engine
+  game = init(document.getElementById('canvas-container'));
+  game.run();
 });
-
 
