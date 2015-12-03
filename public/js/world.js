@@ -10,6 +10,7 @@ var Engine = Matter.Engine,
     Composite = Matter.Composite,
     Constraint = Matter.Constraint;
 var engine;
+var world;
 
 var Game = {};
 var KEY_UP = 'i';
@@ -34,6 +35,7 @@ var FEATURES_WHEEL = {};
 
 var init = function(container) {
   engine = Engine.create(container);
+  world = engine.world;
   Game.initBodies();
   Game.initEvents();
   return Game;
@@ -84,9 +86,10 @@ Game.initBodies = function() {
 
   this.ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
   this.car = Bodies.rectangle(400, 200, 80, 80, FEATURES_CAR);
-  engine.world.gravity.y = 0;
+
+  world.gravity.y = 0;
   // add all of the bodies to the world
-  World.add(engine.world, [this.car, this.ground]);
+  World.add(world, [this.car, this.ground]);
 };
 
 Game.initEvents = function() {
@@ -100,8 +103,7 @@ Game.initEvents = function() {
     Body.rotate(car, ANGLE_LEFT);
   });
   Events.on(engine, 'turnRight', function(event) {
-        var car = world.bodies[0];
-
+    var car = world.bodies[0];
     Body.rotate(car, ANGLE_RIGHT);
   });
 };
