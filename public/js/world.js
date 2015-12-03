@@ -94,16 +94,14 @@ Game.initBodies = function() {
 
 Game.initEvents = function() {
   Events.on(engine, 'accelerate', function(event) {
-    var car = world.bodies[0];
+    var car = Game.car;
     var parallelVector = Vector.mult({x: Math.cos(car.angle), y: Math.sin(car.angle)}, ACCELERATION);
     Body.applyForce(car, car.position, Vector.add(car.force, parallelVector));
   });
   Events.on(engine, 'turnLeft', function(event) {
-    var car = world.bodies[0];
-    Body.rotate(car, ANGLE_LEFT);
+    Body.rotate(Game.car, ANGLE_LEFT);
   });
   Events.on(engine, 'turnRight', function(event) {
-    var car = world.bodies[0];
-    Body.rotate(car, ANGLE_RIGHT);
+    Body.rotate(Game.car, ANGLE_RIGHT);
   });
 };
