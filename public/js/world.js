@@ -13,9 +13,9 @@ var engine;
 var world;
 
 var Game = {};
-var KEY_UP = 'i';
-var KEY_LEFT = 'j';
-var KEY_RIGHT = 'l';
+var KEY_UP = 'w';
+var KEY_LEFT = 'a';
+var KEY_RIGHT = 'd';
 
 var ACCELERATION = 1;
 var ANGLE_LEFT = -0.1;
@@ -47,15 +47,14 @@ var keypresses = {};
 Game.run = function() {
   // register key presses to steer the car
   $(document).keydown(function(event){
-    var key = String.fromCharCode(event.which);
+    var key = String.fromCharCode(event.which).toLowerCase();
     keypresses[key] = true;
   });
   $(document).keyup(function(event){
-    var key = String.fromCharCode(event.which);
+    var key = String.fromCharCode(event.which).toLowerCase();
     keypresses[key] = false;
   });
 
-  Engine.update(engine, 100);
   Engine.run(engine);
 };
 
@@ -95,28 +94,22 @@ Game.initBodies = function() {
 };
 
 Game.initEvents = function() {
-  // Before each frame, check the key presses and update the car.
+  var car = Game.car;
+  // Before rendering each frame, check the key presses and update the car's position.
   Events.on(engine, 'beforeTick', function() {
     if (keypresses[KEY_UP]) {
       // Accelerate
+      var parallelVector = Vector.mult({x: Math.cos(car.angle), y: Math.sin(car.angle)}, ACCELERATION);
+      Body.applyForce(car, car.position, Vector.add(car.force, parallelVector));
+      console.log('test');
     }
     if (keypresses[KEY_LEFT]) {
       // Turn steering wheel left
+      Body.rotate(car, ANGLE_LEFT);
     }
     if (keypresses[KEY_RIGHT]) {
       // Turn steering wheel right
+      Body.rotate(car, ANGLE_RIGHT);
     }
-  });
-
-  Events.on(engine, 'accelerate', function(event) {
-    var car = Game.car;
-    var parallelVector = Vector.mult({x: Math.cos(car.angle), y: Math.sin(car.angle)}, ACCELERATION);
-    Body.applyForce(car, car.position, Vector.add(car.force, parallelVector));
-  });
-  Events.on(engine, 'turnLeft', function(event) {
-    Body.rotate(Game.car, ANGLE_LEFT);
-  });
-  Events.on(engine, 'turnRight', function(event) {
-    Body.rotate(Game.car, ANGLE_RIGHT);
   });
 };
