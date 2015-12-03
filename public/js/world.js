@@ -32,18 +32,20 @@ var init = function(container) {
   return Game;
 };
 
+// Stores current keypress states
+var keypresses = {};
+
 Game.run = function() {
   // register key presses to steer the car
-  $(document).keypress(function(event){
+  $(document).keydown(function(event){
     var key = String.fromCharCode(event.which);
-    if (key == KEY_UP) {
-      Events.trigger(engine, 'accelerate', event);
-    } else if (key == KEY_LEFT) {
-      Events.trigger(engine, 'turnLeft', event);
-    } else if (key == KEY_RIGHT) {
-      Events.trigger(engine, 'turnRight', event);
-    }
-   });
+    keypresses[key] = true;
+  });
+  $(document).keyup(function(event){
+    var key = String.fromCharCode(event.which);
+    keypresses[key] = false;
+  });
+
   Engine.update(engine, 100);
   Engine.run(engine);
 };
@@ -65,6 +67,19 @@ Game.initBodies = function() {
 };
 
 Game.initEvents = function() {
+  // Before each frame, check the key presses and update the car.
+  Events.on(engine, 'beforeTick', function() {
+    if (keypresses[KEY_UP]) {
+      // Accelerate
+    }
+    if (keypresses[KEY_LEFT]) {
+      // Turn steering wheel left
+    }
+    if (keypresses[KEY_RIGHT]) {
+      // Turn steering wheel right
+    }
+  });
+
   Events.on(engine, 'accelerate', function(event) {
     var car = world.bodies[0];
     var pre = car.postion;
