@@ -17,9 +17,9 @@ var KEY_UP = 'w';
 var KEY_LEFT = 'a';
 var KEY_RIGHT = 'd';
 
-var ACCELERATION = 1;
-var ANGLE_LEFT = -0.1;
-var ANGLE_RIGHT = 0.1;
+var ACCELERATION = 0.3;
+var ANGLE_LEFT = -0.05;
+var ANGLE_RIGHT = 0.05;
 
 var CAR_DIMENSIONS = {w: 80, h: 100};
 var FEATURES_CAR = {
@@ -85,6 +85,18 @@ Game.initBodies = function() {
   Composite.addConstraint(car, wheelConstraint);
   */
 
+  var objs = [];
+  for (var i = 0 ; i < 1000; ++i) {
+    var x = Math.random() * 800;
+    var y = Math.random() * 600;
+    var w = Math.random() * 20;
+    var h = Math.random() * 20;
+    if ((x > 400 && x < 480) && (y > 200 && y < 280)) {
+      continue;
+    }
+    objs.push(Bodies.rectangle(x, y, w, h));
+  }
+  World.add(world, objs);
   this.ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
   this.car = Bodies.rectangle(400, 200, 80, 80, FEATURES_CAR);
 
