@@ -8,6 +8,7 @@ var Engine = Matter.Engine,
     Events = Matter.Events,
     Vector = Matter.Vector;
 var engine;
+var world;
 
 var Game = {};
 var KEY_UP = 'i';
@@ -21,6 +22,7 @@ var ANGLE_RIGHT = -0.1;
 
 var init = function(container) {
   engine = Engine.create(container);
+  world = engine.world;
   Game.initBodies();
   Game.initEvents();
   Game.car = {
@@ -52,19 +54,19 @@ Game.initBodies = function() {
     density: 0.004,
     friction: 0.3,
     frictionAir: 0.9,
-    postion: {x: 0, y: 0} 
+    postion: {x: 0, y: 0}
   };
   var car = Bodies.rectangle(400, 200, 80, 80, carOptions);
   var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
-  engine.world.gravity.y = 0;
+  world.gravity.y = 0;
   // add all of the bodies to the world
-  World.add(engine.world, [car, ground]);
+  World.add(world, [car, ground]);
 };
 
 Game.initEvents = function() {
   Events.on(engine, 'accelerate', function(event) {
-    var car = engine.world.bodies[0];
+    var car = world.bodies[0];
     var pre = car.postion;
 
     var parallelVector = Vector.mult({x: Math.cos(car.angle), y: Math.sin(car.angle)}, 10);
@@ -74,14 +76,14 @@ Game.initEvents = function() {
     console.log('ACCELERATE', pre, post);
   });
   Events.on(engine, 'turnLeft', function(event) {
-    var car = engine.world.bodies[0];
+    var car = world.bodies[0];
     var pre = car.postion;
     Body.rotate(car, ANGLE_LEFT);
     var post = car.position;
     console.log('TURN LEFT', pre, post);
   });
   Events.on(engine, 'turnRight', function(event) {
-    var car = engine.world.bodies[0];
+    var car = world.bodies[0];
     var pre = car.postion;
     Body.rotate(car, ANGLE_RIGHT);
     var post = car.position;
