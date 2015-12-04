@@ -133,46 +133,51 @@ Game.initEvents = function() {
   });
   var renderOptions = engine.render.options;
   renderOptions.hasBounds = true;
+  renderOptions.wireframes = false;
 };
 
 Game.initMap = function() {
+  var a = 0,
+      b = 0,
+      c = 0,
+      d = 0;
   world.bounds.min.x = -500;
   world.bounds.min.y = -500;
   world.bounds.max.x = 1500;
   world.bounds.max.y = 1500;
   World.add(world, [
     // top
-    Bodies.rectangle(950, 300, 900, 10, { isStatic: true}),
+    Bodies.rectangle(950 + a, 300 + b, 900 + c, 10 + d, { isStatic: true}),
     // bot
-    Bodies.rectangle(900, 1300, 1000, 10, { isStatic: true}),
+    Bodies.rectangle(900 + a, 1300 + b, 1000 + c, 10 + d, { isStatic: true}),
     // left
-    Bodies.rectangle(400, 900, 10, 800, { isStatic: true}),
+    Bodies.rectangle(400 + a, 900 + b, 10 + c, 800 + d, { isStatic: true}),
     // right
-    Bodies.rectangle(1400, 800, 10, 1000, { isStatic: true}),
+    Bodies.rectangle(1400 + a, 800 + b, 10 + c, 1000 + d, { isStatic: true}),
 
     // top entry and dest
-    Bodies.rectangle(400, 400, 200, 10, { isStatic: true}),
-    Bodies.rectangle(400, 300, 10, 200, { isStatic: true}),
-    Bodies.rectangle(450, 200, 100, 10, { isStatic: true}),
-    Bodies.rectangle(500, 250, 10, 100, { isStatic: true}),
-    Bodies.rectangle(300, 450, 10, 100, { isStatic: true}),
-    Bodies.rectangle(350, 500, 100, 10, { isStatic: true}),
+    Bodies.rectangle(400 + a, 400 + b, 200 + c, 10 + d, { isStatic: true}),
+    Bodies.rectangle(400 + a, 300 + b, 10 + c, 200 + d, { isStatic: true}),
+    Bodies.rectangle(450 + a, 200 + b, 100 + c, 10 + d, { isStatic: true}),
+    Bodies.rectangle(500 + a, 250 + b, 10 + c, 100 + d, { isStatic: true}),
+    Bodies.rectangle(300 + a, 450 + b, 10 + c, 100 + d, { isStatic: true}),
+    Bodies.rectangle(350 + a, 500 + b, 100 + c, 10 + d, { isStatic: true}),
 
     // roads
-    Bodies.rectangle(500, 800, 10, 800, { isStatic: true}),
-    Bodies.rectangle(1300, 800, 10, 800, { isStatic: true}),
-    Bodies.rectangle(900, 1200, 800, 10, { isStatic: true}),
+    Bodies.rectangle(500 + a, 800 + b, 10 + c, 800 + d, { isStatic: true}),
+    Bodies.rectangle(1300 + a, 800 + b, 10 + c, 800 + d, { isStatic: true}),
+    Bodies.rectangle(900 + a, 1200 + b, 800 + c, 10 + d, { isStatic: true}),
 
-    Bodies.rectangle(600, 700, 10, 800, { isStatic: true}),
-    Bodies.rectangle(1200, 700, 10, 800, { isStatic: true}),
+    Bodies.rectangle(600 + a, 700 + b, 10 + c, 800 + d, { isStatic: true}),
+    Bodies.rectangle(1200 + a, 700 + b, 10 + c, 800 + d, { isStatic: true}),
 
-    Bodies.rectangle(700, 800, 10, 800, { isStatic: true}),
-    Bodies.rectangle(1100, 800, 10, 800, { isStatic: true}),
+    Bodies.rectangle(700 + a, 800 + b, 10 + c, 800 + d, { isStatic: true}),
+    Bodies.rectangle(1100 + a, 800 + b, 10 + c, 800 + d, { isStatic: true}),
 
-    Bodies.rectangle(800, 700, 10, 800, { isStatic: true}),
-    Bodies.rectangle(1000, 700, 10, 800, { isStatic: true}),
+    Bodies.rectangle(800 + a, 700 + b, 10 + c, 800 + d, { isStatic: true}),
+    Bodies.rectangle(1000 + a, 700 + b, 10 + c, 800 + d, { isStatic: true}),
 
-    Bodies.rectangle(900, 800, 10, 800, { isStatic: true}),
+    Bodies.rectangle(900 + a, 800 + b, 10 + c, 800 + d, { isStatic: true}),
     // Bodies.rectangle(200, 150, 650, 20, { isStatic: true, angle: Math.PI * 0.06 }),
   ]);
 
