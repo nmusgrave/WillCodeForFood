@@ -2,21 +2,25 @@ var Bodies = Matter.Bodies,
     Composite = Matter.Composite,
     Constraint = Matter.Constraint;
 
-var CAR_DIMENSIONS = {w: 50, h: 100};
+var CAR_DIMENSIONS = {w: 20, h: 40};
 var CAR_FEATURES = {
+  /*
   density: 5,
   friction: 0.3,
   frictionAir: 0.9,
   postion: {x: 0, y: 0},
+  */
 };
 
-var WHEEL_DIMENSIONS = {w: 20, h: 30};
+var WHEEL_DIMENSIONS = {w: 8, h: 10};
 var WHEEL_FEATURES = {
+  /*
   restitution: 0.5, 
-  friction: 0.9,
+  friction: 0.3,
   frictionStatic: 10,
-  slop: 0.5,
-  density: 0.01
+  slop: 0.0,
+  density: 5
+  */
 };
 
 /*
