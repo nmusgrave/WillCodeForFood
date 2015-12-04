@@ -27,7 +27,8 @@ var FEATURES_CAR = {
   density: 0.004,
   friction: 0.3,
   frictionAir: 0.9,
-  postion: {x: 0, y: 0}
+  postion: {x: 0, y: 0},
+  mass: 30,
 };
 
 var WHEEL_DIMENSIONS = {w: 20, h: 40};
@@ -87,34 +88,34 @@ Game.initBodies = function() {
   Composite.addConstraint(car, wheelConstraint);
   */
 
-  var objs = [];
-  for (var i = 0 ; i < 1000; ++i) {
-    var x = Math.random() * 800;
-    var y = Math.random() * 600;
-    var w = Math.random() * 20;
-    var h = Math.random() * 20;
-    if ((x > 400 && x < 480) && (y > 200 && y < 280)) {
-      continue;
-    }
-    objs.push(Bodies.rectangle(x, y, w, h));
-  }
-  World.add(world, objs);
-  this.ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
-  this.car = Bodies.rectangle(400, 200, 80, 80, FEATURES_CAR);
+  // var objs = [];
+  // for (var i = 0 ; i < 100; ++i) {
+  //   var x = Math.random() * 800;
+  //   var y = Math.random() * 600;
+  //   var w = Math.random() * 20;
+  //   var h = Math.random() * 20;
+  //   if ((x > 400 && x < 480) && (y > 200 && y < 280)) {
+  //     continue;
+  //   }
+  //   objs.push(Bodies.rectangle(x, y, w, h));
+  // }
+  // World.add(world, objs);
+  // this.ground = Bodies.rectangle(0, 0, 500, 10, { isStatic: true });
+  this.car = Bodies.rectangle(400, 300, 40,20, FEATURES_CAR);
 
   world.gravity.y = 0;
   // add all of the bodies to the world
-  World.add(world, [this.car, this.ground]);
+  World.add(world, [this.car/*, this.ground*/]);
 };
 
 Game.initEvents = function() {
   var car = Game.car,
       render = engine.render;
-      temp = {x : car.position.x , y : car.position.y};
+      oldcar = {x : car.position.x , y : car.position.y};
   // Before rendering each frame, check the key presses and update the car's position.
   Events.on(engine, 'beforeTick', function() {
-    Bounds.translate(render.bounds, Vector.sub(car.position, temp));
-    temp = {x : car.position.x , y : car.position.y};
+    Bounds.translate(render.bounds, Vector.sub(car.position, oldcar));
+    oldcar = {x : car.position.x , y : car.position.y};
     if (keypresses[KEY_UP]) {
       // Accelerate
       var parallelVector = Vector.mult({x: Math.cos(car.angle), y: Math.sin(car.angle)}, ACCELERATION);
@@ -129,31 +130,50 @@ Game.initEvents = function() {
       // Turn steering wheel right
       Body.rotate(car, ANGLE_RIGHT);
     }
-    // Bounds.translate(render.bounds, Vector.sub(car.position, temp));
   });
-
-  // Events.on(engine, 'afterTick', function() {
-  //   var translate;
-  //
-  //   var deltaCentre = Vector.sub(car.position, viewportCentre),
-  //   centreDist = Vector.magnitude(deltaCentre);
-  //   var direction = Vector.normalise(deltaCentre);
-  //
-  //   // move the view
-  //   Bounds.translate(render.bounds, direction);
-  // });
   var renderOptions = engine.render.options;
   renderOptions.hasBounds = true;
 };
 
 Game.initMap = function() {
-  world.bounds.min.x = -300;
-  world.bounds.min.y = -300;
-  world.bounds.max.x = 1100;
-  world.bounds.max.y = 900;
+  world.bounds.min.x = -500;
+  world.bounds.min.y = -500;
+  world.bounds.max.x = 1500;
+  world.bounds.max.y = 1500;
   World.add(world, [
-    Bodies.rectangle(200, 150, 650, 20, { isStatic: true, angle: Math.PI * 0.06 }),
-    Bodies.rectangle(500, 350, 650, 20, { isStatic: true, angle: -Math.PI * 0.06 }),
-    Bodies.rectangle(340, 580, 700, 20, { isStatic: true, angle: Math.PI * 0.04 })
+    // top
+    Bodies.rectangle(950, 300, 900, 10, { isStatic: true}),
+    // bot
+    Bodies.rectangle(900, 1300, 1000, 10, { isStatic: true}),
+    // left
+    Bodies.rectangle(400, 900, 10, 800, { isStatic: true}),
+    // right
+    Bodies.rectangle(1400, 800, 10, 1000, { isStatic: true}),
+
+    // top entry and dest
+    Bodies.rectangle(400, 400, 200, 10, { isStatic: true}),
+    Bodies.rectangle(400, 300, 10, 200, { isStatic: true}),
+    Bodies.rectangle(450, 200, 100, 10, { isStatic: true}),
+    Bodies.rectangle(500, 250, 10, 100, { isStatic: true}),
+    Bodies.rectangle(300, 450, 10, 100, { isStatic: true}),
+    Bodies.rectangle(350, 500, 100, 10, { isStatic: true}),
+
+    // roads
+    Bodies.rectangle(500, 800, 10, 800, { isStatic: true}),
+    Bodies.rectangle(1300, 800, 10, 800, { isStatic: true}),
+    Bodies.rectangle(900, 1200, 800, 10, { isStatic: true}),
+
+    Bodies.rectangle(600, 700, 10, 800, { isStatic: true}),
+    Bodies.rectangle(1200, 700, 10, 800, { isStatic: true}),
+
+    Bodies.rectangle(700, 800, 10, 800, { isStatic: true}),
+    Bodies.rectangle(1100, 800, 10, 800, { isStatic: true}),
+
+    Bodies.rectangle(800, 700, 10, 800, { isStatic: true}),
+    Bodies.rectangle(1000, 700, 10, 800, { isStatic: true}),
+
+    Bodies.rectangle(900, 800, 10, 800, { isStatic: true}),
+    // Bodies.rectangle(200, 150, 650, 20, { isStatic: true, angle: Math.PI * 0.06 }),
   ]);
+
 };
