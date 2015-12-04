@@ -71,7 +71,8 @@ $(document).ready(function() {
   drawBulletChat();
 
   // create and run a Matter.js engine
-  game = init(document.getElementById('canvas-container'));
+  var game = init(document.getElementById('canvas-container'));
   game.run();
 });
+
 

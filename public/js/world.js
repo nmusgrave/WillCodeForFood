@@ -7,24 +7,28 @@ var Engine = Matter.Engine,
     Events = Matter.Events,
     Vector = Matter.Vector,
     Bounds = Matter.Bounds,
-    Composite = Matter.Composite,
-    Constraint = Matter.Constraint,
     Bodies = Matter.Bodies;
 
 var engine;
 var world;
+var render;
 
 var Game = {};
 var KEY_UP = 'w';
 var KEY_LEFT = 'a';
 var KEY_RIGHT = 'd';
 
-var ACCELERATION = 0.1;
+var ACCELERATION = 0.001;
 var ANGLE_LEFT = -0.05;
 var ANGLE_RIGHT = 0.05;
 
 var init = function(container) {
-  engine = Engine.create(container);
+  var renderOptions = Game.initCanvas(container);
+  engine = Engine.create(container, {
+      render: renderOptions
+    });
+  render = engine.render;
+
   world = engine.world;
   Game.initMap();
   Game.initBodies();
@@ -63,11 +67,12 @@ Game.initBodies = function() {
   // }
   // World.add(world, objs);
   // this.ground = Bodies.rectangle(0, 0, 500, 10, { isStatic: true });
-  //* HEAD
+
   var carInitialPosition = {x: 430, y: 300};
 
   // WHEELS
-  //var car = carFactory(this, carInitialPosition);
+  // TODO v hard to drive w wheels
+  var car = carFactory(this, carInitialPosition);
 
   // NO WHEELS
   var car = Bodies.rectangle(carInitialPosition.x, carInitialPosition.y, 40, 20);
@@ -80,7 +85,6 @@ Game.initBodies = function() {
 
 Game.initEvents = function() {
   var car = Game.car,
-      render = engine.render,
       oldcar = {x : car.position.x , y : car.position.y};
   // Before rendering each frame, check the key presses and update the car's position.
   Events.on(engine, 'beforeTick', function() {
@@ -90,7 +94,6 @@ Game.initEvents = function() {
       // Accelerate
       var parallelVector = Vector.mult({x: Math.cos(car.angle), y: Math.sin(car.angle)}, ACCELERATION);
       Body.applyForce(car, car.position, Vector.add(car.force, parallelVector));
-      console.log('test');
     }
     if (keypresses[KEY_LEFT]) {
       // Turn steering wheel left
@@ -151,4 +154,31 @@ Game.initMap = function() {
     // Bodies.rectangle(200, 150, 650, 20, { isStatic: true, angle: Math.PI * 0.06 }),
   ]);
 
+};
+
+// Sets up canvas for the game (background color, size, resizing)
+Game.initCanvas = function(container) {
+  var canvas = document.createElement('canvas');
+
+  canvas.width = $(container).width();
+  canvas.height = 600;
+  this.canvas = canvas;
+
+  // Resize game on window resize
+  $(window).resize(function(){
+      var container = document.getElementById('canvas-container');
+      Game.canvas.width = $(container).width();
+      Game.canvas.height = $(container).height();
+      // TODO how redraw map on window resize?
+  });
+
+  var render = {
+    canvas: canvas,
+      options: {
+        background: 'darkslategrey',
+        width: canvas.width,
+        height: canvas.height,
+      }
+    };
+  return render;
 };
