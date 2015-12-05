@@ -1,6 +1,10 @@
 /**
+ * ------------------------------------------------------------
  * Create a physics environment, and draw within it.
+ * ------------------------------------------------------------
  */
+
+// Physics engine
 var Engine = Matter.Engine,
     World = Matter.World,
     Body = Matter.Body,
@@ -8,20 +12,22 @@ var Engine = Matter.Engine,
     Vector = Matter.Vector,
     Bounds = Matter.Bounds,
     Bodies = Matter.Bodies;
-
 var engine;
 var world;
 var render;
-
+// Game instance for this client
 var Game = {};
-var KEY_UP = 'w';
-var KEY_LEFT = 'a';
-var KEY_RIGHT = 'd';
+// Stores current keypress states
+var keypresses = {};
+// Game features
+var SMOOTH_DRIVING = false;
+var HAS_WHEELS = false;      // TODO v hard to drive w wheels
 
-var ACCELERATION = 0.001;
-var ANGLE_LEFT = -0.05;
-var ANGLE_RIGHT = 0.05;
 
+/* ------------------------------------------------------------
+ * Create a game for a client
+ * ------------------------------------------------------------
+ */
 var init = function(container) {
   var renderOptions = Game.initCanvas(container);
   engine = Engine.create(container, {
@@ -33,31 +39,54 @@ var init = function(container) {
   Game.initMap();
   Game.initBodies();
   Game.initEvents();
+  Game.register();
   return Game;
 };
 
-// Stores current keypress states
-var keypresses = {};
-
+/*
+ *  Get user's keyboard input to steer the car
+ */
 Game.run = function() {
-  // Take user input from keyboard to steer car
-
-  // REGISTERS ON HOLDING DOWN KEY
-  $(document).keydown(function(event){
-    var key = String.fromCharCode(event.which).toLowerCase();
-    keypresses[key] = true;
-  });
-  // REGISTERS ON RELEASE KEY
-  $(document).keyup(function(event){
-    console.log('UP');
-    var key = String.fromCharCode(event.which).toLowerCase();
-    keypresses[key] = false;
-    //keypresses[key] = true;
-  });
+  if (SMOOTH_DRIVING) {
+    // Take input from user holding down/releasing key
+    $(document).keydown(function(event){
+      var key = String.fromCharCode(event.which).toLowerCase();
+      keypresses[key] = true;
+    });
+    $(document).keyup(function(event){
+      var key = String.fromCharCode(event.which).toLowerCase();
+      keypresses[key] = false;
+    });
+  } else {
+    // Only take input when key is pressed
+    $(document).keydown(function(event){
+      var key = String.fromCharCode(event.which).toLowerCase();
+      keypresses[key] = true;
+    });
+  }
   Engine.run(engine);
 };
 
+/*
+ * Notify server that this client has made a car
+ * Keep track of other server's cars
+ */
+Game.register = function() {
+  var car = {
+    car: 'user car'
+  };
+  socket.emit('register', car);
+};
 
+socket.on('register', function(data) {
+  console.log('GOT REGISTER', data);
+});
+
+
+/* ------------------------------------------------------------
+ * Initialize objects, map, canvas, and events within the game
+ * ------------------------------------------------------------
+ */
 Game.initBodies = function() {
   // var objs = [];
   // for (var i = 0 ; i < 100; ++i) {
@@ -73,10 +102,8 @@ Game.initBodies = function() {
   // World.add(world, objs);
   // this.ground = Bodies.rectangle(0, 0, 500, 10, { isStatic: true });
 
-
-  var has_wheels = true;   // TODO v hard to drive w wheels
   var carInitialPosition = {x: 430, y: 300};
-  var car = carFactory(this, carInitialPosition, has_wheels);
+  var car = carFactory(this, carInitialPosition, HAS_WHEELS);
 
   world.gravity.y = 0;
   World.add(world, [car/*, this.ground*/]);
@@ -90,50 +117,12 @@ Game.initEvents = function() {
   Events.on(engine, 'beforeTick', function() {
     Bounds.translate(render.bounds, Vector.sub(car.position, oldcar));
     oldcar = {x : car.position.x , y : car.position.y};
-    if (keypresses[KEY_UP]) {
-      // Accelerate
-      var parallelVector = Vector.mult({x: -Math.sin(car.angle), y: Math.cos(car.angle)}, ACCELERATION);
-      Body.applyForce(car, car.position, Vector.add(car.force, parallelVector));
-    }
-    if (keypresses[KEY_LEFT]) {
-      // Turn steering wheel left
-      Body.rotate(car, ANGLE_LEFT);
-    }
-    if (keypresses[KEY_RIGHT]) {
-      // Turn steering wheel right
-      Body.rotate(car, ANGLE_RIGHT);
-    }
-
-    /*
-    if (keypresses[KEY_UP] || keypresses[KEY_LEFT] || keypresses[KEY_RIGHT]) {
-      // TODO publish changes to server
-      var movement = {
-        car: car.label,
-        angle: car.angle,
-        angularSpeed: car.angularSpeed,
-        angularVelocity: car.angularVelocity,
-        force: car.force,
-        position: car.position,
-        velocity: car.velocity,
-
-      };
-      socket.emit('move', movement);
-      keypresses[KEY_UP] = false;
-      keypresses[KEY_LEFT] = false;
-      keypresses[KEY_RIGHT] = false;
-    }
-    */
+    handleSteering(keypresses, car);
   });
-
   var renderOptions = engine.render.options;
   renderOptions.hasBounds = true;
   renderOptions.wireframes = false;
 };
-
-
-socket.on('move', function(data) {
-  console.log('GOT MOVE', data);
-});
 
 
 Game.initMap = function() {

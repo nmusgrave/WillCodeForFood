@@ -1,12 +1,14 @@
-var Body = Matter.Body,
-    Bodies = Matter.Bodies,
-    Composite = Matter.Composite,
-    Constraint = Matter.Constraint;
+/** -----------------------------------------------------------
+ * Manufacture cars, and define car attributes
+ * ------------------------------------------------------------
+ */
 
 var CAR_DIMENSIONS = {w: 20, h: 40};
 var CAR_FEATURES = {
+  /*
   density: 0.0009,
   friction: 0.4,
+  */
 };
 
 var WHEEL_DIMENSIONS = {w: 8, h: 10};
@@ -37,7 +39,7 @@ var wheelFactory = function(car, xOffset, yOffset) {
  *    or {body} if none requested
  */
 var carFactory = function(game, carCenter, hasWheels) {
-  var carBody = Bodies.rectangle(carCenter.x, carCenter.y, CAR_DIMENSIONS.w, CAR_DIMENSIONS.h);
+  var carBody = Bodies.rectangle(carCenter.x, carCenter.y, CAR_DIMENSIONS.w, CAR_DIMENSIONS.h, CAR_FEATURES);
   game.car = carBody;
 
   if (!hasWheels) {
