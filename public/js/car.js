@@ -1,21 +1,20 @@
-var Bodies = Matter.Bodies,
+var Body = Matter.Body,
+    Bodies = Matter.Bodies,
     Composite = Matter.Composite,
     Constraint = Matter.Constraint;
 
 var CAR_DIMENSIONS = {w: 20, h: 40};
 var CAR_FEATURES = {
-  density: 5,
-  friction: 0.3,
-  frictionAir: 0.9,
-  postion: {x: 0, y: 0},
+  density: 0.0009,
+  friction: 0.4,
 };
 
 var WHEEL_DIMENSIONS = {w: 8, h: 10};
 var WHEEL_FEATURES = {
-  density: 5,
-  friction: 0.3,
-  frictionStatic: 10,
-  //restitution: 0.5, // body elasticity
+  density: 0.01,
+  friction: 0,
+  frictionStatic: 0,
+  restitution: 0, // body elasticity
   slop: 0.0,
 };
 
@@ -34,12 +33,19 @@ var wheelFactory = function(car, xOffset, yOffset) {
 };
 
 /* 
- * @return {composite} containing the car body and wheels
+ * @return {composite} if wheels are requested, contains the car body and wheels
+ *    or {body} if none requested
  */
-var carFactory = function(game, carCenter) {
-  var carComposite = Composite.create({ label: 'Car' });
-  var carBody = Bodies.rectangle(carCenter.x, carCenter.y, CAR_DIMENSIONS.w, CAR_DIMENSIONS.h, 0.3, CAR_FEATURES);
+var carFactory = function(game, carCenter, hasWheels) {
+  var carBody = Bodies.rectangle(carCenter.x, carCenter.y, CAR_DIMENSIONS.w, CAR_DIMENSIONS.h);
   game.car = carBody;
+
+  if (!hasWheels) {
+    return carBody;
+  }
+
+  // Make composite of body and wheels
+  var carComposite = Composite.create({ label: 'Car' });
   Composite.addBody(carComposite, carBody);
 
   // Add the wheels to the car

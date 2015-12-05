@@ -10,6 +10,7 @@ var http = require('http');
 var serverJSPath = '../routes/';
 var ping = require(serverJSPath + 'ping');
 var typing = require(serverJSPath + 'typing');
+var move = require(serverJSPath + 'move');
 
 /**
  * Get port from environment and store in Express.
@@ -39,6 +40,7 @@ server.on('listening', onListening);
 io.on('connection', function (socket) {
   ping(socket);
   typing(socket);
+  move(socket);
 });
 
 /**

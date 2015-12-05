@@ -40,18 +40,23 @@ var init = function(container) {
 var keypresses = {};
 
 Game.run = function() {
-  // register key presses to steer the car
+  // Take user input from keyboard to steer car
+
+  // REGISTERS ON HOLDING DOWN KEY
   $(document).keydown(function(event){
     var key = String.fromCharCode(event.which).toLowerCase();
     keypresses[key] = true;
   });
+  // REGISTERS ON RELEASE KEY
   $(document).keyup(function(event){
+    console.log('UP');
     var key = String.fromCharCode(event.which).toLowerCase();
     keypresses[key] = false;
+    //keypresses[key] = true;
   });
-
   Engine.run(engine);
 };
+
 
 Game.initBodies = function() {
   // var objs = [];
@@ -68,16 +73,11 @@ Game.initBodies = function() {
   // World.add(world, objs);
   // this.ground = Bodies.rectangle(0, 0, 500, 10, { isStatic: true });
 
+
+  var has_wheels = true;   // TODO v hard to drive w wheels
   var carInitialPosition = {x: 430, y: 300};
+  var car = carFactory(this, carInitialPosition, has_wheels);
 
-  // WHEELS
-  // TODO v hard to drive w wheels
-  var car = carFactory(this, carInitialPosition);
-
-  // NO WHEELS
-  var car = Bodies.rectangle(carInitialPosition.x, carInitialPosition.y, 40, 20);
-  this.car = car;
-  
   world.gravity.y = 0;
   World.add(world, [car/*, this.ground*/]);
 };
@@ -92,7 +92,7 @@ Game.initEvents = function() {
     oldcar = {x : car.position.x , y : car.position.y};
     if (keypresses[KEY_UP]) {
       // Accelerate
-      var parallelVector = Vector.mult({x: Math.cos(car.angle), y: Math.sin(car.angle)}, ACCELERATION);
+      var parallelVector = Vector.mult({x: -Math.sin(car.angle), y: Math.cos(car.angle)}, ACCELERATION);
       Body.applyForce(car, car.position, Vector.add(car.force, parallelVector));
     }
     if (keypresses[KEY_LEFT]) {
@@ -103,11 +103,38 @@ Game.initEvents = function() {
       // Turn steering wheel right
       Body.rotate(car, ANGLE_RIGHT);
     }
+
+    /*
+    if (keypresses[KEY_UP] || keypresses[KEY_LEFT] || keypresses[KEY_RIGHT]) {
+      // TODO publish changes to server
+      var movement = {
+        car: car.label,
+        angle: car.angle,
+        angularSpeed: car.angularSpeed,
+        angularVelocity: car.angularVelocity,
+        force: car.force,
+        position: car.position,
+        velocity: car.velocity,
+
+      };
+      socket.emit('move', movement);
+      keypresses[KEY_UP] = false;
+      keypresses[KEY_LEFT] = false;
+      keypresses[KEY_RIGHT] = false;
+    }
+    */
   });
+
   var renderOptions = engine.render.options;
   renderOptions.hasBounds = true;
   renderOptions.wireframes = false;
 };
+
+
+socket.on('move', function(data) {
+  console.log('GOT MOVE', data);
+});
+
 
 Game.initMap = function() {
   var a = 0,
@@ -153,7 +180,6 @@ Game.initMap = function() {
     Bodies.rectangle(900 + a, 800 + b, 10 + c, 800 + d, { isStatic: true}),
     // Bodies.rectangle(200, 150, 650, 20, { isStatic: true, angle: Math.PI * 0.06 }),
   ]);
-
 };
 
 // Sets up canvas for the game (background color, size, resizing)

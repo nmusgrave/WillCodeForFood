@@ -10,16 +10,22 @@ var Matter = window.Matter;
  * several ms.
  */
 socket.on('ping', function (data) {
+  console.log('GOT PINGED');
   var curTime = +new Date();
   var latencyServer = curTime - data.serverTime;
   var latencyRTT = curTime - data.startTime;
   //console.log('ToServer: ' + latencyServer + ' RTT: ' + latencyRTT);
 });
 
-setInterval(function () {
-  var startTime = +new Date();
-  socket.emit('ping', { startTime: startTime });
-}, 100);
+var runPings = function(doPing) {
+  if (!doPing) {
+    return;
+  }
+  setInterval(function () {
+    var startTime = +new Date();
+    socket.emit('ping', { startTime: startTime });
+  }, 100);
+};
 
 
 /**
@@ -63,11 +69,11 @@ socket.on('update', function (data) {
   $('#' + data.id).css('color', data.color).text(data.update.text);
 });
 
-
 /*
  *  Set up and run physics engine
  */
 $(document).ready(function() {
+  runPings(false);
   drawBulletChat();
 
   // create and run a Matter.js engine
