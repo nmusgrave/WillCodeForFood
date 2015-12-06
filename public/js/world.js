@@ -19,10 +19,11 @@ var render;
 var Game = {};
 // Stores current keypress states
 var keypresses = {};
+// clients: (socket.id) -> (car data)
+var clients = new Map();
 // Game features
 var SMOOTH_DRIVING = false;
 var HAS_WHEELS = false;      // TODO v hard to drive w wheels
-
 
 /* ------------------------------------------------------------
  * Create a game for a client
@@ -72,14 +73,32 @@ Game.run = function() {
  * Keep track of other server's cars
  */
 Game.register = function() {
-  var car = {
-    car: 'user car'
+  var car = this.car;
+  var carData = {
+    label: car.label,
+    angle: car.angle,
+    angularSpeed: car.angularSpeed,
+    angularVelocity: car.angularVelocity,
+    force: car.force,
+    position: car.position,
+    velocity: car.velocity
   };
-  socket.emit('register', car);
+  socket.emit('register', carData);
 };
 
 socket.on('register', function(data) {
-  console.log('GOT REGISTER', data);
+  console.log(this.id);
+  if (data.id === 0) {
+    console.log('REGISTERED SELF', clients.size, data.text);
+  } else {
+    console.log('GOT REGISTER', clients.size, data);
+    console.log(data);
+    // TODO: make new cars for clients that join. Still needs work
+    //var clientCar = carFactory(this, data.position, HAS_WHEELS);
+    //world.add(clientCar);
+    //data.car = clientCar;
+    //clients.set(data.id, data);
+  }
 });
 
 
@@ -117,7 +136,7 @@ Game.initEvents = function() {
   Events.on(engine, 'beforeTick', function() {
     Bounds.translate(render.bounds, Vector.sub(car.position, oldcar));
     oldcar = {x : car.position.x , y : car.position.y};
-    handleSteering(keypresses, car);
+    handleSteering(car);
   });
   var renderOptions = engine.render.options;
   renderOptions.hasBounds = true;

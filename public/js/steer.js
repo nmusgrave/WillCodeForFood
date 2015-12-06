@@ -18,10 +18,24 @@ var KEY_LEFT = 'a';
 var KEY_RIGHT = 'd';
 
 socket.on('move', function(data) {
+  /*
   console.log('GOT MOVE', data);
+  var carData = clients.get(data.id);
+  var clientCar = carData.car;
+  var applyForce = carData.applyForce;
+  var applyRotation = carData.applyRotation;
+  if (applyForce !== undefined) {
+    // TODO move client car
+    //Body.applyForce(clientCar, clientCar.position, applyForce);
+  }
+  if (applyRotation !=- undefined) {
+    // TODO rotate client car
+    //Body.rotate(clientCar, applyRotation);
+  }
+  */
 });
 
-var handleSteering = function(keypresses, car) {
+var handleSteering = function(car) {
   if (!keypresses[KEY_UP] && !keypresses[KEY_LEFT] && !keypresses[KEY_RIGHT]) {
     // no keys pressed, nothing to share
     return;
@@ -59,12 +73,12 @@ var handleSteering = function(keypresses, car) {
     Body.rotate(car, ANGLE_RIGHT);
   }
 
-  // Publish changes to server
-  movement.applyForce = forceVector;
-  movement.applyRotation = rotationAngle;
-  //socket.emit('move', movement);
-
   if (!SMOOTH_DRIVING) {
+    // Publish changes to server
+    movement.applyForce = forceVector;
+    movement.applyRotation = rotationAngle;
+    socket.emit('move', movement);
+
     keypresses[KEY_UP] = false;
     keypresses[KEY_LEFT] = false;
     keypresses[KEY_RIGHT] = false;
