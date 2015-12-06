@@ -17,6 +17,13 @@ var KEY_UP = 'w';
 var KEY_LEFT = 'a';
 var KEY_RIGHT = 'd';
 
+// TODO invoke to calculate new position
+function(carPosition, newPosition, new_vector) {
+  var nextPosition = Vector.add(newPosition, new_vector);
+  var nextVector = Vector.sub(nextPosition,carPosition);
+  return nextVector;
+}
+
 socket.on('move', function(data) {
   /*
   console.log('GOT MOVE', data);

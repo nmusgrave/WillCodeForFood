@@ -217,8 +217,3 @@ Game.initCanvas = function(container) {
   return render;
 };
 
-function(carPosition, newPosition, new_vector) {
-  var nextPosition = Vector.add(newPosition, new_vector);
-  var nextVector = Vector.sub(nextPosition,carPosition);
-  return nextVector;
-}
