@@ -12,13 +12,14 @@ var game = function(socket) {
 
   socket.on('register', function(data) {
     console.log('SERVER REGISTER', socket.id, data.position);
-    // Acknowledge this client's connection
-    socket.emit('register', {id: 0, text: 'ACK'});
+    // Notify client that connection received
+    socket.emit('register', {id: 0});
     // Notify new client of those already connected
-    for (var car in cars) {
-      socket.emit('register', car);
+    for (var id in cars) {
+      console.log('--', id);
+      socket.emit('register', cars[id]);
     }
-    // Notify all other clients about this new connection
+    // Notify all clients about this new connection
     data.id = socket.id;
     socket.broadcast.emit('register', data);
     // Save this new client

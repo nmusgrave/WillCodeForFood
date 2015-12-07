@@ -83,21 +83,22 @@ Game.register = function() {
     position: car.position,
     velocity: car.velocity
   };
+  console.log(carData);
   socket.emit('register', carData);
 };
 
 socket.on('register', function(data) {
   console.log(this.id);
-  if (data.id === 0) {
-    console.log('REGISTERED SELF', clients.size, data.text);
+  if (data.id === this.id || data.id === 0) {
+    console.log('REGISTER SELF', clients.size);
   } else {
-    console.log('GOT REGISTER', clients.size, data);
     console.log(data);
-    // TODO: make new cars for clients that join. Still needs work
-    //var clientCar = carFactory(this, data.position, HAS_WHEELS);
-    //world.add(clientCar);
-    //data.car = clientCar;
-    //clients.set(data.id, data);
+    console.log('REGISTER', clients.size, data.id);
+    // Make new cars for clients that join
+    var clientCar = carFactory(this, data.position, HAS_WHEELS, 'maroon');
+    World.add(world, clientCar);
+    data.car = clientCar;
+    clients.set(data.id, data);
   }
 });
 

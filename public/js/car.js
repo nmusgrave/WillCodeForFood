@@ -38,8 +38,9 @@ var wheelFactory = function(car, xOffset, yOffset) {
  * @return {composite} if wheels are requested, contains the car body and wheels
  *    or {body} if none requested
  */
-var carFactory = function(game, carCenter, hasWheels) {
-  var carBody = Bodies.rectangle(carCenter.x, carCenter.y, CAR_DIMENSIONS.w, CAR_DIMENSIONS.h, CAR_FEATURES);
+var carFactory = function(game, carCenter, hasWheels, color) {
+  var updated_features = $.extend({}, CAR_FEATURES, { render: { fillStyle: color, lineWidth: 0 } });
+  var carBody = Bodies.rectangle(carCenter.x, carCenter.y, CAR_DIMENSIONS.w, CAR_DIMENSIONS.h, updated_features);
   game.car = carBody;
 
   if (!hasWheels) {
