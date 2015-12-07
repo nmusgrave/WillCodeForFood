@@ -217,12 +217,14 @@ Game.initCanvas = function(container) {
   this.canvas = canvas;
 
   // Resize game on window resize
+  /*
   $(window).resize(function(){
       var container = document.getElementById('canvas-container');
       Game.canvas.width = $(container).width();
       Game.canvas.height = $(container).height();
       // TODO how redraw map on window resize?
   });
+*/
 
   var render = {
     canvas: canvas,
