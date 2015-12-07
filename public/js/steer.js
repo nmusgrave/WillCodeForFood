@@ -25,21 +25,16 @@ var updateClientPosition = function(carPosition, newPosition, new_vector) {
 };
 
 socket.on('move', function(data) {
-  /*
-  console.log('GOT MOVE', data);
   var carData = clients.get(data.id);
   var clientCar = carData.car;
-  var applyForce = carData.applyForce;
-  var applyRotation = carData.applyRotation;
-  if (applyForce !== undefined) {
-    // TODO move client car
-    //Body.applyForce(clientCar, clientCar.position, applyForce);
+  Game.car.render.fillStyle = 'blue';
+  clientCar.render.fillStyle = 'green';
+  if (data.applyForce !== undefined) {
+    Body.applyForce(clientCar, clientCar.position, data.applyForce);
   }
-  if (applyRotation !=- undefined) {
-    // TODO rotate client car
-    //Body.rotate(clientCar, applyRotation);
+  if (data.applyRotation !== undefined) {
+    Body.rotate(clientCar, data.applyRotation);
   }
-  */
 });
 
 var handleSteering = function(car) {

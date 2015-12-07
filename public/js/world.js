@@ -40,7 +40,6 @@ var init = function(container) {
   Game.initMap();
   Game.initBodies();
   Game.initEvents();
-  Game.register();
   return Game;
 };
 
@@ -70,10 +69,8 @@ Game.run = function() {
 
 /*
  * Notify server that this client has made a car
- * Keep track of other server's cars
  */
-Game.register = function() {
-  var car = this.car;
+var register = function(car) {
   var carData = {
     label: car.label,
     angle: car.angle,
@@ -87,19 +84,25 @@ Game.register = function() {
   socket.emit('register', carData);
 };
 
+/*
+ * Keep track of clients that join this game session
+ * Draw cars of other clients, then this client's car (must draw this after,
+ *  to ensure correct positioning)
+ */
 socket.on('register', function(data) {
-  console.log(this.id);
-  if (data.id === this.id || data.id === 0) {
-    console.log('REGISTER SELF', clients.size);
-  } else {
-    console.log(data);
-    console.log('REGISTER', clients.size, data.id);
-    // Make new cars for clients that join
-    var clientCar = carFactory(this, data.position, HAS_WHEELS, 'maroon');
+  //console.log('REGISTER SELF', socket.id, data);
+  // Make new cars for clients that join
+  for (var id in data) {
+    // TODO set up initial forces on these cars
+    var clientCar = carFactory(this, data[id].position, HAS_WHEELS, 'maroon');
     World.add(world, clientCar);
+    Game.clientCar = clientCar;
+    data.car = {};
     data.car = clientCar;
-    clients.set(data.id, data);
+    clients.set(id, data);
   }
+  // Draw this client's car after other client's cars
+  World.add(world, Game.car);
 });
 
 
@@ -122,16 +125,18 @@ Game.initBodies = function() {
   // World.add(world, objs);
   // this.ground = Bodies.rectangle(0, 0, 500, 10, { isStatic: true });
 
+  world.gravity.y = 0;
+
+  // Construct this client's car
   var carInitialPosition = {x: 430, y: 300};
   var car = carFactory(this, carInitialPosition, HAS_WHEELS);
-
-  world.gravity.y = 0;
-  World.add(world, [car/*, this.ground*/]);
+  // Register this car with server, and all cars
+  register(car);
 };
 
 
 Game.initEvents = function() {
-  var car = Game.car,
+  var car = this.car,
       oldcar = {x : car.position.x , y : car.position.y};
   // Before rendering each frame, check the key presses and update the car's position.
   Events.on(engine, 'beforeTick', function() {
@@ -155,6 +160,17 @@ Game.initMap = function() {
   world.bounds.max.x = 1500;
   world.bounds.max.y = 1500;
   World.add(world, [
+    // SMALL BOX FOR TESTING
+    // top
+    Bodies.rectangle(500 + a, 200 + b, 700 + c, 10 + d, { isStatic: true}),
+    // bot
+    Bodies.rectangle(500 + a, 500 + b, 700 + c, 10 + d, { isStatic: true}),
+    // left
+    Bodies.rectangle(150 + a, 350 + b, 10 + c, 300 + d, { isStatic: true}),
+    // right
+    Bodies.rectangle(850 + a, 350 + b, 10 + c, 300 + d, { isStatic: true})
+
+    /* FULL MAP
     // top
     Bodies.rectangle(950 + a, 300 + b, 900 + c, 10 + d, { isStatic: true}),
     // bot
@@ -188,6 +204,7 @@ Game.initMap = function() {
 
     Bodies.rectangle(900 + a, 800 + b, 10 + c, 800 + d, { isStatic: true}),
     // Bodies.rectangle(200, 150, 650, 20, { isStatic: true, angle: Math.PI * 0.06 }),
+    */
   ]);
 };
 
