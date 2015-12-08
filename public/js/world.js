@@ -83,6 +83,7 @@ var register = function(car) {
 socket.on('register', function(data) {
   //console.log('REGISTER SELF', socket.id, data);
   // Make new cars for clients that join
+  /*
   for (var id in data) {
     // TODO set up initial forces on these cars
     var clientCar = carFactory(this, data[id].position, HAS_WHEELS, 'maroon');
@@ -93,6 +94,7 @@ socket.on('register', function(data) {
     clients.set(id, data);
   }
   // Draw this client's car after other client's cars
+  */
   World.add(world, Game.car);
 });
 
@@ -155,7 +157,7 @@ Game.initMap = function() {
     // top
     Bodies.rectangle(500 + a, 200 + b, 700 + c, 10 + d, { isStatic: true}),
     // bot
-    Bodies.rectangle(500 + a, 500 + b, 700 + c, 10 + d, { isStatic: true}),
+    //Bodies.rectangle(500 + a, 500 + b, 700 + c, 10 + d, { isStatic: true}),
     // left
     Bodies.rectangle(150 + a, 350 + b, 10 + c, 300 + d, { isStatic: true}),
     // right

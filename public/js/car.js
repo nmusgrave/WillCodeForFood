@@ -5,10 +5,9 @@
 
 var CAR_DIMENSIONS = {w: 20, h: 40};
 var CAR_FEATURES = {
-  /*
-  density: 0.0009,
-  friction: 0.4,
-  */
+  density: 0.006,
+  friction: 0.004,
+  frictionAir: 0.009
 };
 
 var WHEEL_DIMENSIONS = {w: 8, h: 10};
@@ -41,6 +40,8 @@ var wheelFactory = function(car, xOffset, yOffset) {
 var carFactory = function(game, carCenter, hasWheels, color) {
   var updated_features = $.extend({}, CAR_FEATURES, { render: { fillStyle: color, lineWidth: 0 } });
   var carBody = Bodies.rectangle(carCenter.x, carCenter.y, CAR_DIMENSIONS.w, CAR_DIMENSIONS.h, updated_features);
+  // Offset between car's angle and the steering wheel
+  carBody.rotationAngle = 0;
   game.car = carBody;
 
   if (!hasWheels) {

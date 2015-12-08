@@ -4,8 +4,8 @@
  */
 
 var ACCELERATION = 0.001;
-var ANGLE_LEFT = -0.05;
-var ANGLE_RIGHT = 0.05;
+var ANGLE = 0.06;
+var ANGLE_MAX = Math.PI / 6;
 
 var KEY_UP = 'w';
 var KEY_DOWN = 's';
@@ -40,7 +40,6 @@ var handleSteering = function(car) {
 
   // Steering to apply
   var forceVector;
-  var rotationAngle;
   // Store current state of car
   var movement = {
     car: car.label,
@@ -54,16 +53,28 @@ var handleSteering = function(car) {
 
   // Apply user's action to the car's motion
   if (keypresses[KEY_LEFT] || keypresses[KEY_RIGHT]) {
-    rotationAngle = keypresses[KEY_LEFT] ? ANGLE_LEFT : ANGLE_RIGHT;
-    Body.rotate(car, rotationAngle);
+    car.rotationAngle += keypresses[KEY_LEFT] ? -ANGLE : ANGLE;
+    if (car.rotationAngle >= ANGLE_MAX) {
+      car.rotationAngle = ANGLE_MAX;
+    } else if (car.rotationAngle <= -ANGLE_MAX) {
+      car.rotationAngle = -ANGLE_MAX;
+    }
   }
   if (keypresses[KEY_UP] || keypresses[KEY_DOWN]) {
+    Body.rotate(car, car.rotationAngle);
+    car.rotationAngle = 0;
+
     var parallelVector = Vector.mult({x: -Math.sin(car.angle), y: Math.cos(car.angle)}, ACCELERATION);
     forceVector = Vector.add(car.force, parallelVector);
     // Invert vector if going backwards
     forceVector = keypresses[KEY_UP] ? forceVector : Vector.neg(forceVector);
-    Body.applyForce(car, car.position, forceVector);
+    var point = {x: car.position.x, y: car.position.y};
+    Body.applyForce(car, point, forceVector);
   }
+
+  // Suppress spinning freely
+  Body.rotate(car, car.rotationAngle * car.speed);
+  car.rotationAngle = 0;
 
   /*
   // Publish changes to server
