@@ -22,7 +22,6 @@ var keypresses = {};
 // clients: (socket.id) -> (car data)
 var clients = new Map();
 // Game features
-var SMOOTH_DRIVING = false;
 var HAS_WHEELS = false;      // TODO v hard to drive w wheels
 
 /* ------------------------------------------------------------
@@ -47,23 +46,15 @@ var init = function(container) {
  *  Get user's keyboard input to steer the car
  */
 Game.run = function() {
-  if (SMOOTH_DRIVING) {
-    // Take input from user holding down/releasing key
-    $(document).keydown(function(event){
-      var key = String.fromCharCode(event.which).toLowerCase();
-      keypresses[key] = true;
-    });
-    $(document).keyup(function(event){
-      var key = String.fromCharCode(event.which).toLowerCase();
-      keypresses[key] = false;
-    });
-  } else {
-    // Only take input when key is pressed
-    $(document).keydown(function(event){
-      var key = String.fromCharCode(event.which).toLowerCase();
-      keypresses[key] = true;
-    });
-  }
+  // Take input from user holding down/releasing key
+  $(document).keydown(function(event){
+    var key = String.fromCharCode(event.which).toLowerCase();
+    keypresses[key] = true;
+  });
+  $(document).keyup(function(event){
+    var key = String.fromCharCode(event.which).toLowerCase();
+    keypresses[key] = false;
+  });
   Engine.run(engine);
 };
 
@@ -212,7 +203,7 @@ Game.initMap = function() {
 Game.initCanvas = function(container) {
   var canvas = document.createElement('canvas');
 
-  canvas.width = $(container).width();
+  canvas.width = 860;
   canvas.height = 600;
   this.canvas = canvas;
 

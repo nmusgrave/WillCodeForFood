@@ -3,15 +3,9 @@
  * ------------------------------------------------------------
  */
 
-if (SMOOTH_DRIVING) {
-  var ACCELERATION = 0.001;
-  var ANGLE_LEFT = -0.05;
-  var ANGLE_RIGHT = 0.05;
-} else {
-  var ACCELERATION = 0.01;
-  var ANGLE_LEFT = -0.5;
-  var ANGLE_RIGHT = 0.5;
-}
+var ACCELERATION = 0.001;
+var ANGLE_LEFT = -0.05;
+var ANGLE_RIGHT = 0.05;
 
 var KEY_UP = 'w';
 var KEY_DOWN = 's';
@@ -71,15 +65,15 @@ var handleSteering = function(car) {
     Body.applyForce(car, car.position, forceVector);
   }
 
-  if (!SMOOTH_DRIVING) {
-    // Publish changes to server
-    movement.applyForce = forceVector;
-    movement.applyRotation = rotationAngle;
-    socket.emit('move', movement);
+  /*
+  // Publish changes to server
+  movement.applyForce = forceVector;
+  movement.applyRotation = rotationAngle;
+  socket.emit('move', movement);
 
-    keypresses[KEY_UP] = false;
-    keypresses[KEY_DOWN] = false;
-    keypresses[KEY_LEFT] = false;
-    keypresses[KEY_RIGHT] = false;
-  }
+  keypresses[KEY_UP] = false;
+  keypresses[KEY_DOWN] = false;
+  keypresses[KEY_LEFT] = false;
+  keypresses[KEY_RIGHT] = false;
+  */
 };
