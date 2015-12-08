@@ -32,14 +32,11 @@ socket.on('move', function(data) {
   }
 });
 
-var handleSteering = function(car) {
-  if (!keypresses[KEY_UP] && !keypresses[KEY_DOWN] && !keypresses[KEY_LEFT] && !keypresses[KEY_RIGHT]) {
-    // no keys pressed, nothing to share
-    return;
-  }
 
-  // Steering to apply
-  var forceVector;
+/*
+ * Steer this client's car using key input
+ */
+var steerLocal = function(car) {
   // Store current state of car
   var movement = {
     car: car.label,
@@ -51,6 +48,8 @@ var handleSteering = function(car) {
     velocity: car.velocity
   };
 
+  // CLIENT: Steering to apply
+  var forceVector;
   // Apply user's action to the car's motion
   if (keypresses[KEY_LEFT] || keypresses[KEY_RIGHT]) {
     car.rotationAngle += keypresses[KEY_LEFT] ? -ANGLE : ANGLE;
@@ -61,9 +60,6 @@ var handleSteering = function(car) {
     }
   }
   if (keypresses[KEY_UP] || keypresses[KEY_DOWN]) {
-    Body.rotate(car, car.rotationAngle);
-    car.rotationAngle = 0;
-
     var parallelVector = Vector.mult({x: -Math.sin(car.angle), y: Math.cos(car.angle)}, ACCELERATION);
     forceVector = Vector.add(car.force, parallelVector);
     // Invert vector if going backwards
@@ -76,7 +72,7 @@ var handleSteering = function(car) {
   Body.rotate(car, car.rotationAngle * car.speed);
   car.rotationAngle = 0;
 
-  /*
+  /* TODO
   // Publish changes to server
   movement.applyForce = forceVector;
   movement.applyRotation = rotationAngle;
@@ -87,4 +83,12 @@ var handleSteering = function(car) {
   keypresses[KEY_LEFT] = false;
   keypresses[KEY_RIGHT] = false;
   */
+};
+
+var handleSteering = function(car) {
+  steerLocal(car);
+
+  // TODO Steer remote clients
+
+
 };
