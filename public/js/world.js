@@ -11,7 +11,9 @@ var Engine = Matter.Engine,
     Events = Matter.Events,
     Vector = Matter.Vector,
     Bounds = Matter.Bounds,
-    Bodies = Matter.Bodies;
+    Bodies = Matter.Bodies,
+    Vertices = Matter.Vertices;
+
 var engine;
 var world;
 var render;
@@ -19,8 +21,8 @@ var render;
 var Game = {};
 // Stores current keypress states
 var keypresses = {};
-// clients: (socket.id) -> (car data)
-var clients = new Map();
+// clients: (socket.id) -> (car data), including this client's car
+Game.clients = new Map();
 // Game features
 var HAS_WHEELS = false;      // TODO v hard to drive w wheels
 // Definitions for game attributes
@@ -83,21 +85,54 @@ var register = function(car) {
  *  to ensure correct positioning)
  */
 socket.on('tick', function(data) {
-  console.log('TICK', data);
-  // Make new cars for clients that join
-  /*
-  for (var id in data) {
-    // TODO set up initial forces on these cars
-    var clientCar = carFactory(this, data[id].position, HAS_WHEELS, 'maroon');
-    World.add(world, clientCar);
-    Game.clientCar = clientCar;
-    data.car = {};
-    data.car = clientCar;
-    clients.set(id, data);
+  // Get updates from server, and change the 
+  //console.log('TICK', Game.clients);
+  // Update all the cars
+  if (!GAME_FEATURES) {
+    return;
   }
-  // Draw this client's car after other client's cars
-  */
+  for (var id in data) {
+    if (id === socket.id) {
+      // Don't update our own car
+      continue;
+    }
+    var carUpdate = data[id];
+    var carData = Game.clients.get(id);
+    if (carData === undefined) {
+      carData = data;
+      // Car seen for the first time, so make a new body
+      var clientCar = carFactory(this, data[id].position, HAS_WHEELS, 'maroon');
+      World.add(world, clientCar);
+      carData.car = clientCar;
+    } else {
+      // Apply changes to old car
+      setPosition(carData.car, carUpdate.position);
+      setVelocity(carData.car, carUpdate.velocity);
+      carData.car.angle = carUpdate.angle;
+    }
+    Game.clients.set(id, carData);
+  }
 });
+
+var setVelocity = function(body, velocity) {
+  body.positionPrev.x = body.position.x - velocity.x;
+  body.positionPrev.y = body.position.y - velocity.y;
+  body.velocity.x = velocity.x;
+  body.velocity.y = velocity.y;
+  body.speed = Vector.magnitude(body.velocity);
+};
+
+var setPosition = function(body, position) {
+  var delta = Vector.sub(position, body.position);
+
+  body.position.x = position.x;
+  body.position.y = position.y;
+  body.positionPrev.x += delta.x;
+  body.positionPrev.y += delta.y;
+
+  Vertices.translate(body.vertices, delta);
+  Bounds.update(body.bounds, body.vertices, body.velocity);
+};
 
 
 /* ------------------------------------------------------------
@@ -125,14 +160,14 @@ Game.initBodies = function() {
   var carInitialPosition = {x: 430, y: 300};
   var car = carFactory(this, carInitialPosition, HAS_WHEELS);
   World.add(world, car);
+  this.clients[socket.id] = car;
 
   // Register this car with server, and all cars
   register(car);
 };
 
-
 Game.initEvents = function() {
-  var car = this.car,
+  var car = this.clients[socket.id],
       oldcar = {x : car.position.x , y : car.position.y};
   // Before rendering each frame, check the key presses and update the car's position.
   Events.on(engine, 'beforeTick', function() {
@@ -220,7 +255,7 @@ Game.initCanvas = function(container) {
       Game.canvas.height = $(container).height();
       // TODO how redraw map on window resize?
   });
-*/
+  */
 
   var render = {
     canvas: canvas,

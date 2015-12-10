@@ -23,11 +23,11 @@ var wheelFactory = function(car, xOffset, yOffset) {
  *    or {body} if none requested
  */
 var carFactory = function(game, carCenter, hasWheels, color) {
-  var updated_features = $.extend({}, GAME_FEATURES.CAR_FEATURES, { render: { fillStyle: color, lineWidth: 0 } });
+  //var updated_features = $.extend({}, GAME_FEATURES.CAR_FEATURES, { render: { fillStyle: color, lineWidth: 0 } });
+  var updated_features = GAME_FEATURES.CAR_FEATURES;
   var carBody = Bodies.rectangle(carCenter.x, carCenter.y, GAME_FEATURES.CAR_DIMENSIONS.w, GAME_FEATURES.CAR_DIMENSIONS.h, updated_features);
   // Offset between car's angle and the steering wheel
   carBody.rotationAngle = 0;
-  game.car = carBody;
 
   if (!hasWheels) {
     return carBody;

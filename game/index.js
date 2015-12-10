@@ -60,10 +60,13 @@ game.move = function(car) {
  */
 game.register = function(car) {
   console.log('GOT CAR');
-  var carBody = Bodies.rectangle(car.position.x, car.position.y, GAME_FEATURES.CAR_DIMENSIONS.w, GAME_FEATURES.CAR_DIMENSIONS.h, GAME_FEATURES.CAR_FEATURES);
-  Body.setVelocity(carBody, car.velocity);
-  Body.setAngle(carBody, car.angle);
-  cars[car.id] = carBody;
+  // Build a new car model
+  //var carBody = Bodies.rectangle(car.position.x, car.position.y, GAME_FEATURES.CAR_DIMENSIONS.w, GAME_FEATURES.CAR_DIMENSIONS.h, GAME_FEATURES.CAR_FEATURES);
+  //Body.setVelocity(carBody, car.velocity);
+  //Body.setAngle(carBody, car.angle);
+  // Keep track of the body and raw car data
+  //carBodies[car.id] = carBody;
+  cars[car.id] = car;
 };
 
 game.reset = function() {
