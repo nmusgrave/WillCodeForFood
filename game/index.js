@@ -11,6 +11,7 @@ var Engine = Matter.Engine;
 
 var engine = Engine.create(options);
 var world = engine.world;
+var carBodies = {};
 var cars = {};
 var io;
 
@@ -29,11 +30,11 @@ Events.on(engine, 'afterUpdate', function() {
   
   // Translate car bodies to client-relevant data
   var carData = {};
-  for (var id in cars) {
+  for (var id in carBodies) {
     carData[id] = {
-      position: cars[id].position,
-      angle: cars[id].angle,
-      velocity: cars[id].velocity
+      position: carBodies[id].position,
+      angle: carBodies[id].angle,
+      velocity: carBodies[id].velocity
     };
   }
   io.emit('tick', carData);
@@ -48,8 +49,8 @@ game.start = function(i) {
  * Update a car position
  */ 
 game.move = function(car) {
-  cars[car.id] = car;
-  console.log(cars);
+  carBodies[car.id] = car;
+  console.log(carBodies);
 };
 
 /*
@@ -57,10 +58,13 @@ game.move = function(car) {
  */
 game.register = function(car) {
   console.log('GOT CAR');
+  // Build a new car model
   var carBody = Bodies.rectangle(car.position.x, car.position.y, GAME_FEATURES.CAR_DIMENSIONS.w, GAME_FEATURES.CAR_DIMENSIONS.h, GAME_FEATURES.CAR_FEATURES);
   Body.setVelocity(carBody, car.velocity);
   Body.setAngle(carBody, car.angle);
-  cars[car.id] = carBody;
+  // Keep track of the body and raw car data
+  carBodies[car.id] = carBody;
+  cars[car.id] = car;
 };
 
 /*

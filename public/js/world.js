@@ -32,6 +32,7 @@ var GAME_FEATURES;
  */
 var init = function(gameFeatures, container) {
   GAME_FEATURES = gameFeatures;
+  console.log(GAME_FEATURES);
   var renderOptions = Game.initCanvas(container);
   engine = Engine.create(container, {
       render: renderOptions
@@ -83,20 +84,24 @@ var register = function(car) {
  *  to ensure correct positioning)
  */
 socket.on('tick', function(data) {
-  console.log('TICK', data);
-  // Make new cars for clients that join
-  /*
+  // Get updates from server, and change the 
+  console.log('TICK', clients);
+  // Update all the cars
   for (var id in data) {
-    // TODO set up initial forces on these cars
-    var clientCar = carFactory(this, data[id].position, HAS_WHEELS, 'maroon');
-    World.add(world, clientCar);
-    Game.clientCar = clientCar;
-    data.car = {};
-    data.car = clientCar;
-    clients.set(id, data);
+    var carUpdate = data[id];
+    var carData = clients.get(id);
+    if (carData === undefined) {
+      // Car seen for the first time, so make a new body
+      console.log(carUpdate);
+      var clientCar = carFactory(this, data[id].position, HAS_WHEELS, 'maroon');
+      World.add(world, clientCar);
+      carData.car = clientCar;
+    } else {
+      // Apply changes to old car
+      console.log('old car');
+    }
+    clients.set(id, carData);
   }
-  // Draw this client's car after other client's cars
-  */
 });
 
 
@@ -220,7 +225,7 @@ Game.initCanvas = function(container) {
       Game.canvas.height = $(container).height();
       // TODO how redraw map on window resize?
   });
-*/
+  */
 
   var render = {
     canvas: canvas,
