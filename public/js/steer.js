@@ -45,7 +45,7 @@ var steerLocal = function(car) {
     angularVelocity: car.angularVelocity,
     force: car.force,
     position: car.position,
-    velocity: car.velocity 
+    velocity: car.velocity
   };
 
   // CLIENT: Steering to apply
@@ -77,7 +77,7 @@ var steerLocal = function(car) {
   carData.applyForce = forceVector;
   carData.applyRotation = car.rotationAngle;
   car.rotationAngle = 0;
-  // socket.emit('move', carData);
+  socket.emit('move', carData);
 };
 
 var handleSteering = function(car) {
