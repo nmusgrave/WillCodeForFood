@@ -23,12 +23,15 @@ var keypresses = {};
 var clients = new Map();
 // Game features
 var HAS_WHEELS = false;      // TODO v hard to drive w wheels
+// Definitions for game attributes
+var GAME_FEATURES;
 
 /* ------------------------------------------------------------
  * Create a game for a client
  * ------------------------------------------------------------
  */
-var init = function(container) {
+var init = function(gameFeatures, container) {
+  GAME_FEATURES = gameFeatures;
   var renderOptions = Game.initCanvas(container);
   engine = Engine.create(container, {
       render: renderOptions
@@ -71,7 +74,6 @@ var register = function(car) {
     position: car.position,
     velocity: car.velocity
   };
-  console.log(carData);
   socket.emit('register', carData);
 };
 
@@ -80,8 +82,8 @@ var register = function(car) {
  * Draw cars of other clients, then this client's car (must draw this after,
  *  to ensure correct positioning)
  */
-socket.on('register', function(data) {
-  //console.log('REGISTER SELF', socket.id, data);
+socket.on('tick', function(data) {
+  console.log('TICK', data);
   // Make new cars for clients that join
   /*
   for (var id in data) {
@@ -95,7 +97,6 @@ socket.on('register', function(data) {
   }
   // Draw this client's car after other client's cars
   */
-  World.add(world, Game.car);
 });
 
 
@@ -123,6 +124,8 @@ Game.initBodies = function() {
   // Construct this client's car
   var carInitialPosition = {x: 430, y: 300};
   var car = carFactory(this, carInitialPosition, HAS_WHEELS);
+  World.add(world, car);
+
   // Register this car with server, and all cars
   register(car);
 };

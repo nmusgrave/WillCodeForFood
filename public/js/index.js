@@ -69,16 +69,21 @@ socket.on('update', function (data) {
   $('#' + data.id).css('color', data.color).text(data.update.text);
 });
 
+// Create and start the game
+socket.on('startGame', function(data) {
+  // create and run a Matter.js engine
+  console.log(data);
+  var game = init(data, document.getElementById('canvas-container'));
+  game.run();
+});
+
 /*
  *  Set up and run physics engine
  */
 $(document).ready(function() {
   runPings(false);
   drawBulletChat();
-
-  // create and run a Matter.js engine
-  var game = init(document.getElementById('canvas-container'));
-  game.run();
+  socket.emit('startGame', {});  
 });
 
 

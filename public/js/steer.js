@@ -32,20 +32,20 @@ socket.on('move', function(data) {
   }
 });
 
+var setVelocity = function(body, velocity) { body.positionPrev.x = body.position.x - velocity.x; body.positionPrev.y = body.position.y - velocity.y; body.velocity.x = velocity.x; body.velocity.y = velocity.y; body.speed = Vector.magnitude(body.velocity);    };
+
 
 /*
  * Steer this client's car using key input
  */
 var steerLocal = function(car) {
   // Store current state of car
-  var movement = {
-    car: car.label,
+  var carData = {
     angle: car.angle,
-    angularSpeed: car.angularSpeed,
     angularVelocity: car.angularVelocity,
     force: car.force,
     position: car.position,
-    velocity: car.velocity
+    velocity: car.velocity 
   };
 
   // CLIENT: Steering to apply
@@ -69,20 +69,14 @@ var steerLocal = function(car) {
   }
 
   // Suppress spinning freely
-  Body.rotate(car, car.rotationAngle * car.speed);
-  car.rotationAngle = 0;
+  car.rotationAngle *= car.speed / 10;
+  Body.rotate(car, car.rotationAngle);
 
-  /* TODO
   // Publish changes to server
-  movement.applyForce = forceVector;
-  movement.applyRotation = rotationAngle;
-  socket.emit('move', movement);
-
-  keypresses[KEY_UP] = false;
-  keypresses[KEY_DOWN] = false;
-  keypresses[KEY_LEFT] = false;
-  keypresses[KEY_RIGHT] = false;
-  */
+  carData.applyForce = forceVector;
+  carData.applyRotation = car.rotationAngle;
+  car.rotationAngle = 0;
+  // socket.emit('move', carData);
 };
 
 var handleSteering = function(car) {

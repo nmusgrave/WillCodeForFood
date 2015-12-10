@@ -3,27 +3,12 @@
  * ------------------------------------------------------------
  */
 
-var CAR_DIMENSIONS = {w: 20, h: 40};
-var CAR_FEATURES = {
-  density: 0.006,
-  friction: 0.004,
-  frictionAir: 0.009
-};
-
-var WHEEL_DIMENSIONS = {w: 8, h: 10};
-var WHEEL_FEATURES = {
-  density: 0.01,
-  friction: 0,
-  frictionStatic: 0,
-  restitution: 0, // body elasticity
-  slop: 0.0,
-};
-
 /*
  * @return {object} tire and its axel
  */
 var wheelFactory = function(car, xOffset, yOffset) {
-  var tire = Bodies.rectangle(car.position.x + xOffset, car.position.y + yOffset, WHEEL_DIMENSIONS.w, WHEEL_DIMENSIONS.h, WHEEL_FEATURES);
+  var tire = Bodies.rectangle(car.position.x + xOffset, car.position.y + yOffset,
+    GAME_FEATURES.WHEEL_DIMENSIONS.w, GAME_FEATURES.WHEEL_DIMENSIONS.h, GAME_FEATURES.WHEEL_FEATURES);
   var axel = Constraint.create({
       bodyA: car,
       pointA: { x: xOffset, y: yOffset },
@@ -38,8 +23,8 @@ var wheelFactory = function(car, xOffset, yOffset) {
  *    or {body} if none requested
  */
 var carFactory = function(game, carCenter, hasWheels, color) {
-  var updated_features = $.extend({}, CAR_FEATURES, { render: { fillStyle: color, lineWidth: 0 } });
-  var carBody = Bodies.rectangle(carCenter.x, carCenter.y, CAR_DIMENSIONS.w, CAR_DIMENSIONS.h, updated_features);
+  var updated_features = $.extend({}, GAME_FEATURES.CAR_FEATURES, { render: { fillStyle: color, lineWidth: 0 } });
+  var carBody = Bodies.rectangle(carCenter.x, carCenter.y, GAME_FEATURES.CAR_DIMENSIONS.w, GAME_FEATURES.CAR_DIMENSIONS.h, updated_features);
   // Offset between car's angle and the steering wheel
   carBody.rotationAngle = 0;
   game.car = carBody;
@@ -53,8 +38,8 @@ var carFactory = function(game, carCenter, hasWheels, color) {
   Composite.addBody(carComposite, carBody);
 
   // Add the wheels to the car
-  var wheelAOffset = CAR_DIMENSIONS.w * 0.5 + WHEEL_DIMENSIONS.w * 0.5,
-      wheelYOffset = CAR_DIMENSIONS.h * 0.3;
+  var wheelAOffset = GAME_FEATURES.CAR_DIMENSIONS.w * 0.5 + GAME_FEATURES.WHEEL_DIMENSIONS.w * 0.5,
+      wheelYOffset = GAME_FEATURES.CAR_DIMENSIONS.h * 0.3;
   var wheels = [
     // front wheels
     wheelFactory(carBody, wheelAOffset, wheelYOffset),

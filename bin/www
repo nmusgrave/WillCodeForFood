@@ -10,7 +10,7 @@ var http = require('http');
 var serverJSPath = '../routes/';
 var ping = require(serverJSPath + 'ping');
 var typing = require(serverJSPath + 'typing');
-var game = require(serverJSPath + 'game');
+var gameRoutes = require(serverJSPath + 'game');
 
 /**
  * Get port from environment and store in Express.
@@ -26,6 +26,10 @@ app.set('port', port);
 var server = http.createServer(app);
 var io = require('socket.io')(server);
 
+// Start the game
+var game = require('../game');
+game.start(io);
+
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -40,7 +44,7 @@ server.on('listening', onListening);
 io.on('connection', function (socket) {
   ping(socket);
   typing(socket);
-  game(socket);
+  gameRoutes(socket);
 });
 
 /**

@@ -1,75 +1,73 @@
 
-global.document = {
-  createElement: function(){
-    // Canvas
-    return {
-      getContext: function() {
-        return {};
-      }
-    };
-  }
-};
-global.window = {};
+var options = require('./matter-mock');
+var GAME_FEATURES = require('../game/game-features.js');
+
 var Matter = require('matter-js/build/matter.js');
-
-
 var World = Matter.World;
+var Events = Matter.Events;
 var Body = Matter.Body;
 var Bodies = Matter.Bodies;
 var Engine = Matter.Engine;
 
-// Create a new world
-// HACK HACK HACK
-// matter.js isn't supposed to work on server-side, we do hacks to make it work.
-var options = {
-  render: {
-    element: null,
-    controller: {
-      create: function() {},
-      clear: function() {},
-      world: function() {}
-    }
-  },
-  input: {
-    mouse: {}
-  }
-};
 var engine = Engine.create(options);
-// END OF HACK HACK HACK
-world = engine.world;
-
-var a = Bodies.rectangle(190, 300, 60, 60, { frictionAir: 0.001 });
-var b = Bodies.rectangle(200, 100, 60, 60, { frictionAir: 0.05 });
-World.addBody(world, a);
-World.addBody(world, b);
-
-// console.log(a.position);
-
-Body.applyForce(a, {
-  x: 0,
-  y: 0
-}, {
-  x: 0,
-  y: -1
-});
+var world = engine.world;
+var cars = {};
+var io;
 
 var UPDATE_INTERVAL = 10; // ms
 setInterval(function() {
   Engine.update(engine, UPDATE_INTERVAL);
-
-  Body.applyForce(a, {
-    x: 0,
-    y: 0
-  }, {
-    x: 0,
-    y: 0.01
-  });
-
-  // console.log(a.position);
 }, UPDATE_INTERVAL);
 
-module.exports = {
-  start: function() {
-    console.log('Starting game...');
+var game = {};
+
+/*
+ * Communicate master copy of game to client
+ */
+Events.on(engine, 'afterUpdate', function() {
+  game.cleanCars();
+  
+  // Translate car bodies to client-relevant data
+  var carData = {};
+  for (var id in cars) {
+    carData[id] = {
+      position: cars[id].position,
+      angle: cars[id].angle,
+      velocity: cars[id].velocity
+    };
   }
+  io.emit('tick', carData);
+});
+
+game.start = function(i) {
+  io = i;
+  console.log('Starting game...');
 };
+
+/**
+ * Update a car position
+ */ 
+game.move = function(car) {
+  cars[car.id] = car;
+  console.log(cars);
+};
+
+/*
+ *  Create a car for a new client connection
+ */
+game.register = function(car) {
+  console.log('GOT CAR');
+  var carBody = Bodies.rectangle(car.position.x, car.position.y, GAME_FEATURES.CAR_DIMENSIONS.w, GAME_FEATURES.CAR_DIMENSIONS.h, GAME_FEATURES.CAR_FEATURES);
+  Body.setVelocity(carBody, car.velocity);
+  Body.setAngle(carBody, car.angle);
+  cars[car.id] = carBody;
+};
+
+/*
+ *  TODO clean out cars that are no longer used by clients
+ */
+game.cleanCars = function() {
+
+};
+
+module.exports = game;
