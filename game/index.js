@@ -27,7 +27,7 @@ var game = {};
  */
 Events.on(engine, 'afterUpdate', function() {
   game.cleanCars();
-  
+
   // Translate car bodies to client-relevant data
   var carData = {};
   for (var id in carBodies) {
@@ -47,10 +47,9 @@ game.start = function(i) {
 
 /**
  * Update a car position
- */ 
+ */
 game.move = function(car) {
-  carBodies[car.id] = car;
-  console.log(carBodies);
+  cars[car.id] = car;
 };
 
 /*
