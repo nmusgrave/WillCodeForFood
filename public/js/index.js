@@ -72,7 +72,6 @@ socket.on('update', function (data) {
 // Create and start the game
 socket.on('startGame', function(data) {
   // create and run a Matter.js engine
-  console.log(data);
   var game = init(data, document.getElementById('canvas-container'));
   game.run();
 });

@@ -19,8 +19,8 @@ var render;
 var Game = {};
 // Stores current keypress states
 var keypresses = {};
-// clients: (socket.id) -> (car data)
-var clients = new Map();
+// clients: (socket.id) -> (car data), including this client's car
+Game.clients = new Map();
 // Game features
 var HAS_WHEELS = false;      // TODO v hard to drive w wheels
 // Definitions for game attributes
@@ -32,7 +32,6 @@ var GAME_FEATURES;
  */
 var init = function(gameFeatures, container) {
   GAME_FEATURES = gameFeatures;
-  console.log(GAME_FEATURES);
   var renderOptions = Game.initCanvas(container);
   engine = Engine.create(container, {
       render: renderOptions
@@ -85,22 +84,28 @@ var register = function(car) {
  */
 socket.on('tick', function(data) {
   // Get updates from server, and change the 
-  console.log('TICK', clients);
+  //console.log('TICK', Game.clients);
   // Update all the cars
+  if (!GAME_FEATURES) {
+    return;
+  }
   for (var id in data) {
     var carUpdate = data[id];
-    var carData = clients.get(id);
-    if (carData === undefined) {
-      // Car seen for the first time, so make a new body
+    if (carUpdate.angle) {
       console.log(carUpdate);
+    }
+    var carData = Game.clients.get(id);
+    if (carData === undefined) {
+      carData = data;
+      // Car seen for the first time, so make a new body
       var clientCar = carFactory(this, data[id].position, HAS_WHEELS, 'maroon');
       World.add(world, clientCar);
       carData.car = clientCar;
+      Game.clients.set(id, carData);
     } else {
       // Apply changes to old car
-      console.log('old car');
+      console.log('old car TODO redraw position');
     }
-    clients.set(id, carData);
   }
 });
 
@@ -130,14 +135,14 @@ Game.initBodies = function() {
   var carInitialPosition = {x: 430, y: 300};
   var car = carFactory(this, carInitialPosition, HAS_WHEELS);
   World.add(world, car);
+  this.clients[socket.id] = car;
 
   // Register this car with server, and all cars
   register(car);
 };
 
-
 Game.initEvents = function() {
-  var car = this.car,
+  var car = this.clients[socket.id],
       oldcar = {x : car.position.x , y : car.position.y};
   // Before rendering each frame, check the key presses and update the car's position.
   Events.on(engine, 'beforeTick', function() {
