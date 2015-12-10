@@ -6,7 +6,7 @@
 var CAR_DIMENSIONS = {w: 20, h: 40};
 var CAR_FEATURES = {
   density: 0.006,
-  friction: 0.004,
+  friction: 0.009,
   frictionAir: 0.009
 };
 
@@ -33,7 +33,7 @@ var wheelFactory = function(car, xOffset, yOffset) {
   return {tire: tire, axel: axel};
 };
 
-/* 
+/*
  * @return {composite} if wheels are requested, contains the car body and wheels
  *    or {body} if none requested
  */

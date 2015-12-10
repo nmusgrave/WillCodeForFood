@@ -69,7 +69,7 @@ var steerLocal = function(car) {
   }
 
   // Suppress spinning freely
-  Body.rotate(car, car.rotationAngle * car.speed);
+  Body.rotate(car, car.rotationAngle /** car.speed*/);
   car.rotationAngle = 0;
 
   /* TODO
