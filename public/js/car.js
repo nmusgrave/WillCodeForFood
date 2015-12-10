@@ -18,7 +18,7 @@ var wheelFactory = function(car, xOffset, yOffset) {
   return {tire: tire, axel: axel};
 };
 
-/* 
+/*
  * @return {composite} if wheels are requested, contains the car body and wheels
  *    or {body} if none requested
  */

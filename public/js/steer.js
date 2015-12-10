@@ -69,8 +69,9 @@ var steerLocal = function(car) {
   }
 
   // Suppress spinning freely
-  car.rotationAngle *= car.speed / 10;
-  Body.rotate(car, car.rotationAngle);
+  Body.rotate(car, car.rotationAngle /** car.speed*/);
+  car.rotationAngle = 0;
+
 
   // Publish changes to server
   carData.applyForce = forceVector;
