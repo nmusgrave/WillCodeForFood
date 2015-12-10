@@ -11,7 +11,9 @@ var Engine = Matter.Engine,
     Events = Matter.Events,
     Vector = Matter.Vector,
     Bounds = Matter.Bounds,
-    Bodies = Matter.Bodies;
+    Bodies = Matter.Bodies,
+    Vertices = Matter.Vertices;
+
 var engine;
 var world;
 var render;
@@ -90,10 +92,11 @@ socket.on('tick', function(data) {
     return;
   }
   for (var id in data) {
-    var carUpdate = data[id];
-    if (carUpdate.angle) {
-      console.log(carUpdate);
+    if (id === socket.id) {
+      // Don't update our own car
+      continue;
     }
+    var carUpdate = data[id];
     var carData = Game.clients.get(id);
     if (carData === undefined) {
       carData = data;
@@ -101,13 +104,35 @@ socket.on('tick', function(data) {
       var clientCar = carFactory(this, data[id].position, HAS_WHEELS, 'maroon');
       World.add(world, clientCar);
       carData.car = clientCar;
-      Game.clients.set(id, carData);
     } else {
       // Apply changes to old car
-      console.log('old car TODO redraw position');
+      setPosition(carData.car, carUpdate.position);
+      setVelocity(carData.car, carUpdate.velocity);
+      carData.car.angle = carUpdate.angle;
     }
+    Game.clients.set(id, carData);
   }
 });
+
+var setVelocity = function(body, velocity) {
+  body.positionPrev.x = body.position.x - velocity.x;
+  body.positionPrev.y = body.position.y - velocity.y;
+  body.velocity.x = velocity.x;
+  body.velocity.y = velocity.y;
+  body.speed = Vector.magnitude(body.velocity);
+};
+
+var setPosition = function(body, position) {
+  var delta = Vector.sub(position, body.position);
+
+  body.position.x = position.x;
+  body.position.y = position.y;
+  body.positionPrev.x += delta.x;
+  body.positionPrev.y += delta.y;
+
+  Vertices.translate(body.vertices, delta);
+  Bounds.update(body.bounds, body.vertices, body.velocity);
+};
 
 
 /* ------------------------------------------------------------

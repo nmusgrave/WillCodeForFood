@@ -11,9 +11,6 @@ var movements = function(socket) {
    */
   socket.on('move', function (car) {
     car.id = socket.id;
-    //console.log('MOVE', socket.id);
-
-    // update the velocity for this car
     game.move(car);
   });
 
