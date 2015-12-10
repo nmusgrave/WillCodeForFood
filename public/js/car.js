@@ -4,6 +4,33 @@
  */
 
 /*
+ *  Force the body's velocity to match
+ */
+var setVelocity = function(body, velocity) {
+  body.positionPrev.x = body.position.x - velocity.x;
+  body.positionPrev.y = body.position.y - velocity.y;
+  body.velocity.x = velocity.x;
+  body.velocity.y = velocity.y;
+  body.speed = Vector.magnitude(body.velocity);
+};
+
+/*
+ *  Force the body's position to match
+ */
+var setPosition = function(body, position) {
+  var delta = Vector.sub(position, body.position);
+
+  body.position.x = position.x;
+  body.position.y = position.y;
+  body.positionPrev.x += delta.x;
+  body.positionPrev.y += delta.y;
+
+  Vertices.translate(body.vertices, delta);
+  Bounds.update(body.bounds, body.vertices, body.velocity);
+};
+
+
+/*
  * @return {object} tire and its axel
  */
 var wheelFactory = function(car, xOffset, yOffset) {

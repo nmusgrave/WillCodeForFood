@@ -74,10 +74,18 @@ game.reset = function() {
 };
 
 /*
- *  TODO clean out cars that are no longer used by clients
+ *  clean out cars that are no longer used by clients
  */
 game.cleanDeadCars = function() {
-
+  var badIDs = [];
+  for (var id in cars) {
+    if (io.sockets.connected[id] === undefined) {
+      badIDs.push(id);
+    }
+  }
+  for (id in badIDs) {
+    delete cars[badIDs[id]];
+  }
 };
 
 module.exports = game;

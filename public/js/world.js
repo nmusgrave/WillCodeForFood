@@ -22,7 +22,7 @@ var Game = {};
 // Stores current keypress states
 var keypresses = {};
 // clients: (socket.id) -> (car data), including this client's car
-Game.clients = new Map();
+Game.clients = {};
 // Game features
 var HAS_WHEELS = false;      // TODO v hard to drive w wheels
 // Definitions for game attributes
@@ -86,54 +86,41 @@ var register = function(car) {
  */
 socket.on('tick', function(data) {
   // Get updates from server, and change the 
-  //console.log('TICK', Game.clients);
   // Update all the cars
   if (!GAME_FEATURES) {
     return;
   }
+  var examinedIDs = new Set();
+  examinedIDs.add(socket.id);
   for (var id in data) {
     if (id === socket.id) {
       // Don't update our own car
       continue;
     }
+    examinedIDs.add(id);
     var carUpdate = data[id];
-    var carData = Game.clients.get(id);
-    if (carData === undefined) {
-      carData = data;
+    var carBody = Game.clients[id];
+    if (carBody === undefined) {
       // Car seen for the first time, so make a new body
       var clientCar = carFactory(this, data[id].position, HAS_WHEELS, 'maroon');
       World.add(world, clientCar);
-      carData.car = clientCar;
+      carBody = clientCar;
     } else {
       // Apply changes to old car
-      setPosition(carData.car, carUpdate.position);
-      setVelocity(carData.car, carUpdate.velocity);
-      carData.car.angle = carUpdate.angle;
+      setPosition(carBody, carUpdate.position);
+      setVelocity(carBody, carUpdate.velocity);
+      carBody.angle = carUpdate.angle;
     }
-    Game.clients.set(id, carData);
+    Game.clients[id] = carBody;
+  }
+  // Remove bodies from the world that are no longer used
+  for (id in Game.clients) {
+    if (!examinedIDs.has(id)) {
+      World.remove(world, Game.clients[id]);
+      delete Game.clients[id];
+    }
   }
 });
-
-var setVelocity = function(body, velocity) {
-  body.positionPrev.x = body.position.x - velocity.x;
-  body.positionPrev.y = body.position.y - velocity.y;
-  body.velocity.x = velocity.x;
-  body.velocity.y = velocity.y;
-  body.speed = Vector.magnitude(body.velocity);
-};
-
-var setPosition = function(body, position) {
-  var delta = Vector.sub(position, body.position);
-
-  body.position.x = position.x;
-  body.position.y = position.y;
-  body.positionPrev.x += delta.x;
-  body.positionPrev.y += delta.y;
-
-  Vertices.translate(body.vertices, delta);
-  Bounds.update(body.bounds, body.vertices, body.velocity);
-};
-
 
 /* ------------------------------------------------------------
  * Initialize objects, map, canvas, and events within the game
