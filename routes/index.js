@@ -12,7 +12,10 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/reset', function(req, res, next) {
-  game.reset();
+  setTimeout(function() {
+    game.reset();
+  }, 100);
+  // res.send({good:true});
   res.redirect('/');
 });
 

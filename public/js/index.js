@@ -82,7 +82,11 @@ socket.on('startGame', function(data) {
 $(document).ready(function() {
   runPings(false);
   drawBulletChat();
-  socket.emit('startGame', {});  
+  socket.emit('startGame', {});
+  $('#reset').submit(function() {
+    $(this).ajaxSubmit();
+    return false;
+  });
 });
 
 
