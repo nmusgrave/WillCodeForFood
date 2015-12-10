@@ -9,38 +9,42 @@ var Body = Matter.Body;
 var Bodies = Matter.Bodies;
 var Engine = Matter.Engine;
 
-var engine = Engine.create(options);
-var world = engine.world;
-var cars = {};
+var engine;
+var world;
+var cars;
 var io;
-
-var UPDATE_INTERVAL = 10; // ms
-setInterval(function() {
-  Engine.update(engine, UPDATE_INTERVAL);
-}, UPDATE_INTERVAL);
 
 var game = {};
 
-/*
- * Communicate master copy of game to client
- */
-Events.on(engine, 'afterUpdate', function() {
-  game.cleanCars();
-
-  // Translate car bodies to client-relevant data
-  var carData = {};
-  for (var id in cars) {
-    carData[id] = {
-      position: cars[id].position,
-      angle: cars[id].angle,
-      velocity: cars[id].velocity
-    };
-  }
-  io.emit('tick', carData);
-});
-
 game.start = function(i) {
   io = i;
+  engine = Engine.create(options);
+  world = engine.world;
+
+  /*
+   * Communicate master copy of game to client
+   */
+  Events.on(engine, 'afterUpdate', function() {
+    game.cleanDeadCars();
+
+    // Translate car bodies to client-relevant data
+    var carData = {};
+    for (var id in cars) {
+      carData[id] = {
+        position: cars[id].position,
+        angle: cars[id].angle,
+        velocity: cars[id].velocity
+      };
+    }
+    io.emit('tick', carData);
+  });
+
+  var UPDATE_INTERVAL = 10; // ms
+  setInterval(function() {
+    Engine.update(engine, UPDATE_INTERVAL);
+  }, UPDATE_INTERVAL);
+
+  cars = {};
   console.log('Starting game...');
 };
 
@@ -62,10 +66,14 @@ game.register = function(car) {
   cars[car.id] = carBody;
 };
 
+game.reset = function() {
+  cars = {};
+};
+
 /*
  *  TODO clean out cars that are no longer used by clients
  */
-game.cleanCars = function() {
+game.cleanDeadCars = function() {
 
 };
 

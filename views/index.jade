@@ -1,4 +1,6 @@
 extends layout
 
 block content
+  form(action='/reset' method='POST')
+    button(type='submit') reset cars
   div#canvas-container
