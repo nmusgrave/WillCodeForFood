@@ -5,7 +5,7 @@
  *    http://www.guelnika.net/images/charset/noel/caribou.png
  */
 
-var caribou_colors = [ 'pink', 'red', 'blue', 'green' ];
+var caribou_colors = [ 'pink', 'red', 'blue', 'green', 'cyan', 'purple', 'yellow'];
 
 /*
  *  Force the body's velocity to match
@@ -53,12 +53,18 @@ var wheelFactory = function(car, xOffset, yOffset) {
  * @return {composite} if wheels are requested, contains the car body and wheels
  *    or {body} if none requested
  */
-var carFactory = function(game, carCenter, hasWheels, color) {
+var carFactory = function(game, carCenter, hasWheels, isClient) {
+  var color;
+  if (isClient) {
+    color = 'santa';
+  } else {
+    color = caribou_colors[Math.floor(Math.random()*caribou_colors.length)];
+  }
   var render_features = {
     render: {
       //fillStyle: 'blue',
       lineWidth: 0,
-      sprite: { texture: '../images/caribou_sprite_' + caribou_colors[Math.floor(Math.random()*caribou_colors.length)] + '.png' }
+      sprite: { texture: '../images/caribou_sprite_' + color + '.png' }
     }
   };
   var updated_features = $.extend({}, GAME_FEATURES.CAR_FEATURES, render_features);
