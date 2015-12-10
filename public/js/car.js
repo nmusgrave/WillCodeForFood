@@ -1,7 +1,11 @@
 /** -----------------------------------------------------------
  * Manufacture cars, and define car attributes
  * ------------------------------------------------------------
+ * Caribou sprite from 
+ *    http://www.guelnika.net/images/charset/noel/caribou.png
  */
+
+var caribou_colors = [ 'pink', 'red', 'blue', 'green' ];
 
 /*
  *  Force the body's velocity to match
@@ -50,8 +54,15 @@ var wheelFactory = function(car, xOffset, yOffset) {
  *    or {body} if none requested
  */
 var carFactory = function(game, carCenter, hasWheels, color) {
-  //var updated_features = $.extend({}, GAME_FEATURES.CAR_FEATURES, { render: { fillStyle: color, lineWidth: 0 } });
-  var updated_features = GAME_FEATURES.CAR_FEATURES;
+  var render_features = {
+    render: {
+      //fillStyle: 'blue',
+      lineWidth: 0,
+      sprite: { texture: '../images/caribou_sprite_' + caribou_colors[Math.floor(Math.random()*caribou_colors.length)] + '.png' }
+    }
+  };
+  var updated_features = $.extend({}, GAME_FEATURES.CAR_FEATURES, render_features);
+  //var updated_features = GAME_FEATURES.CAR_FEATURES;
   var carBody = Bodies.rectangle(carCenter.x, carCenter.y, GAME_FEATURES.CAR_DIMENSIONS.w, GAME_FEATURES.CAR_DIMENSIONS.h, updated_features);
   // Offset between car's angle and the steering wheel
   carBody.rotationAngle = 0;
