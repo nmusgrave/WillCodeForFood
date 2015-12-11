@@ -21,11 +21,6 @@ Game.initMap = function() {
   drawStartingLine();
 };
 
-var drawIce = function() {
-  var ice = iceFactory({x: 525, y: 300});  
-  World.add(world, ice);
-};
-
 var drawStartingLine = function() {
   for (var i = 0 ; i < 5; ++i) {
     var checkerPosition = {x:430,y:169 + (48*i)};
@@ -34,6 +29,21 @@ var drawStartingLine = function() {
     World.add(world, checker);
   }
 };
+
+var drawIce = function() {
+  var ice = iceFactory({x: 525, y: 300});
+  World.add(world, ice);
+};
+
+var drawTree = function() {
+  for (var i = 0 ; i < 10; ++i) {
+    var treePosition = {x:430 - (i*20),y:121};
+    var tree = treeFactory(treePosition);
+    World.add(world, tree);
+  }
+};
+
+
 
 // Sets up canvas for the game (background color, size, resizing)
 Game.initCanvas = function(container) {
@@ -123,8 +133,6 @@ var drawRoads = function() {
     Bodies.rectangle(980 + a, 920 + b, 380 + c, 10 + d, { isStatic: true, angle: Math.PI }),
     Bodies.rectangle(800 + a, 860 + b, 120 + c, 10 + d, { isStatic: true, angle: Math.PI * 0.5 }),
     Bodies.rectangle(1640 + a, 870 + b, 1000 + c, 10 + d, { isStatic: true, angle: Math.PI * 0.1 }),
-    Bodies.rectangle(2180 + a, 1210 + b, 450 + c, 10 + d, { isStatic: true, angle: Math.PI * 0.35 }),
+    Bodies.rectangle(2180 + a, 1210 + b, 450 + c, 10 + d, { isStatic: true, angle: Math.PI * 0.35 })
   ]);
 };
-
-
