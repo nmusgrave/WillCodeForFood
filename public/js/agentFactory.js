@@ -125,10 +125,8 @@ var iceFactory = function(icePosition) {
 };
 
 var checkerFactory = function(checkerPosition) {
-
   var render_features = {
     render: {
-      //fillStyle: 'blue',
       lineWidth: 0,
       sprite: { texture: '/images/checker.png' },
     },

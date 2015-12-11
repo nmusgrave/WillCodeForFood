@@ -13,9 +13,10 @@ Game.initMap = function() {
 
 var drawStartingLine = function() {
   for (var i = 0 ; i < 5; ++i) {
-    var chekerPosition = {x:430,y:169 + (48*i)};
-    var cheker = checkerFactory(chekerPosition);
-    World.add(world, cheker);
+    var checkerPosition = {x:430,y:169 + (48*i)};
+    var checker = checkerFactory(this, checkerPosition);
+    console.log(checker);
+    World.add(world, checker);
   }
 };
 
@@ -125,6 +126,6 @@ var drawRoads = function() {
     Bodies.rectangle(980 + a, 920 + b, 380 + c, 10 + d, { isStatic: true, angle: Math.PI }),
     Bodies.rectangle(800 + a, 860 + b, 120 + c, 10 + d, { isStatic: true, angle: Math.PI * 0.5 }),
     Bodies.rectangle(1640 + a, 870 + b, 1000 + c, 10 + d, { isStatic: true, angle: Math.PI * 0.1 }),
-    Bodies.rectangle(2180 + a, 1210 + b, 450 + c, 10 + d, { isStatic: true, angle: Math.PI * 0.35 }),
+    Bodies.rectangle(2180 + a, 1210 + b, 450 + c, 10 + d, { isStatic: true, angle: Math.PI * 0.35 })
   ]);
 };
