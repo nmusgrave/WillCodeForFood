@@ -14,7 +14,7 @@ Game.initMap = function() {
 var drawStartingLine = function() {
   for (var i = 0 ; i < 5; ++i) {
     var checkerPosition = {x:430,y:169 + (48*i)};
-    var checker = checkerFactory(this, checkerPosition);
+    var checker = checkerFactory(checkerPosition);
     console.log(checker);
     World.add(world, checker);
   }
