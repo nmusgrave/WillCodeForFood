@@ -28,9 +28,10 @@ var drawIce = function() {
 
 var drawStartingLine = function() {
   for (var i = 0 ; i < 5; ++i) {
-    var chekerPosition = {x:430,y:169 + (48*i)};
-    var cheker = checkerFactory(this, chekerPosition);
-    World.add(world, cheker);
+    var checkerPosition = {x:430,y:169 + (48*i)};
+    var checker = checkerFactory(this, checkerPosition);
+    console.log(checker);
+    World.add(world, checker);
   }
 };
 
