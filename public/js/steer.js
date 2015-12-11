@@ -58,7 +58,6 @@ var steerLocal = function(car) {
     }
   }
   if (keypresses[KEY_UP] || keypresses[KEY_DOWN]) {
-    console.log('GO');
     var acceleration = ACCELERATION;
     if (isInIce(car)) {
       acceleration *= ICE_SPEEDUP;
