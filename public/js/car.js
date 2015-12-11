@@ -67,8 +67,10 @@ var carFactory = function(game, carCenter, hasWheels, isClient) {
   var render_features = {
     render: {
       //fillStyle: 'blue',
-      lineWidth: 0,
-      sprite: { texture: '../images/caribou_sprite_' + color + '.png' }
+      // lineWidth: 0,
+      // sprite: {
+      //   texture: '../images/caribou_sprite_' + color + '.png'
+      // }
     }
   };
   var updated_features = $.extend({}, GAME_FEATURES.CAR_FEATURES, render_features);
@@ -111,7 +113,7 @@ var treeFactory = function(game, treePosition) {
   var render_features = {
     render: {
       //fillStyle: 'blue',
-      lineWidth: 0,
+      // lineWidth: 1,
       sprite: { texture: '/images/gametree.png' }
     },
     isStatic:true,

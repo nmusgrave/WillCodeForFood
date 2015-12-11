@@ -84,6 +84,9 @@ var register = function(car) {
  * Draw cars of other clients, then this client's car (must draw this after,
  *  to ensure correct positioning)
  */
+var abc = 1;
+var fps = 10;
+var frame = 0;
 socket.on('tick', function(data) {
   // Get updates from server, and change the
   // Update all the cars
@@ -93,13 +96,25 @@ socket.on('tick', function(data) {
   var examinedIDs = new Set();
   examinedIDs.add(socket.id);
   for (var id in data) {
+    var carUpdate = data[id];
+    var carBody = Game.clients[id];
+    // Update the reindeer
+    if (frame === fps) {
+      var num = abc < 10 ? '0' + abc : abc;
+      carBody.render.sprite.texture = '/images/reindeer/reindeer_' + num + '.gif';
+      carBody.render.sprite.xScale = 12;
+      carBody.render.sprite.yScale = 12;
+      abc = (abc + 1) % 64;
+      if (abc === 0) { abc = 1; }
+      frame = 0;
+    }
+    ++frame;
+
     if (id === socket.id) {
       // Don't update our own car
       continue;
     }
     examinedIDs.add(id);
-    var carUpdate = data[id];
-    var carBody = Game.clients[id];
     if (carBody === undefined) {
       // Car seen for the first time, so make a new body
       var clientCar = carFactory(this, data[id].position, HAS_WHEELS, false);
