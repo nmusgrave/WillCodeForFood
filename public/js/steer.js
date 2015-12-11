@@ -46,7 +46,6 @@ var steerLocal = function(car) {
     velocity: car.velocity
   };
 
-
   // CLIENT: Steering to apply
   var forceVector;
   // Apply user's action to the car's motion
@@ -71,7 +70,6 @@ var steerLocal = function(car) {
     var point = {x: car.position.x, y: car.position.y};
     Body.applyForce(car, point, forceVector);
   }
-  console.log(forceVector, car.position);
 
   // Suppress spinning freely
   Body.rotate(car, car.rotationAngle /** car.speed*/);
