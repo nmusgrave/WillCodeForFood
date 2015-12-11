@@ -5,20 +5,10 @@
  */
 
 Game.initMap = function() {
-  // Trees
-  for (var i = 0 ; i < 10; ++i) {
-    var x = Math.random() * 800;
-    var y = Math.random() * 600;
-    if ((x > 500 && x < 550) && (y > 250 && y < 350)) {
-         continue;
-    }
-    var treePosition = {x:x,y:y};
-    var tree = treeFactory(treePosition);
-    //World.add(world, tree);
-  }
   drawRoads();
   drawIce();
   drawStartingLine();
+  drawTree();
 };
 
 var drawStartingLine = function() {
@@ -36,8 +26,11 @@ var drawIce = function() {
 };
 
 var drawTree = function() {
-  for (var i = 0 ; i < 10; ++i) {
-    var treePosition = {x:430 - (i*20),y:121};
+  for (var i = 0 ; i < 30; ++i) {
+    var treePosition = {x:900 - (i*40),y:110};
+    var tree = treeFactory(treePosition);
+    World.add(world, tree);
+    var treePosition = {x:900 - (i*40),y:380};
     var tree = treeFactory(treePosition);
     World.add(world, tree);
   }

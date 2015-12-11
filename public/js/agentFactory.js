@@ -103,11 +103,11 @@ var treeFactory = function(treePosition) {
   var render_features = {
     render: {
       lineWidth: 0,
-      sprite: { texture: '/images/gametree.png' },
+      sprite: { texture: '/images/tree2.png' },
     },
     isStatic:true
   };
-  var tree = Bodies.rectangle(treePosition.x, treePosition.y, 20, 40, render_features);
+  var tree = Bodies.rectangle(treePosition.x, treePosition.y, 20, 20, render_features);
   return tree;
 };
 
