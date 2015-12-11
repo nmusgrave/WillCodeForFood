@@ -38,12 +38,8 @@ var setPosition = function(body, position) {
  * @return {object} tire and its axel
  */
 var wheelFactory = function(car, xOffset, yOffset) {
-  var tire = Bodies.rectangle(
-    car.position.x + xOffset,
-    car.position.y + yOffset,
-    GAME_FEATURES.WHEEL_DIMENSIONS.w,
-    GAME_FEATURES.WHEEL_DIMENSIONS.h,
-    GAME_FEATURES.WHEEL_FEATURES);
+  var tire = Bodies.rectangle(car.position.x + xOffset, car.position.y + yOffset,
+    GAME_FEATURES.WHEEL_DIMENSIONS.w, GAME_FEATURES.WHEEL_DIMENSIONS.h, GAME_FEATURES.WHEEL_FEATURES);
   var axel = Constraint.create({
       bodyA: car,
       pointA: { x: xOffset, y: yOffset },
@@ -65,19 +61,18 @@ var carFactory = function(game, carCenter, hasWheels, isClient) {
     color = caribou_colors[Math.floor(Math.random()*caribou_colors.length)];
   }
   var render_features = {
-    render: {
-      //fillStyle: 'blue',
-      // lineWidth: 0,
-      // sprite: {
-      //   texture: '../images/caribou_sprite_' + color + '.png'
-      // }
-    }
+    // render: {
+    //   //fillStyle: 'blue',
+    //   lineWidth: 0,
+    //   sprite: { texture: '../images/caribou_sprite_' + color + '.png' }
+    // }
   };
   var updated_features = $.extend({}, GAME_FEATURES.CAR_FEATURES, render_features);
   //var updated_features = GAME_FEATURES.CAR_FEATURES;
   var carBody = Bodies.rectangle(carCenter.x, carCenter.y, GAME_FEATURES.CAR_DIMENSIONS.w, GAME_FEATURES.CAR_DIMENSIONS.h, updated_features);
   // Offset between car's angle and the steering wheel
   carBody.rotationAngle = 0;
+  carBody.groupId = 1;
 
   if (!hasWheels) {
     return carBody;
@@ -113,34 +108,36 @@ var treeFactory = function(game, treePosition) {
   var render_features = {
     render: {
       //fillStyle: 'blue',
-      // lineWidth: 1,
-      sprite: { texture: '/images/gametree.png' }
+      lineWidth: 0,
+      sprite: { texture: '/images/gametree.png' },
     },
-    isStatic:true,
+    isStatic:true
   };
+  var updated_features = $.extend({}, render_features);
   //var updated_features = GAME_FEATURES.CAR_FEATURES;
-  var tree = Bodies.rectangle(treePosition.x, treePosition.y, 20, 40, render_features);
+  var tree = Bodies.rectangle(treePosition.x, treePosition.y, 20, 20, updated_features);
   // Offset between car's angle and the steering wheel
   tree.rotationAngle = 0;
 
   return tree;
 };
 
+var chekerFactory = function(game, checkerPosition) {
 
+  var render_features = {
+    render: {
+      //fillStyle: 'blue',
+      lineWidth: 0,
+      sprite: { texture: '/images/checker.png' },
+    },
+    isStatic:true
+  };
+  var updated_features = $.extend({}, render_features);
+  //var updated_features = GAME_FEATURES.CAR_FEATURES;
+  var checker = Bodies.rectangle(checkerPosition.x, checkerPosition.y, 20, 20, updated_features);
+  // Offset between car's angle and the steering wheel
+  checker.rotationAngle = 0;
+  checker.groupId = 1;
 
-// var treeFactory = function(game, treePosition) {
-//
-//   var render_features = {
-//     render: {
-//       //fillStyle: 'blue',
-//       lineWidth: 0,
-//       sprite: { texture: '../images/caribou_sprite_.png' }
-//     }
-//   };
-//   //var updated_features = GAME_FEATURES.CAR_FEATURES;
-//   var carBody = Bodies.rectangle(treePosition.x, treePosition.y, 20, 20, render_features);
-//   // Offset between car's angle and the steering wheel
-//   carBody.rotationAngle = 0;
-//
-//   return carBody;
-// };
+  return checker;
+};
