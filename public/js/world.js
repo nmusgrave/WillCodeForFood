@@ -106,7 +106,7 @@ socket.on('tick', function(data) {
       examinedIDs.add(id);
       if (!Game.clients[id]) {
         // Car seen for the first time, so make a new body
-        var clientCar = carFactory(this, data[id].position, HAS_WHEELS, false);
+        var clientCar = carFactory(data[id].position, false);
         World.add(world, clientCar);
         carBody = clientCar;
         Game.clients[id] = {
