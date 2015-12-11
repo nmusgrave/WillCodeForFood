@@ -15,7 +15,6 @@ var drawStartingLine = function() {
   for (var i = 0 ; i < 5; ++i) {
     var checkerPosition = {x:430,y:169 + (48*i)};
     var checker = checkerFactory(checkerPosition);
-    console.log(checker);
     World.add(world, checker);
   }
 };
@@ -35,7 +34,6 @@ var drawTree = function() {
     World.add(world, tree);
   }
 };
-
 
 
 // Sets up canvas for the game (background color, size, resizing)
