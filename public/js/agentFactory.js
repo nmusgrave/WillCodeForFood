@@ -6,6 +6,7 @@
  */
 
 var caribou_colors = [ 'pink', 'red', 'blue', 'green', 'cyan', 'purple', 'yellow'];
+var myGroupId = Math.floor(Math.random() * 100000);
 
 /*
  *  Force the body's velocity to match
@@ -72,7 +73,7 @@ var carFactory = function(carCenter, isClient) {
   );
   // Offset between car's angle and the steering wheel
   carBody.rotationAngle = 0;
-  carBody.groupId = 1;
+  carBody.groupId = myGroupId;
 
   var imageSize = 2;
   var carImage = Bodies.rectangle(
@@ -90,7 +91,7 @@ var carFactory = function(carCenter, isClient) {
       }
     }, GAME_FEATURES.CAR_FEATURES)
   );
-  carImage.groupId = 1;
+  carImage.groupId = myGroupId;
 
   var carComposite = Composite.create();
   Composite.addBody(carComposite, carBody);
@@ -119,7 +120,7 @@ var iceFactory = function(icePosition) {
     isStatic:true,
   };
   var ice = Bodies.rectangle(icePosition.x, icePosition.y, 20, 40, render_features);
-  ice.groupId = 1;
+  ice.groupId = myGroupId;
   return ice;
 };
 
@@ -138,6 +139,6 @@ var checkerFactory = function(checkerPosition) {
   var checker = Bodies.rectangle(checkerPosition.x, checkerPosition.y, 20, 20, updated_features);
   // Offset between car's angle and the steering wheel
   checker.rotationAngle = 0;
-  checker.groupId = 1;
+  checker.groupId = myGroupId;
   return checker;
 };
