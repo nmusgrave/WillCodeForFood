@@ -3,7 +3,7 @@
  * ------------------------------------------------------------
  */
 
-var ACCELERATION = 0.001;
+var ACCELERATION = 0.0001;
 var ANGLE = 0.06;
 var ANGLE_MAX = Math.PI / 6;
 
@@ -32,9 +32,6 @@ socket.on('move', function(data) {
   }
 });
 
-var setVelocity = function(body, velocity) { body.positionPrev.x = body.position.x - velocity.x; body.positionPrev.y = body.position.y - velocity.y; body.velocity.x = velocity.x; body.velocity.y = velocity.y; body.speed = Vector.magnitude(body.velocity);    };
-
-
 /*
  * Steer this client's car using key input
  */
@@ -48,6 +45,7 @@ var steerLocal = function(car) {
     velocity: car.velocity
   };
 
+
   // CLIENT: Steering to apply
   var forceVector;
   // Apply user's action to the car's motion
@@ -60,7 +58,12 @@ var steerLocal = function(car) {
     }
   }
   if (keypresses[KEY_UP] || keypresses[KEY_DOWN]) {
-    var parallelVector = Vector.mult({x: -Math.sin(car.angle), y: Math.cos(car.angle)}, ACCELERATION);
+    var acceleration = ACCELERATION;
+    if (isInIce(car)) {
+      acceleration *= 10;
+    }
+    console.log(acceleration);
+    var parallelVector = Vector.mult({x: -Math.sin(car.angle), y: Math.cos(car.angle)}, acceleration);
     forceVector = Vector.add(car.force, parallelVector);
     // Invert vector if going backwards
     forceVector = keypresses[KEY_UP] ? forceVector : Vector.neg(forceVector);
@@ -82,8 +85,17 @@ var steerLocal = function(car) {
 
 var handleSteering = function(car) {
   steerLocal(car);
+};
 
-  // TODO Steer remote clients
-
-
+var isInIce = function(car) {
+  var iceDimensions = {x:202, y:125};
+  var icePos = {x: 525, y:300};
+  var left = icePos.x - (iceDimensions.x/2);
+  var right = icePos.x + (iceDimensions.x/2);
+  var up = icePos.y - (iceDimensions.y/2);
+  var down = icePos.y + (iceDimensions.y/2);
+  if (car.position.x >= left && car.position.y <= right && car.position.y >= up && car.position.y <= down) {
+    return true;
+  }
+  return false;
 };

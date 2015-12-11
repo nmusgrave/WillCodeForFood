@@ -57,7 +57,7 @@ var wheelFactory = function(car, xOffset, yOffset) {
  * @return {composite} if wheels are requested, contains the car body and wheels
  *    or {body} if none requested
  */
-var carFactory = function(game, carCenter, hasWheels, isClient) {
+var carFactory = function(carCenter, isClient) {
   var color;
   if (isClient) {
     color = 'santa';
@@ -77,68 +77,32 @@ var carFactory = function(game, carCenter, hasWheels, isClient) {
   // Offset between car's angle and the steering wheel
   carBody.rotationAngle = 0;
 
-  if (!hasWheels) {
-    return carBody;
-  }
-
-  // Make composite of body and wheels
-  var carComposite = Composite.create({ label: 'Car' });
-  Composite.addBody(carComposite, carBody);
-
-  // Add the wheels to the car
-  var wheelAOffset = GAME_FEATURES.CAR_DIMENSIONS.w * 0.5 + GAME_FEATURES.WHEEL_DIMENSIONS.w * 0.5,
-      wheelYOffset = GAME_FEATURES.CAR_DIMENSIONS.h * 0.3;
-  var wheels = [
-    // front wheels
-    wheelFactory(carBody, wheelAOffset, wheelYOffset),
-    wheelFactory(carBody, -wheelAOffset, wheelYOffset),
-    // rear wheels
-    wheelFactory(carBody, wheelAOffset, -wheelYOffset),
-    wheelFactory(carBody, -wheelAOffset, -wheelYOffset)
-  ];
-  var w;
-  for (w of wheels) {
-    Composite.addBody(carComposite, w.tire);
-  }
-  for (w of wheels) {
-    Composite.addConstraint(carComposite, w.axel);
-  }
-  return carComposite;
+  return carBody;
 };
 
-var treeFactory = function(game, treePosition) {
-
+var treeFactory = function(treePosition) {
   var render_features = {
     render: {
-      //fillStyle: 'blue',
       lineWidth: 0,
       sprite: { texture: '/images/gametree.png' }
     },
     isStatic:true,
   };
-  //var updated_features = GAME_FEATURES.CAR_FEATURES;
   var tree = Bodies.rectangle(treePosition.x, treePosition.y, 20, 40, render_features);
-  // Offset between car's angle and the steering wheel
   tree.rotationAngle = 0;
-
   return tree;
 };
 
+var iceFactory = function(icePosition) {
+  var render_features = {
+    render: {
+      lineWidth: 0,
+      sprite: { texture: '/images/pixel_ice1.png' }
+    },
+    isStatic:true,
+  };
+  var ice = Bodies.rectangle(icePosition.x, icePosition.y, 20, 40, render_features);
+  ice.groupId = 1;
+  return ice;
+};
 
-
-// var treeFactory = function(game, treePosition) {
-//
-//   var render_features = {
-//     render: {
-//       //fillStyle: 'blue',
-//       lineWidth: 0,
-//       sprite: { texture: '../images/caribou_sprite_.png' }
-//     }
-//   };
-//   //var updated_features = GAME_FEATURES.CAR_FEATURES;
-//   var carBody = Bodies.rectangle(treePosition.x, treePosition.y, 20, 20, render_features);
-//   // Offset between car's angle and the steering wheel
-//   carBody.rotationAngle = 0;
-//
-//   return carBody;
-// };
