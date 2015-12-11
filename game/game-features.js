@@ -1,5 +1,5 @@
 var gameFeatures = {
-  CAR_DIMENSIONS: {w: 20, h: 40},
+  CAR_DIMENSIONS: {w: 20, h: 20},
   CAR_FEATURES: {
     density: 0.006,
     friction: 0.004,

@@ -85,7 +85,7 @@ var register = function(car) {
  *  to ensure correct positioning)
  */
 socket.on('tick', function(data) {
-  // Get updates from server, and change the 
+  // Get updates from server, and change the
   // Update all the cars
   if (!GAME_FEATURES) {
     return;
@@ -102,7 +102,7 @@ socket.on('tick', function(data) {
     var carBody = Game.clients[id];
     if (carBody === undefined) {
       // Car seen for the first time, so make a new body
-      var clientCar = carFactory(this, data[id].position, HAS_WHEELS, 'maroon');
+      var clientCar = carFactory(this, data[id].position, HAS_WHEELS, false);
       World.add(world, clientCar);
       carBody = clientCar;
     } else {
@@ -145,7 +145,21 @@ Game.initBodies = function() {
 
   // Construct this client's car
   var carInitialPosition = {x: 430, y: 300};
-  var car = carFactory(this, carInitialPosition, HAS_WHEELS);
+  var car = carFactory(this, carInitialPosition, HAS_WHEELS, true);
+  for (var i = 0 ; i < 10; ++i) {
+    var x = Math.random() * 800;
+    var y = Math.random() * 600;
+
+    if ((x > 500 && x < 550) && (y > 250 && y < 350)) {
+         continue;
+    }
+
+    var treePosition = {x:x,y:y};
+
+    var tree = treeFactory(this, treePosition);
+    World.add(world, tree);
+  }
+
   World.add(world, car);
   this.clients[socket.id] = car;
 
@@ -254,4 +268,3 @@ Game.initCanvas = function(container) {
     };
   return render;
 };
-
