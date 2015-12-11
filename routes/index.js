@@ -15,7 +15,6 @@ router.post('/reset', function(req, res, next) {
   setTimeout(function() {
     game.reset();
   }, 100);
-  // res.send({good:true});
   res.redirect('/');
 });
 

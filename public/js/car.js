@@ -34,8 +34,12 @@ var setPosition = function(body, position) {
  * @return {object} tire and its axel
  */
 var wheelFactory = function(car, xOffset, yOffset) {
-  var tire = Bodies.rectangle(car.position.x + xOffset, car.position.y + yOffset,
-    GAME_FEATURES.WHEEL_DIMENSIONS.w, GAME_FEATURES.WHEEL_DIMENSIONS.h, GAME_FEATURES.WHEEL_FEATURES);
+  var tire = Bodies.rectangle(
+    car.position.x + xOffset,
+    car.position.y + yOffset,
+    GAME_FEATURES.WHEEL_DIMENSIONS.w,
+    GAME_FEATURES.WHEEL_DIMENSIONS.h,
+    GAME_FEATURES.WHEEL_FEATURES);
   var axel = Constraint.create({
       bodyA: car,
       pointA: { x: xOffset, y: yOffset },
@@ -52,7 +56,12 @@ var wheelFactory = function(car, xOffset, yOffset) {
 var carFactory = function(game, carCenter, hasWheels, color) {
   //var updated_features = $.extend({}, GAME_FEATURES.CAR_FEATURES, { render: { fillStyle: color, lineWidth: 0 } });
   var updated_features = GAME_FEATURES.CAR_FEATURES;
-  var carBody = Bodies.rectangle(carCenter.x, carCenter.y, GAME_FEATURES.CAR_DIMENSIONS.w, GAME_FEATURES.CAR_DIMENSIONS.h, updated_features);
+  var carBody = Bodies.rectangle(
+    carCenter.x,
+    carCenter.y,
+    GAME_FEATURES.CAR_DIMENSIONS.w,
+    GAME_FEATURES.CAR_DIMENSIONS.h,
+    updated_features);
   // Offset between car's angle and the steering wheel
   carBody.rotationAngle = 0;
 
