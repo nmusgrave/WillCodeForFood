@@ -58,11 +58,11 @@ var steerLocal = function(car) {
     }
   }
   if (keypresses[KEY_UP] || keypresses[KEY_DOWN]) {
+    console.log('GO');
     var acceleration = ACCELERATION;
     if (isInIce(car)) {
       acceleration *= 10;
     }
-    console.log(acceleration);
     var parallelVector = Vector.mult({x: -Math.sin(car.angle), y: Math.cos(car.angle)}, acceleration);
     forceVector = Vector.add(car.force, parallelVector);
     // Invert vector if going backwards
@@ -70,11 +70,11 @@ var steerLocal = function(car) {
     var point = {x: car.position.x, y: car.position.y};
     Body.applyForce(car, point, forceVector);
   }
+  console.log(forceVector, car.position);
 
   // Suppress spinning freely
   Body.rotate(car, car.rotationAngle /** car.speed*/);
   car.rotationAngle = 0;
-
 
   // Publish changes to server
   carData.applyForce = forceVector;

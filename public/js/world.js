@@ -82,6 +82,9 @@ var register = function(car) {
  * Draw cars of other clients, then this client's car (must draw this after,
  *  to ensure correct positioning)
  */
+var abc = 1;
+var fps = 10;
+var frame = 0;
 socket.on('tick', function(data) {
   // Get updates from server, and change the
   // Update all the cars
@@ -91,13 +94,25 @@ socket.on('tick', function(data) {
   var examinedIDs = new Set();
   examinedIDs.add(socket.id);
   for (var id in data) {
+    var carUpdate = data[id];
+    var carBody = Game.clients[id];
+    // Update the reindeer
+    if (frame === fps) {
+      var num = abc < 10 ? '0' + abc : abc;
+      //carBody.render.sprite.texture = '/images/reindeer/reindeer_' + num + '.gif';
+      carBody.render.sprite.xScale = 12;
+      carBody.render.sprite.yScale = 12;
+      abc = (abc + 1) % 64;
+      if (abc === 0) { abc = 1; }
+      frame = 0;
+    }
+    ++frame;
+
     if (id === socket.id) {
       // Don't update our own car
       continue;
     }
     examinedIDs.add(id);
-    var carUpdate = data[id];
-    var carBody = Game.clients[id];
     if (carBody === undefined) {
       // Car seen for the first time, so make a new body
       var clientCar = carFactory(data[id].position, false);
@@ -125,30 +140,13 @@ socket.on('tick', function(data) {
  * ------------------------------------------------------------
  */
 Game.initBodies = function() {
-  // var objs = [];
-  // for (var i = 0 ; i < 100; ++i) {
-  //   var x = Math.random() * 800;
-  //   var y = Math.random() * 600;
-  //   var w = Math.random() * 20;
-  //   var h = Math.random() * 20;
-  //   if ((x > 400 && x < 480) && (y > 200 && y < 280)) {
-  //     continue;
-  //   }
-  //   objs.push(Bodies.rectangle(x, y, w, h));
-  // }
-  // World.add(world, objs);
-  // this.ground = Bodies.rectangle(0, 0, 500, 10, { isStatic: true });
-
   world.gravity.y = 0;
-
   // Construct this client's car
   var carInitialPosition = {x: 430, y: 300};
   var car = carFactory(carInitialPosition, true);
-  car.groupId = 1;
-
+  //car.groupId = 1;
   World.add(world, car);
   this.clients[socket.id] = car;
-
   // Register this car with server, and all cars
   register(car);
 };
