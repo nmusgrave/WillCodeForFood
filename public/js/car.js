@@ -1,7 +1,7 @@
 /** -----------------------------------------------------------
  * Manufacture cars, and define car attributes
  * ------------------------------------------------------------
- * Caribou sprite from 
+ * Caribou sprite from
  *    http://www.guelnika.net/images/charset/noel/caribou.png
  */
 
@@ -101,3 +101,40 @@ var carFactory = function(game, carCenter, hasWheels, isClient) {
   }
   return carComposite;
 };
+
+var treeFactory = function(game, treePosition) {
+
+  var render_features = {
+    render: {
+      //fillStyle: 'blue',
+      lineWidth: 0,
+      sprite: { texture: '/images/gametree.png' }
+    },
+    isStatic:true,
+  };
+  //var updated_features = GAME_FEATURES.CAR_FEATURES;
+  var tree = Bodies.rectangle(treePosition.x, treePosition.y, 20, 40, render_features);
+  // Offset between car's angle and the steering wheel
+  tree.rotationAngle = 0;
+
+  return tree;
+};
+
+
+
+// var treeFactory = function(game, treePosition) {
+//
+//   var render_features = {
+//     render: {
+//       //fillStyle: 'blue',
+//       lineWidth: 0,
+//       sprite: { texture: '../images/caribou_sprite_.png' }
+//     }
+//   };
+//   //var updated_features = GAME_FEATURES.CAR_FEATURES;
+//   var carBody = Bodies.rectangle(treePosition.x, treePosition.y, 20, 20, render_features);
+//   // Offset between car's angle and the steering wheel
+//   carBody.rotationAngle = 0;
+//
+//   return carBody;
+// };
