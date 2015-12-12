@@ -35,7 +35,17 @@ var drawIcePatches = function(Game) {
 
 drawForest = function() {
   var treePositions = [
-    {x: 270, y: 280}
+    {x: -300, y: -230},
+    {x: -325, y: -303},
+    {x: -375, y: -315},
+    {x: -365, y: -205},
+    {x: -450, y: -165},
+    {x: -500, y: -340},
+    {x: -430, y: -230},
+    {x: -400, y: -365},
+    {x: -445, y: -430},
+    {x: -535, y: -410},
+    {x: -525, y: -525}
   ];
   for (var i in treePositions) {
     var tree = factory('tree', treePositions[i]);
