@@ -171,7 +171,7 @@ var factory = function(image, position) {
 
 var icePatchFactory = function(position) {
   var image_num = Math.floor(Math.random() * iceDimensions.length);
-  var ice = spriteFactory('/images/pixel_ice' + image_num + '.png', position, {x:20, y:20}, true);
+  var ice = spriteFactory('/images/pixel_ice' + image_num + '.png', position, {x:100, y:100}, true);
   ice.dimensions = iceDimensions[image_num];
   return ice;
 };
