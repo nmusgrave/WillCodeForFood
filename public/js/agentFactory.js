@@ -99,6 +99,12 @@ var setPosition = function(body, position) {
   Bounds.update(body.bounds, body.vertices, body.velocity);
 };
 
+var setAngularVelocity = function(body, velocity) {
+  body.anglePrev = body.angle - velocity;
+  body.angularVelocity = velocity;
+  body.angularSpeed = Math.abs(body.angularVelocity);
+};
+
 /*
  * -------------------------------
  * Agent factory

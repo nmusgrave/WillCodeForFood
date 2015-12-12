@@ -44,6 +44,7 @@ var steerLocal = function(car) {
   var forceVector;
   // Apply user's action to the car's motion
   if (keypresses[KEY_LEFT] || keypresses[KEY_RIGHT]) {
+    setAngularVelocity(car, 0);
     car.rotationAngle += keypresses[KEY_LEFT] ? -ANGLE : ANGLE;
     if (car.rotationAngle >= ANGLE_MAX) {
       car.rotationAngle = ANGLE_MAX;
