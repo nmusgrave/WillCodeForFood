@@ -174,3 +174,33 @@ var spriteFactory = function(path, position, dimensions, isStatic) {
   body.groupId = myGroupId;
   return body;
 };
+var nonspriteFactory = function(path, position, dimensions, isStatic) {
+  var render_features = {
+    render: {
+      lineWidth: 0,
+      sprite: { texture: path},
+    },
+    isStatic: true
+  };
+  var body = Bodies.rectangle(position.x, position.y, dimensions.x, dimensions.y, render_features);
+  body.groupId = myGroupId;
+  return body;
+};
+
+var snowFactory = function(position) {
+  var image_num = Math.floor(Math.random() * 2);
+  var snow = spriteFactory('/images/snow' + image_num + '.png', position, {x:20, y:20}, true);
+  return snow;
+};
+
+var snowmanFactory = function(position) {
+  var image_num = Math.floor(Math.random() * 3);
+  var snow = spriteFactory('/images/snowman' + image_num + '.png', position, {x:20, y:20}, true);
+  return snow;
+};
+
+var olafFactory = function(position) {
+  var image_num = Math.floor(Math.random() * 3);
+  var snow = nonspriteFactory('/images/olaf.png', position, {x:40, y:80}, true);
+  return snow;
+};
