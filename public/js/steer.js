@@ -39,7 +39,6 @@ var steerLocal = function(car) {
     position: car.position,
     velocity: car.velocity
   };
-
   // CLIENT: Steering to apply
   var forceVector;
   // Apply user's action to the car's motion

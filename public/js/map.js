@@ -10,6 +10,7 @@ Game.initMap = function() {
   drawStartingLine();
   //drawWallDecorations();
   drawTree();
+  drawForest();
 };
 
 var drawStartingLine = function() {
@@ -23,12 +24,23 @@ var drawStartingLine = function() {
 var drawIcePatches = function(Game) {
   var icePositions = [
     {x: 0, y: 300},
-    {x: -360, y: -340}
+    //{x: -360, y: -340}
   ];
   for (var i in icePositions) {
     var ice = icePatchFactory(icePositions[i]);
     World.add(world, ice);
     Game.iceBodies.add(ice);
+  }
+};
+
+drawForest = function() {
+  var treePositions = [
+    {x: 270, y: 280}
+  ];
+  for (var i in treePositions) {
+    var tree = factory('tree', treePositions[i]);
+    tree.groupId = 1;
+    World.add(world, tree);
   }
 };
 
