@@ -3,7 +3,7 @@
  * ------------------------------------------------------------
  */
 
-var ACCELERATION = 0.0005;
+var ACCELERATION = 0.0020;
 var ICE_SPEEDUP = 5;
 var ANGLE = 0.06;
 var ANGLE_MAX = Math.PI / 6;
@@ -39,11 +39,12 @@ var steerLocal = function(car) {
     position: car.position,
     velocity: car.velocity
   };
-
+  console.log(car.position);
   // CLIENT: Steering to apply
   var forceVector;
   // Apply user's action to the car's motion
   if (keypresses[KEY_LEFT] || keypresses[KEY_RIGHT]) {
+    setAngularVelocity(car, 0);
     car.rotationAngle += keypresses[KEY_LEFT] ? -ANGLE : ANGLE;
     if (car.rotationAngle >= ANGLE_MAX) {
       car.rotationAngle = ANGLE_MAX;

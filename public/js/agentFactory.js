@@ -27,11 +27,6 @@ var spriteAttributes = {
     path: '/images/spikes',
     dimensions: {x:70, y:20}
   },
-  icePatch: {
-    num: iceDimensions.length,
-    path: '/images/pixel_ice',
-    dimensions: {x:20, y:20}
-  },
   iceBorder: {
     num: 2,
     path: '/images/snow',
@@ -43,10 +38,40 @@ var spriteAttributes = {
     dimensions: {x:20, y:20}
   },
   candyCane: {
-    num: 1,
-    path: '/images/spikes',
-    dimensions: {x:20, y:70}
+    num: 4,
+    path: '/images/candyCane',
+    dimensions: {x:72, y:142}
   },
+  gift: {
+    num: 5,
+    path: '/images/gift',
+    dimensions: {x:64, y:64}
+  },
+  sleigh: {
+    num: 1,
+    path: '/images/sleigh',
+    dimensions: {x:64, y:64}
+  },
+  penguin: {
+    num: 1,
+    path: '/images/penguin',
+    dimensions: {x:32, y:32}
+  },
+  ornament: {
+    num: 1,
+    path: '/images/ornament',
+    dimensions: {x:32, y:32}
+  },
+  hat: {
+    num: 1,
+    path: '/images/ornament',
+    dimensions: {x:64, y:64}
+  },
+  snowflake: {
+    num: 1,
+    path: '/images/snowflake',
+    dimensions: {x:256, y:256}
+  }
 };
 
 /*
@@ -72,6 +97,12 @@ var setPosition = function(body, position) {
 
   Vertices.translate(body.vertices, delta);
   Bounds.update(body.bounds, body.vertices, body.velocity);
+};
+
+var setAngularVelocity = function(body, velocity) {
+  body.anglePrev = body.angle - velocity;
+  body.angularVelocity = velocity;
+  body.angularSpeed = Math.abs(body.angularVelocity);
 };
 
 /*
@@ -131,35 +162,24 @@ var carFactory = function(carCenter, isClient) {
  *  Decoration factories
  * --------------------
  */
-var treeFactory = function(position) {
-  var image_num = Math.floor(Math.random() * 4);
-  var tree = spriteFactory('/images/tree' + image_num + '.png', position, {x:20, y:20}, true);
-  return tree;
+
+var factory = function(image, position) {
+  var attr = spriteAttributes[image];
+  if (attr.num == 1) {
+    var image_num = '';
+  } else {
+    var image_num = Math.floor(Math.random() * attr.num);
+  }
+  var body = spriteFactory(attr.path + image_num + '.png', position, attr.dimensions, true);
+  return body;
 };
 
-var spikeFactory = function(position) {
-  var image_num = Math.floor(Math.random() * 3);
-  var spike = spriteFactory('/images/spikes' + image_num + '.png', position, {x:40, y:70}, true);
-  return spike;
-};
 
 var icePatchFactory = function(position) {
   var image_num = Math.floor(Math.random() * iceDimensions.length);
-  var ice = spriteFactory('/images/pixel_ice' + image_num + '.png', position, {x:20, y:20}, true);
+  var ice = spriteFactory('/images/pixel_ice' + image_num + '.png', position, {x:100, y:100}, true);
   ice.dimensions = iceDimensions[image_num];
   return ice;
-};
-
-var iceFactory = function(position) {
-  var image_num = Math.floor(Math.random() * 2);
-  var ice = spriteFactory('/images/snow' + image_num + '.png', position, {x:40, y:20}, true);
-  return ice;
-};
-
-var checkerFactory = function(position) {
-  var checker = spriteFactory('/images/checker.png', position, {x:20, y:20}, true);
-  checker.rotationAngle = 0;
-  return checker;
 };
 
 var spriteFactory = function(path, position, dimensions, isStatic) {
@@ -200,7 +220,13 @@ var snowmanFactory = function(position) {
 };
 
 var olafFactory = function(position) {
-  var image_num = Math.floor(Math.random() * 3);
+  //var image_num = Math.floor(Math.random() * 3);
   var snow = nonspriteFactory('/images/olaf.png', position, {x:40, y:80}, true);
+  return snow;
+};
+
+var spikeFactory = function(position) {
+  var image_num = Math.floor(Math.random() * 3);
+  var snow = nonspriteFactory('/images/spikes' + image_num + '.png', position, {x:40, y:80}, true);
   return snow;
 };
