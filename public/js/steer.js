@@ -13,12 +13,6 @@ var KEY_DOWN = 's';
 var KEY_LEFT = 'a';
 var KEY_RIGHT = 'd';
 
-// TODO invoke to calculate new position
-var updateClientPosition = function(carPosition, newPosition, new_vector) {
-  var nextPosition = Vector.add(newPosition, new_vector);
-  var nextVector = Vector.sub(nextPosition,carPosition);
-  return nextVector;
-};
 
 socket.on('move', function(data) {
   var carData = clients.get(data.id);
@@ -86,14 +80,14 @@ var handleSteering = function(car) {
 };
 
 var isInIce = function(car) {
-  var iceDimensions = {x:202, y:125};
-  var icePos = {x: 525, y:300};
-  var left = icePos.x - (iceDimensions.x/2);
-  var right = icePos.x + (iceDimensions.x/2);
-  var up = icePos.y - (iceDimensions.y/2);
-  var down = icePos.y + (iceDimensions.y/2);
-  if (car.position.x >= left && car.position.y <= right && car.position.y >= up && car.position.y <= down) {
-    return true;
+  for (var ice of Game.iceBodies) {
+    var left = ice.position.x - (ice.dimensions.x/2);
+    var right = ice.position.x + (ice.dimensions.x/2);
+    var up = ice.position.y - (ice.dimensions.y/2);
+    var down = ice.position.y + (ice.dimensions.y/2);
+    if (car.position.x >= left && car.position.x <= right && car.position.y >= up && car.position.y <= down) {
+      return true;
+   }
   }
   return false;
 };

@@ -1,15 +1,58 @@
 /** -----------------------------------------------------------
  * Manufacture cars, and define car attributes
  * ------------------------------------------------------------
- * Caribou sprite from
- *    http://www.guelnika.net/images/charset/noel/caribou.png
+ * Sprites from
+ *    http://opengameart.org/content/platformer-art-ice-world/
+ *    http://pixsearching.com/pictures/frost-texture-png/
+ *    http://iconsparadise.com/flat-icons/flat-christmas/
  */
 
 var caribou_colors = [ 'pink', 'red', 'blue', 'green', 'cyan', 'purple', 'yellow'];
 var myGroupId = Math.floor(Math.random() * 100000);
+var iceDimensions = [
+  {x:203, y:119},
+  {x:108, y:145},
+  {x:204, y:94},
+  {x:131, y:146}
+];
+
+var spriteAttributes = {
+  tree: {
+    num: 4,
+    path: '/images/tree',
+    dimensions: {x:20, y:20}
+  },
+  spikes: {
+    num: 3,
+    path: '/images/spikes',
+    dimensions: {x:70, y:20}
+  },
+  icePatch: {
+    num: iceDimensions.length,
+    path: '/images/pixel_ice',
+    dimensions: {x:20, y:20}
+  },
+  iceBorder: {
+    num: 2,
+    path: '/images/snow',
+    dimensions: {x:70, y:70}
+  },
+  checker: {
+    num: 1,
+    path: '/images/checker',
+    dimensions: {x:20, y:20}
+  },
+  candyCane: {
+    num: 1,
+    path: '/images/spikes',
+    dimensions: {x:20, y:70}
+  },
+};
 
 /*
- *  Force the body's velocity to match
+ *  -------------------------------
+ *  Position controls
+ * -------------------------------
  */
 var setVelocity = function(body, velocity) {
   body.positionPrev.x = body.position.x - velocity.x;
@@ -19,9 +62,6 @@ var setVelocity = function(body, velocity) {
   body.speed = Vector.magnitude(body.velocity);
 };
 
-/*
- *  Force the body's position to match
- */
 var setPosition = function(body, position) {
   var delta = Vector.sub(position, body.position);
 
@@ -34,25 +74,12 @@ var setPosition = function(body, position) {
   Bounds.update(body.bounds, body.vertices, body.velocity);
 };
 
-
 /*
- * @return {object} tire and its axel
- */
-var wheelFactory = function(car, xOffset, yOffset) {
-  var tire = Bodies.rectangle(car.position.x + xOffset, car.position.y + yOffset,
-    GAME_FEATURES.WHEEL_DIMENSIONS.w, GAME_FEATURES.WHEEL_DIMENSIONS.h, GAME_FEATURES.WHEEL_FEATURES);
-  var axel = Constraint.create({
-      bodyA: car,
-      pointA: { x: xOffset, y: yOffset },
-      bodyB: tire,
-      stiffness: 0.5
-  });
-  return {tire: tire, axel: axel};
-};
-
-/*
+ * -------------------------------
+ * Agent factory
  * @return {composite} if wheels are requested, contains the car body and wheels
  *    or {body} if none requested
+ * -------------------------------
  */
 var carFactory = function(carCenter, isClient) {
   var color;
@@ -99,44 +126,51 @@ var carFactory = function(carCenter, isClient) {
   return carComposite;
 };
 
-var treeFactory = function(treePosition) {
-  var render_features = {
-    render: {
-      lineWidth: 0,
-      sprite: { texture: '/images/tree2.png' },
-    },
-    isStatic:true
-  };
-  var tree = Bodies.rectangle(treePosition.x, treePosition.y, 20, 20, render_features);
+
+/* --------------------
+ *  Decoration factories
+ * --------------------
+ */
+var treeFactory = function(position) {
+  var image_num = Math.floor(Math.random() * 4);
+  var tree = spriteFactory('/images/tree' + image_num + '.png', position, {x:20, y:20}, true);
   return tree;
 };
 
-var iceFactory = function(icePosition) {
-  var render_features = {
-    render: {
-      lineWidth: 0,
-      sprite: { texture: '/images/pixel_ice1.png' }
-    },
-    isStatic:true,
-  };
-  var ice = Bodies.rectangle(icePosition.x, icePosition.y, 20, 40, render_features);
-  ice.groupId = myGroupId;
+var spikeFactory = function(position) {
+  var image_num = Math.floor(Math.random() * 3);
+  var spike = spriteFactory('/images/spikes' + image_num + '.png', position, {x:40, y:70}, true);
+  return spike;
+};
+
+var icePatchFactory = function(position) {
+  var image_num = Math.floor(Math.random() * iceDimensions.length);
+  var ice = spriteFactory('/images/pixel_ice' + image_num + '.png', position, {x:20, y:20}, true);
+  ice.dimensions = iceDimensions[image_num];
   return ice;
 };
 
-var checkerFactory = function(checkerPosition) {
+var iceFactory = function(position) {
+  var image_num = Math.floor(Math.random() * 2);
+  var ice = spriteFactory('/images/snow' + image_num + '.png', position, {x:40, y:20}, true);
+  return ice;
+};
+
+var checkerFactory = function(position) {
+  var checker = spriteFactory('/images/checker.png', position, {x:20, y:20}, true);
+  checker.rotationAngle = 0;
+  return checker;
+};
+
+var spriteFactory = function(path, position, dimensions, isStatic) {
   var render_features = {
     render: {
       lineWidth: 0,
-      sprite: { texture: '/images/checker.png' },
+      sprite: { texture: path},
     },
-    isStatic:true
+    isStatic: isStatic
   };
-  var updated_features = $.extend({}, render_features);
-  //var updated_features = GAME_FEATURES.CAR_FEATURES;
-  var checker = Bodies.rectangle(checkerPosition.x, checkerPosition.y, 20, 20, updated_features);
-  // Offset between car's angle and the steering wheel
-  checker.rotationAngle = 0;
-  checker.groupId = myGroupId;
-  return checker;
+  var body = Bodies.rectangle(position.x, position.y, dimensions.x, dimensions.y, render_features);
+  body.groupId = myGroupId;
+  return body;
 };

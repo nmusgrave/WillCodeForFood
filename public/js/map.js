@@ -6,8 +6,9 @@
 
 Game.initMap = function() {
   drawRoads();
-  drawIce();
+  drawIcePatches(this);
   drawStartingLine();
+  //drawWallDecorations();
   drawTree();
 };
 
@@ -19,9 +20,16 @@ var drawStartingLine = function() {
   }
 };
 
-var drawIce = function() {
-  var ice = iceFactory({x: 525, y: 300});
-  World.add(world, ice);
+var drawIcePatches = function(Game) {
+  var icePositions = [
+    {x: 0, y: 300},
+    {x: -360, y: -340}
+  ];
+  for (var i in icePositions) {
+    var ice = icePatchFactory(icePositions[i]);
+    World.add(world, ice);
+    Game.iceBodies.add(ice);
+  }
 };
 
 var drawTree = function() {
@@ -181,6 +189,80 @@ var drawTree = function() {
   // left out side road
   for (var i = 0 ; i < 6; ++i) {
     var treePosition = {x:-610 + (i*15),y:120 + (i * 50)};
+    var tree = treeFactory(treePosition);
+    World.add(world, tree);
+  }
+};
+
+
+var drawWallDecorations = function() {
+  // SECOND PART OF PATH - ICE
+  x = -480;
+  y = -210;
+  for (var i = 0; i < 7; ++i) {
+    var icePosition = {x: x, y: y};
+    x -= 14;
+    y -= 40;
+    var ice = iceFactory(icePosition);
+    ice.angle = Math.PI * 0.4;
+    World.add(world, ice);
+  }
+
+  // SPIKES
+  x = -253;
+  y = -220;
+  for (var i = 0; i < 3; ++i) {
+    var position = {x: x, y: y};
+    x -= 0;
+    y -= 70;
+    var ice = spikeFactory(position);
+    ice.angle = -Math.PI * 0.5;
+    console.log(ice);
+    World.add(world, ice);
+  }
+
+
+  // FIRST PART OF PATH - TREES
+  var cutoff = 33;
+  for (var i = 0 ; i < cutoff; ++i) {
+    var treePosition = {x:900 - (i*40),y:115};
+    var tree = treeFactory(treePosition);
+    World.add(world, tree);
+    var treePosition = {x:900 - (i*40),y:370};
+    var tree = treeFactory(treePosition);
+    World.add(world, tree);
+  }
+  // finish lower part of path
+  for (var i = cutoff; i < cutoff + 3; ++i) {
+    var treePosition = {x:900 - (i*40),y:370};
+    var tree = treeFactory(treePosition);
+    World.add(world, tree);
+  }
+  // Left side of Path
+  // draw from higher to lower to fix overlap
+  x = -500;
+  y = -200;
+  for (var i = 0; i < 8; ++i) {
+    var treePosition = {x: x, y: y};
+    x -= 14;
+    y += 40;
+    var tree = treeFactory(treePosition);
+    World.add(world, tree);
+  }
+  for (var i = 0; i < 7; ++i) {
+    var treePosition = {x: x, y: y};
+    x += 15;
+    y += 43;
+    var tree = treeFactory(treePosition);
+    World.add(world, tree);
+  }
+  // Right side of path
+  x = -225;
+  y = -200;
+  for (var i = 0; i < 8; ++i) {
+    var treePosition = {x: x, y: y};
+    x -= 20;
+    y += 40;
     var tree = treeFactory(treePosition);
     World.add(world, tree);
   }

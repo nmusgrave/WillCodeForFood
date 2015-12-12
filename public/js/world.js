@@ -27,6 +27,8 @@ var Game = {
 var keypresses = {};
 // clients: (socket.id) -> (car data), including this client's car
 Game.clients = {};
+// ice: set of (center, dimensions) tuples for every ice patch
+Game.iceBodies = new Set();
 // Definitions for game attributes
 var GAME_FEATURES;
 
