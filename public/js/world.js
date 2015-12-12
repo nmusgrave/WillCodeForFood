@@ -124,6 +124,7 @@ socket.on('tick', function(data) {
       handleAnimation(carBody, id);
     }
   }
+
   // Remove bodies from the world that are no longer used
   for (id in Game.clients) {
     if (!examinedIDs.has(id)) {
@@ -168,4 +169,3 @@ Game.initEvents = function() {
   renderOptions.hasBounds = true;
   renderOptions.wireframes = false;
 };
-

@@ -1,9 +1,10 @@
 var gameFeatures = {
   CAR_DIMENSIONS: {w: 20, h: 50},
   CAR_FEATURES: {
-    density: 0.006,
-    friction: 0.004,
-    frictionAir: 0.009
+    density: 0.9,
+    friction: 0.9,
+    frictionAir: 0.9,
+    mass: 30
   },
   WHEEL_DIMENSIONS: {w: 8, h: 10},
   WHEEL_FEATURES: {

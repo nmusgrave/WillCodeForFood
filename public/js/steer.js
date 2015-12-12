@@ -3,7 +3,7 @@
  * ------------------------------------------------------------
  */
 
-var ACCELERATION = 0.0020;
+var ACCELERATION = 0.002;
 var ICE_SPEEDUP = 5;
 var ANGLE = 0.06;
 var ANGLE_MAX = Math.PI / 6;
