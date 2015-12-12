@@ -1,6 +1,12 @@
 extends layout
 
 block content
-  form(action='/reset' method='POST' id='reset')
-    button(type='submit') reset cars
+  div#timing
+    p#serverlatency
+    p#rtt
+    p#avgrtt
+    form(action='/reset' method='POST' id='reset')
+      button(type='submit') reset cars
+    input
+    ul
   div#canvas-container

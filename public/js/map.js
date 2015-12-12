@@ -24,7 +24,8 @@ var drawStartingLine = function() {
 var drawIcePatches = function(Game) {
   var icePositions = [
     {x: 0, y: 300},
-    //{x: -360, y: -340}
+    {x: 1230, y: 120},
+    {x: 1150, y: 320}
   ];
   for (var i in icePositions) {
     var ice = icePatchFactory(icePositions[i]);

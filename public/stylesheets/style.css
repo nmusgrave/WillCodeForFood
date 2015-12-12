@@ -1,8 +1,29 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  width: 100%;
+  margin: 0;
+  float: left;
 }
 
 a {
   color: #00B7FF;
+}
+
+span {
+  padding-right: 10px;
+}
+
+div#canvas-container {
+  width: 66.66%;
+  float: left;
+}
+
+div#timing {
+  width: 33.33%;
+  float: right;
+  padding-left: 20px;
 }

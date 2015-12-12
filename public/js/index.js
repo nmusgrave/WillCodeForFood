@@ -9,12 +9,17 @@ var Matter = window.Matter;
  * Calculate latency of connecting to server, every
  * several ms.
  */
+var avgRTT = 0;
+var n = 100;
 socket.on('ping', function (data) {
-  console.log('GOT PINGED');
   var curTime = +new Date();
   var latencyServer = curTime - data.serverTime;
   var latencyRTT = curTime - data.startTime;
-  //console.log('ToServer: ' + latencyServer + ' RTT: ' + latencyRTT);
+  avgRTT -= avgRTT / n;
+  avgRTT += latencyRTT / n;
+  $('#serverlatency').text('to server: ' + latencyServer + ' ms');
+  $('#rtt').text('current RTT: ' + latencyRTT + ' ms');
+  $('#avgrtt').text('average RTT: ' + (avgRTT).toFixed(2) + ' ms');
 });
 
 var runPings = function(doPing) {
@@ -48,7 +53,6 @@ function drawBulletChat() {
       return;
     }
     var userInput = this.value;
-    console.log('input: ' + userInput);
     // Display this user's input
     $('#' + socket.id).text(userInput);
     // Notify server of input
@@ -80,7 +84,7 @@ socket.on('startGame', function(data) {
  *  Set up and run physics engine
  */
 $(document).ready(function() {
-  runPings(false);
+  runPings(true);
   drawBulletChat();
   socket.emit('startGame', {});
   $('#reset').submit(function() {
