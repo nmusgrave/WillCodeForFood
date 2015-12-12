@@ -135,7 +135,7 @@ socket.on('tick', function(data) {
     var frameNum = ((Math.floor(carAnglePercent * NUM_FRAME_ROTATIONS) + (NUM_FRAME_ROTATIONS/2)) % NUM_FRAME_ROTATIONS) + 1;
 
     // Adjust frame number based off of current walk position/frame number
-    Game.clients[id].frameNum += ANIMATION_SPEED;
+    Game.clients[id].frameNum += ANIMATION_SPEED * carChassis.speed/4;
     if (Math.floor(Game.clients[id].frameNum) >= TOTAL_FRAMES) {
       Game.clients[id].frameNum = Game.clients[id].frameNum % TOTAL_FRAMES;
     }
