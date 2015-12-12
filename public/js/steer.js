@@ -3,7 +3,7 @@
  * ------------------------------------------------------------
  */
 
-var ACCELERATION = 0.0010;
+var ACCELERATION = 0.0020;
 var ICE_SPEEDUP = 5;
 var ANGLE = 0.06;
 var ANGLE_MAX = Math.PI / 6;
@@ -39,6 +39,7 @@ var steerLocal = function(car) {
     position: car.position,
     velocity: car.velocity
   };
+
   // CLIENT: Steering to apply
   var forceVector;
   // Apply user's action to the car's motion
