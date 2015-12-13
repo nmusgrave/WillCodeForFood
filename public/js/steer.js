@@ -4,7 +4,7 @@
  */
 
 var ACCELERATION = 0.005;
-var ICE_SPEEDUP = 0.2;
+var ICE_SPEEDUP = 0.1;
 var ANGLE = 0.06;
 var ANGLE_MAX = Math.PI / 6;
 
@@ -39,10 +39,19 @@ var steerLocal = function(car) {
     position: car.position,
     velocity: car.velocity
   };
+  console.log(car.position);
 
-  // CLIENT: Steering to apply
-  var forceVector;
+  // Determine ice effects: turn off friction, and reduce acceleration
+  var acceleration = ACCELERATION;
+  if (isInIce(car)) {
+    acceleration *= ICE_SPEEDUP;
+    car.frictionAir = 0.000001;
+  } else {
+    car.frictionAir = GAME_FEATURES.CAR_FEATURES.frictionAir;
+  }
+
   // Apply user's action to the car's motion
+  var forceVector;
   if (keypresses[KEY_LEFT] || keypresses[KEY_RIGHT]) {
     setAngularVelocity(car, 0);
     car.rotationAngle += keypresses[KEY_LEFT] ? -ANGLE : ANGLE;
@@ -53,13 +62,6 @@ var steerLocal = function(car) {
     }
   }
   if (keypresses[KEY_UP] || keypresses[KEY_DOWN]) {
-    var acceleration = ACCELERATION;
-    if (isInIce(car)) {
-      acceleration *= ICE_SPEEDUP;
-      car.frictionAir = 0.0001;
-    } else {
-      car.frictionAir = GAME_FEATURES.CAR_FEATURES.frictionAir;
-    }
     var parallelVector = Vector.mult({x: -Math.sin(car.angle), y: Math.cos(car.angle)}, acceleration);
     forceVector = Vector.add(car.force, parallelVector);
     // Invert vector if going backwards
