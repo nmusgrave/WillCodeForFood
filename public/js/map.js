@@ -32,10 +32,9 @@ var drawIcePatches = function(Game) {
     {x: 1315, y: 320},
     {x: 950, y: -15},
     // top four ice road
-    {x: -100, y: -790},
-    {x: 100, y: -790},
-    {x: 300, y: -790},
-    {x: 500, y: -790},
+    {x: 100, y: -500},
+    {x: 300, y: -500},
+    {x: 500, y: -500},
   ];
   for (var i in icePositions) {
     var ice = icePatchFactory(icePositions[i]);
@@ -47,28 +46,38 @@ var drawIcePatches = function(Game) {
 var drawIcerock = function() {
   var icerockPosition;
   var icerock;
-  var i;
-  for (i = 0 ; i < 15; ++i) {
-    var x = Math.random() * (500 - 230) + 230;
-    var y = Math.random() * (-700 + 800) - 800;
-    icerockPosition = {x:x ,y:y};
-    icerock = factory('icerock', icerockPosition);
-    World.add(world, icerock);
-  }
+  icerockPosition = {x:425 ,y:-792};
+  icerock = factory('icerock', icerockPosition);
+  World.add(world, icerock);
+  icerockPosition = {x:307 ,y:-758};
+  icerock = factory('icerock', icerockPosition);
+  World.add(world, icerock);
+  icerockPosition = {x:396 ,y:-777};
+  icerock = factory('icerock', icerockPosition);
+  World.add(world, icerock);
+  icerockPosition = {x:459 ,y:-774};
+  icerock = factory('icerock', icerockPosition);
+  World.add(world, icerock);
+  icerockPosition = {x:328 ,y:-756};
+  icerock = factory('icerock', icerockPosition);
+  World.add(world, icerock);
 };
 
 var drawPenguin = function() {
   var penguinPosition;
   var penguin;
-  var i;
-  for (i = 0 ; i < 10; ++i) {
-    var x = Math.random() * (350 - 100) + 100;
-    var y = Math.random() * (-700 + 800) - 800;
-    penguinPosition = {x:-x ,y:y};
-    penguin = factory('penguin', penguinPosition);
-    World.add(world, penguin);
-  }
 
+  penguinPosition = {x:0 ,y:-780};
+  penguin = factory('penguin', penguinPosition);
+  World.add(world, penguin);
+
+  penguinPosition = {x:60 ,y:-810};
+  penguin = factory('penguin', penguinPosition);
+  World.add(world, penguin);
+
+  penguinPosition = {x:80 ,y:-780};
+  penguin = factory('penguin', penguinPosition);
+  World.add(world, penguin);
 };
 
 var drawForest = function() {
