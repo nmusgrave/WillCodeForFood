@@ -9,7 +9,7 @@ var Matter = window.Matter;
  * Calculate latency of connecting to server, every
  * several ms.
  */
-var avgRTT = 0;
+var avgRTT;
 var n = 100;
 socket.on('ping', function (data) {
   var curTime = +new Date();

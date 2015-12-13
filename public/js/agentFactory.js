@@ -120,19 +120,24 @@ var carFactory = function(carCenter, isClient) {
     color = caribou_colors[Math.floor(Math.random()*caribou_colors.length)];
   }
 
+  // Car body
   var carBody = Bodies.rectangle(
     carCenter.x,
     carCenter.y,
     GAME_FEATURES.CAR_DIMENSIONS.w,
     GAME_FEATURES.CAR_DIMENSIONS.h,
     $.extend({
-      label: 'body'
+      label: 'body',
+      render: {
+        visible: false
+      }
     }, GAME_FEATURES.CAR_FEATURES)
   );
   // Offset between car's angle and the steering wheel
   carBody.rotationAngle = 0;
   carBody.groupId = myGroupId;
 
+  // Car image
   var imageSize = 2;
   var carImage = Bodies.rectangle(
     carCenter.x,
@@ -151,8 +156,27 @@ var carFactory = function(carCenter, isClient) {
   );
   carImage.groupId = myGroupId;
 
+  // Car shadow
+  var carShadow = Bodies.rectangle(
+    carCenter.x,
+    carCenter.y,
+    1,
+    1,
+    $.extend({
+      label: 'shadow',
+      render: {
+        sprite: {
+          xScale: imageSize,
+          yScale: imageSize,
+        }
+      }
+    }, GAME_FEATURES.CAR_FEATURES)
+  );
+  carShadow.groupId = myGroupId;
+
   var carComposite = Composite.create();
   Composite.addBody(carComposite, carBody);
+  Composite.addBody(carComposite, carShadow);
   Composite.addBody(carComposite, carImage);
   return carComposite;
 };
