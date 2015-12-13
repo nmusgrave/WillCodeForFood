@@ -12,6 +12,16 @@ Game.initMap = function() {
   drawForest();
   drawIcerock();
   drawPenguin();
+
+  // Draw texture
+  for (var i = 0; i < 1000; ++i) {
+    var xdif = Math.random() * (30000) - 1500;
+    var ydif = Math.random() * (2000) - 1000;
+    var flakePosition = {x: xdif,y: ydif};
+    var flake = factory('snowflake', flakePosition);
+    flake.groupId = myGroupId;
+    //World.add(world, flake);
+  }
 };
 
 var drawStartingLine = function() {
