@@ -142,6 +142,30 @@ Game.initBodies = function() {
   // Construct this client's car
   var carInitialPosition = {x: 430, y: 300};
   var car = carFactory(carInitialPosition, true);
+
+  // Prefetch reindeer images
+  var prefetchBodies = [];
+  for (var i = 1; i <= 64; ++i) {
+    var frameNumString = i < 10 ? '0' + i : i;
+    var body = Bodies.rectangle(10 * i, 500, 3, 4, {
+      render: {
+        sprite: {
+          texture: '/images/reindeer/reindeer_' + frameNumString + '.gif'
+        }
+      }
+    });
+    prefetchBodies.push(body);
+  }
+  for (i = 0; i < prefetchBodies.length; ++i) {
+    World.add(world, prefetchBodies[i]);
+  }
+  setTimeout(function() {
+    for (var i = 0; i < prefetchBodies.length; ++i) {
+      World.remove(world, prefetchBodies[i]);
+    }
+  }, 1000);
+
+  // Add the car
   World.add(world, car);
   this.clients[socket.id] = {
     body: car,
