@@ -26,8 +26,12 @@ var drawStartingLine = function() {
 var drawIcePatches = function(Game) {
   var icePositions = [
     {x: 0, y: 300},
+    {x: 240, y: 200},
+    {x: -250, y: 200},
     {x: 1230, y: 120},
     {x: 1150, y: 320},
+    {x: 1315, y: 320},
+    {x: 950, y: -15},
     // top four ice road
     {x: 100, y: -500},
     {x: 300, y: -500},
@@ -79,6 +83,8 @@ drawPenguin = function() {
 
 drawForest = function() {
   var treePositions = [
+    {x: -480, y: -15},
+    {x: -390, y: -80},
     {x: -300, y: -230},
     {x: -325, y: -303},
     {x: -375, y: -315},
