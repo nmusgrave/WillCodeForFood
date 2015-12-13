@@ -251,7 +251,7 @@ var drawTree = function() {
     World.add(world, tree);
   }
   // left out side road
-  treePosition = {x:100,y:-280};
+  treePosition = {x:100,y:-290};
   tree = factory('olaf0',treePosition);
   World.add(world, tree);
   treePosition = {x:150,y:-220};

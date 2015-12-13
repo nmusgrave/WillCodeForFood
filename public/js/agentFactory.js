@@ -90,7 +90,7 @@ var spriteAttributes = {
   penguin: {
     num: 1,
     path: '/images/penguin',
-    dimensions: {x:10, y:10}
+    dimensions: {x:20, y:20}
   },
   ornament: {
     num: 1,
