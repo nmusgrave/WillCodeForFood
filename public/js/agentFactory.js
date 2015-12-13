@@ -62,11 +62,13 @@ var spriteAttributes = {
     path: '/images/snow',
     dimensions: {x:70, y:70}
   },
+  /*
   snowman: {
     num: 3,
     path: '/images/snowman',
     dimensions: {x:20, y:20}
   },
+  */
   checker: {
     num: 1,
     path: '/images/checker',
