@@ -15,9 +15,11 @@ socket.on('ping', function (data) {
   var curTime = +new Date();
   var latencyServer = curTime - data.serverTime;
   var latencyRTT = curTime - data.startTime;
-  avgRTT -= avgRTT / n;
-  avgRTT += latencyRTT / n;
-  $('#serverlatency').text('to server: ' + latencyServer + ' ms');
+  if (!avgRTT) {
+    avgRTT = 0;
+  }
+  avgRTT += ((latencyRTT) - avgRTT) / (n + 1);
+    $('#serverlatency').text('to server: ' + latencyServer + ' ms');
   $('#rtt').text('current RTT: ' + latencyRTT + ' ms');
   $('#avgrtt').text('average RTT: ' + (avgRTT).toFixed(2) + ' ms');
 });

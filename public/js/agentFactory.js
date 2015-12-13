@@ -10,13 +10,43 @@
 var caribou_colors = [ 'pink', 'red', 'blue', 'green', 'cyan', 'purple', 'yellow'];
 var myGroupId = Math.floor(Math.random() * 100000);
 var iceDimensions = [
-  {x:203, y:119},
-  {x:108, y:145},
-  {x:204, y:94},
-  {x:131, y:146}
+  {x:320, y:198},
+  {x:179, y:240},
+  {x:320, y:147},
+  {x:215, y:240}
 ];
 
 var spriteAttributes = {
+  olaf0: {
+    num: 1,
+    path: '/images/olaf0',
+    dimensions: {x:60, y:60}
+  },
+  olaf1: {
+    num: 1,
+    path: '/images/olaf1',
+    dimensions: {x:20, y:20}
+  },
+  olaf2: {
+    num: 1,
+    path: '/images/olaf2',
+    dimensions: {x:30, y:30}
+  },
+  olaf3: {
+    num: 1,
+    path: '/images/olaf3',
+    dimensions: {x:20, y:20}
+  },
+  olaf4: {
+    num: 1,
+    path: '/images/olaf4',
+    dimensions: {x:80, y:80}
+  },
+  icerock: {
+    num: 2,
+    path: '/images/icerock',
+    dimensions: {x:20, y:20}
+  },
   tree: {
     num: 4,
     path: '/images/tree',
@@ -32,6 +62,13 @@ var spriteAttributes = {
     path: '/images/snow',
     dimensions: {x:70, y:70}
   },
+  /*
+  snowman: {
+    num: 3,
+    path: '/images/snowman',
+    dimensions: {x:20, y:20}
+  },
+  */
   checker: {
     num: 1,
     path: '/images/checker',
@@ -55,7 +92,7 @@ var spriteAttributes = {
   penguin: {
     num: 1,
     path: '/images/penguin',
-    dimensions: {x:32, y:32}
+    dimensions: {x:20, y:20}
   },
   ornament: {
     num: 1,
@@ -194,14 +231,20 @@ var factory = function(image, position) {
   } else {
     var image_num = Math.floor(Math.random() * attr.num);
   }
-  var body = spriteFactory(attr.path + image_num + '.png', position, attr.dimensions, true);
+  if(image == 'penguin' || image == 'olaf0' || image == 'olaf1'
+      || image == 'olaf2' || image == 'olaf3' || image == 'olaf4'){
+    var body = nonspriteFactory(attr.path + image_num + '.png', position, attr.dimensions, false);
+  } else if(image == 'icerock' || image == 'olaf'){
+    var body = nonspriteFactory(attr.path + image_num + '.png', position, attr.dimensions, true);
+  }else{
+    var body = spriteFactory(attr.path + image_num + '.png', position, attr.dimensions, true);
+  }
   return body;
 };
 
-
 var icePatchFactory = function(position) {
   var image_num = Math.floor(Math.random() * iceDimensions.length);
-  var ice = spriteFactory('/images/pixel_ice' + image_num + '.png', position, {x:100, y:100}, true);
+  var ice = spriteFactory('/images/pixel_ice' + image_num + '.png', position, {x:320, y:240}, true);
   ice.dimensions = iceDimensions[image_num];
   return ice;
 };
@@ -218,39 +261,16 @@ var spriteFactory = function(path, position, dimensions, isStatic) {
   body.groupId = myGroupId;
   return body;
 };
+
 var nonspriteFactory = function(path, position, dimensions, isStatic) {
   var render_features = {
     render: {
       lineWidth: 0,
       sprite: { texture: path},
     },
-    isStatic: true
+    isStatic: isStatic
   };
   var body = Bodies.rectangle(position.x, position.y, dimensions.x, dimensions.y, render_features);
-  body.groupId = myGroupId;
+  body.groupId = 0;
   return body;
-};
-
-var snowFactory = function(position) {
-  var image_num = Math.floor(Math.random() * 2);
-  var snow = spriteFactory('/images/snow' + image_num + '.png', position, {x:20, y:20}, true);
-  return snow;
-};
-
-var snowmanFactory = function(position) {
-  var image_num = Math.floor(Math.random() * 3);
-  var snow = spriteFactory('/images/snowman' + image_num + '.png', position, {x:20, y:20}, true);
-  return snow;
-};
-
-var olafFactory = function(position) {
-  //var image_num = Math.floor(Math.random() * 3);
-  var snow = nonspriteFactory('/images/olaf.png', position, {x:40, y:80}, true);
-  return snow;
-};
-
-var spikeFactory = function(position) {
-  var image_num = Math.floor(Math.random() * 3);
-  var snow = nonspriteFactory('/images/spikes' + image_num + '.png', position, {x:40, y:80}, true);
-  return snow;
 };

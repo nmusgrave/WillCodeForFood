@@ -8,9 +8,10 @@ Game.initMap = function() {
   drawRoads();
   drawIcePatches(this);
   drawStartingLine();
-  //drawWallDecorations();
-  drawTree();
+  drawWallDecorations();
   drawForest();
+  drawIcerock();
+  drawPenguin();
 };
 
 var drawStartingLine = function() {
@@ -24,8 +25,16 @@ var drawStartingLine = function() {
 var drawIcePatches = function(Game) {
   var icePositions = [
     {x: 0, y: 300},
+    {x: 240, y: 200},
+    {x: -250, y: 200},
     {x: 1230, y: 120},
-    {x: 1150, y: 320}
+    {x: 1150, y: 320},
+    {x: 1315, y: 320},
+    {x: 950, y: -15},
+    // top four ice road
+    {x: 100, y: -500},
+    {x: 300, y: -500},
+    {x: 500, y: -500},
   ];
   for (var i in icePositions) {
     var ice = icePatchFactory(icePositions[i]);
@@ -34,8 +43,47 @@ var drawIcePatches = function(Game) {
   }
 };
 
-drawForest = function() {
+var drawIcerock = function() {
+  var icerockPosition;
+  var icerock;
+  icerockPosition = {x:425 ,y:-792};
+  icerock = factory('icerock', icerockPosition);
+  World.add(world, icerock);
+  icerockPosition = {x:307 ,y:-758};
+  icerock = factory('icerock', icerockPosition);
+  World.add(world, icerock);
+  icerockPosition = {x:396 ,y:-777};
+  icerock = factory('icerock', icerockPosition);
+  World.add(world, icerock);
+  icerockPosition = {x:459 ,y:-774};
+  icerock = factory('icerock', icerockPosition);
+  World.add(world, icerock);
+  icerockPosition = {x:328 ,y:-756};
+  icerock = factory('icerock', icerockPosition);
+  World.add(world, icerock);
+};
+
+var drawPenguin = function() {
+  var penguinPosition;
+  var penguin;
+
+  penguinPosition = {x:0 ,y:-780};
+  penguin = factory('penguin', penguinPosition);
+  World.add(world, penguin);
+
+  penguinPosition = {x:60 ,y:-810};
+  penguin = factory('penguin', penguinPosition);
+  World.add(world, penguin);
+
+  penguinPosition = {x:80 ,y:-780};
+  penguin = factory('penguin', penguinPosition);
+  World.add(world, penguin);
+};
+
+var drawForest = function() {
   var treePositions = [
+    {x: -480, y: -15},
+    {x: -390, y: -80},
     {x: -300, y: -230},
     {x: -325, y: -303},
     {x: -375, y: -315},
@@ -55,7 +103,7 @@ drawForest = function() {
   }
 };
 
-var drawTree = function() {
+var drawWallDecorations = function() {
   var treePosition;
   var tree;
   var i;
@@ -65,47 +113,10 @@ var drawTree = function() {
     tree = factory('tree', treePosition);
     World.add(world, tree);
   }
-  // right mid in side road
-  for (var i = 0 ; i < 5; ++i) {
-    var treePosition = {x:-10 + (i*80),y:-100};
-    var tree = snowmanFactory(treePosition);
-    World.add(world, tree);
-  }
-  // right mid in side road
-  for (var i = 0 ; i < 9; ++i) {
-    var treePosition = {x:390 + (i*80),y:-100 + (i*28)};
-    var tree = snowmanFactory(treePosition);
-    World.add(world, tree);
-  }
-  // right mid in side road
-  for (var i = 0 ; i < 2; ++i) {
-    var treePosition = {x:-10,y:-100 - (i*120)};
-    var tree = snowmanFactory(treePosition);
-    World.add(world, tree);
-  }
-  // right mid in side road
-  for (var i = 0 ; i < 4; ++i) {
-    var treePosition = {x:-10 - (i*26),y:-280 - (i*60)};
-    var tree = snowmanFactory(treePosition);
-    World.add(world, tree);
-  }
-  // right mid in side road
-  for (var i = 0 ; i < 3; ++i) {
-    var treePosition = {x:-84 + (i*26),y:-520 - (i*60)};
-    var tree = snowmanFactory(treePosition);
-    World.add(world, tree);
-  }
-
   // top in side road
-  for (var i = 0 ; i < 7; ++i) {
-    var treePosition = {x:-19 + (i*80),y:-630};
-    var tree = snowmanFactory(treePosition);
-    World.add(world, tree);
-  }
-  // top in side road
-  for (var i = 0 ; i < 23; ++i) {
-    var treePosition = {x:-340 + (i*40),y:-730};
-    var tree = snowFactory(treePosition);
+  for (i = 0 ; i < 23; ++i) {
+    treePosition = {x:-340 + (i*40),y:-730};
+    tree = factory('iceBorder', treePosition);
     World.add(world, tree);
   }
   // left in side road
@@ -138,52 +149,10 @@ var drawTree = function() {
     tree = factory('tree', treePosition);
     World.add(world, tree);
   }
-  // right out side road
-  for (var i = 0 ; i < 6; ++i) {
-    var treePosition = {x:1500 - (i*40),y:380 - (i * 70)};
-    var tree = snowmanFactory(treePosition);
-    World.add(world, tree);
-  }
-  // right out side road
-  for (var i = 0 ; i < 16; ++i) {
-    var treePosition = {x:1300 - (i*60),y:0 - (i * 20)};
-    var tree = snowmanFactory(treePosition);
-    World.add(world, tree);
-  }
-  // right out side road
-  for (var i = 0 ; i < 4; ++i) {
-    var treePosition = {x:310 - (i*60),y:-330 - (i * 40)};
-    var tree = snowmanFactory(treePosition);
-    World.add(world, tree);
-  }
-  // right out side road
-  for (var i = 0 ; i < 10; ++i) {
-    var treePosition = {x:140 + (i*60),y:-470};
-    var tree = snowmanFactory(treePosition);
-    World.add(world, tree);
-  }
-  // right out side road
-  for (var i = 0 ; i < 2; ++i) {
-    var treePosition = {x:710 + (i*40),y:-490 - (i*40)};
-    var tree = snowmanFactory(treePosition);
-    World.add(world, tree);
-  }
-  // right out side road
-  for (var i = 0 ; i < 2; ++i) {
-    var treePosition = {x:790,y:-550 - (i*120)};
-    var tree = snowmanFactory(treePosition);
-    World.add(world, tree);
-  }
-  // right out side road
-  for (var i = 0 ; i < 5; ++i) {
-    var treePosition = {x:770 - (i*40),y:-720 - (i*30)};
-    var tree = snowmanFactory(treePosition);
-    World.add(world, tree);
-  }
   // top out side road
-  for (var i = 0 ; i < 32; ++i) {
-    var treePosition = {x:570 - (i*30),y:-820};
-    var tree = spikeFactory(treePosition);
+  for (i = 0 ; i < 32; ++i) {
+    treePosition = {x:570 - (i*30),y:-820};
+    var tree = factory('spikes',treePosition);
     World.add(world, tree);
   }
   // left out side road
@@ -217,84 +186,22 @@ var drawTree = function() {
     World.add(world, tree);
   }
   // left out side road
-  var treePosition = {x:50,y:-200};
-  var tree = olafFactory(treePosition);
+  treePosition = {x:100,y:-290};
+  tree = factory('olaf0',treePosition);
+  World.add(world, tree);
+  treePosition = {x:150,y:-220};
+  tree = factory('olaf1',treePosition);
+  World.add(world, tree);
+  treePosition = {x:90,y:-200};
+  tree = factory('olaf2',treePosition);
+  World.add(world, tree);
+  treePosition = {x:40,y:-240};
+  tree = factory('olaf3',treePosition);
+  World.add(world, tree);
+  treePosition = {x:120,y:-140};
+  tree = factory('olaf4',treePosition);
   World.add(world, tree);
 };
-
-
-var drawWallDecorations = function() {
-  // SECOND PART OF PATH - ICE
-  x = -480;
-  y = -210;
-  for (var i = 0; i < 7; ++i) {
-    var icePosition = {x: x, y: y};
-    x -= 14;
-    y -= 40;
-    var ice = factory('iceBorder', icePosition);
-    ice.angle = Math.PI * 0.4;
-    World.add(world, ice);
-  }
-
-  // SPIKES
-  x = -253;
-  y = -220;
-  for (var i = 0; i < 3; ++i) {
-    var position = {x: x, y: y};
-    x -= 0;
-    y -= 70;
-    var ice = factory('spikes', position);
-    ice.angle = -Math.PI * 0.5;
-    World.add(world, ice);
-  }
-
-
-  // FIRST PART OF PATH - TREES
-  var cutoff = 33;
-  for (var i = 0 ; i < cutoff; ++i) {
-    var treePosition = {x:900 - (i*40),y:115};
-    tree = factory('tree', treePosition);
-    World.add(world, tree);
-    var treePosition = {x:900 - (i*40),y:370};
-    var tree = factory('tree', treePosition);
-    World.add(world, tree);
-  }
-  // finish lower part of path
-  for (var i = cutoff; i < cutoff + 3; ++i) {
-    var treePosition = {x:900 - (i*40),y:370};
-    var tree = factory('tree', treePosition);
-    World.add(world, tree);
-  }
-  // Left side of Path
-  // draw from higher to lower to fix overlap
-  x = -500;
-  y = -200;
-  for (var i = 0; i < 8; ++i) {
-    var treePosition = {x: x, y: y};
-    x -= 14;
-    y += 40;
-    var tree = factory('tree', treePosition);
-    World.add(world, tree);
-  }
-  for (var i = 0; i < 7; ++i) {
-    var treePosition = {x: x, y: y};
-    x += 15;
-    y += 43;
-    var tree = factory('tree', treePosition);
-    World.add(world, tree);
-  }
-  // Right side of path
-  x = -225;
-  y = -200;
-  for (var i = 0; i < 8; ++i) {
-    var treePosition = {x: x, y: y};
-    x -= 20;
-    y += 40;
-    var tree = factory('tree', treePosition);
-    World.add(world, tree);
-  }
-};
-
 
 // Sets up canvas for the game (background color, size, resizing)
 Game.initCanvas = function(container) {
