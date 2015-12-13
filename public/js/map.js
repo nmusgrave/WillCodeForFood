@@ -113,45 +113,6 @@ var drawWallDecorations = function() {
     tree = factory('tree', treePosition);
     World.add(world, tree);
   }
-  /*
-  // right mid in side road
-  for (i = 0 ; i < 5; ++i) {
-    treePosition = {x:-10 + (i*80),y:-100};
-    tree = factory('snowman', treePosition);
-    World.add(world, tree);
-  }
-  // right mid in side road
-  for (i = 0 ; i < 9; ++i) {
-    treePosition = {x:390 + (i*80),y:-100 + (i*28)};
-    tree = factory('snowman', treePosition);
-    World.add(world, tree);
-  }
-  // right mid in side road
-  for (i = 0 ; i < 2; ++i) {
-    treePosition = {x:-10,y:-100 - (i*120)};
-    tree = factory('snowman', treePosition);
-    World.add(world, tree);
-  }
-  // right mid in side road
-  for (i = 0 ; i < 4; ++i) {
-    treePosition = {x:-10 - (i*26),y:-280 - (i*60)};
-    tree = factory('snowman', treePosition);
-    World.add(world, tree);
-  }
-  // right mid in side road
-  for (i = 0 ; i < 3; ++i) {
-    treePosition = {x:-84 + (i*26),y:-520 - (i*60)};
-    tree = factory('snowman', treePosition);
-    World.add(world, tree);
-  }
-
-  // top in side road
-  for (i = 0 ; i < 7; ++i) {
-    treePosition = {x:-19 + (i*80),y:-630};
-    tree = factory('snowman', treePosition);
-    World.add(world, tree);
-  }
-  */
   // top in side road
   for (i = 0 ; i < 23; ++i) {
     treePosition = {x:-340 + (i*40),y:-730};
@@ -188,50 +149,6 @@ var drawWallDecorations = function() {
     tree = factory('tree', treePosition);
     World.add(world, tree);
   }
-  /*
-  // right out side road
-  for (i = 0 ; i < 6; ++i) {
-    treePosition = {x:1500 - (i*40),y:380 - (i * 70)};
-    tree = factory('snowman', treePosition);
-    World.add(world, tree);
-  }
-  // right out side road
-  for (i = 0 ; i < 16; ++i) {
-    treePosition = {x:1300 - (i*60),y:0 - (i * 20)};
-    tree = factory('snowman', treePosition);
-    World.add(world, tree);
-  }
-  // right out side road
-  for (i = 0 ; i < 4; ++i) {
-    treePosition = {x:310 - (i*60),y:-330 - (i * 40)};
-    tree = factory('snowman', treePosition);
-    World.add(world, tree);
-  }
-  // right out side road
-  for (i = 0 ; i < 10; ++i) {
-    treePosition = {x:140 + (i*60),y:-470};
-    tree = factory('snowman', treePosition);
-    World.add(world, tree);
-  }
-  // right out side road
-  for (i = 0 ; i < 2; ++i) {
-    treePosition = {x:710 + (i*40),y:-490 - (i*40)};
-    tree = factory('snowman', treePosition);
-    World.add(world, tree);
-  }
-  // right out side road
-  for (i = 0 ; i < 2; ++i) {
-    treePosition = {x:790,y:-550 - (i*120)};
-    tree = factory('snowman', treePosition);
-    World.add(world, tree);
-  }
-  // right out side road
-  for (i = 0 ; i < 5; ++i) {
-    treePosition = {x:770 - (i*40),y:-720 - (i*30)};
-    tree = factory('snowman', treePosition);
-    World.add(world, tree);
-  }
-  */
   // top out side road
   for (i = 0 ; i < 32; ++i) {
     treePosition = {x:570 - (i*30),y:-820};
