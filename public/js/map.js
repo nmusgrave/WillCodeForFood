@@ -29,10 +29,9 @@ var drawIcePatches = function(Game) {
     {x: 1230, y: 120},
     {x: 1150, y: 320},
     // top four ice road
-    {x: -100, y: -790},
-    {x: 100, y: -790},
-    {x: 300, y: -790},
-    {x: 500, y: -790},
+    {x: 100, y: -500},
+    {x: 300, y: -500},
+    {x: 500, y: -500},
   ];
   for (var i in icePositions) {
     var ice = icePatchFactory(icePositions[i]);
