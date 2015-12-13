@@ -39,7 +39,6 @@ var steerLocal = function(car) {
     position: car.position,
     velocity: car.velocity
   };
-  console.log(car.position);
 
   // Determine ice effects: turn off friction, and reduce acceleration
   var acceleration = ACCELERATION;
