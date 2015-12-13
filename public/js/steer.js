@@ -3,8 +3,8 @@
  * ------------------------------------------------------------
  */
 
-var ACCELERATION = 0.5;
-var ICE_SPEEDUP = 3;
+var ACCELERATION = 0.005;
+var ICE_SPEEDUP = 0.2;
 var ANGLE = 0.06;
 var ANGLE_MAX = Math.PI / 6;
 
@@ -56,6 +56,9 @@ var steerLocal = function(car) {
     var acceleration = ACCELERATION;
     if (isInIce(car)) {
       acceleration *= ICE_SPEEDUP;
+      car.frictionAir = 0.0001;
+    } else {
+      car.frictionAir = GAME_FEATURES.CAR_FEATURES.frictionAir;
     }
     var parallelVector = Vector.mult({x: -Math.sin(car.angle), y: Math.cos(car.angle)}, acceleration);
     forceVector = Vector.add(car.force, parallelVector);

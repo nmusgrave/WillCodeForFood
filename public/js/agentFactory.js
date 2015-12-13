@@ -10,10 +10,10 @@
 var caribou_colors = [ 'pink', 'red', 'blue', 'green', 'cyan', 'purple', 'yellow'];
 var myGroupId = Math.floor(Math.random() * 100000);
 var iceDimensions = [
-  {x:203, y:119},
-  {x:108, y:145},
-  {x:204, y:94},
-  {x:131, y:146}
+  {x:320, y:198},
+  {x:179, y:240},
+  {x:320, y:147},
+  {x:215, y:240}
 ];
 
 var spriteAttributes = {
@@ -218,7 +218,7 @@ var factory = function(image, position) {
 
 var icePatchFactory = function(position) {
   var image_num = Math.floor(Math.random() * iceDimensions.length);
-  var ice = spriteFactory('/images/pixel_ice' + image_num + '.png', position, {x:100, y:100}, true);
+  var ice = spriteFactory('/images/pixel_ice' + image_num + '.png', position, {x:320, y:240}, true);
   ice.dimensions = iceDimensions[image_num];
   return ice;
 };
