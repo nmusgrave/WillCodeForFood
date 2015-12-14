@@ -123,8 +123,6 @@ socket.on('tick', function(data) {
         setPosition(carChassis, carUpdate.position);
         setVelocity(carChassis, carUpdate.velocity);
         setAngle(carChassis, carUpdate.angle);
-        console.log(carUpdate.angle, carChassis.angle);
-        // console.log(carChassis.angle);
       }
       handleAnimation(carBody, id);
     }

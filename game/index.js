@@ -58,12 +58,10 @@ game.move = function(type, data) {
   if (type == 'car') {
     cars[data.id] = data;
   } else if (type == 'penguin') {
-    console.log('GOT PENGUINS');
     // TODO store penguins updates
     for (var i in data) {
       penguins[data[i].label] = data[i];
     }
-    console.log(penguins);
   }
 };
 
