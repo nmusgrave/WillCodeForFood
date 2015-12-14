@@ -36,7 +36,8 @@ game.start = function(i) {
         velocity: cars[id].velocity
       };
     }
-    io.emit('tick', carData);
+
+    io.emit('tick', {cars: carData, penguins: penguins});
   });
 
   var UPDATE_INTERVAL = 10; // ms
@@ -45,14 +46,24 @@ game.start = function(i) {
   }, UPDATE_INTERVAL);
 
   cars = {};
+  penguins = {};
   console.log('Starting game...');
-};
+}; 
 
 /**
  * Update a car position
  */
-game.move = function(car) {
-  cars[car.id] = car;
+game.move = function(type, data) {
+  if (type == 'car') {
+    cars[data.id] = data;
+  } else if (type == 'penguin') {
+    console.log('GOT PENGUINS');
+    // TODO store penguins updates
+    for (var i in data) {
+      penguins[data[i].label] = data[i];
+    }
+    console.log(penguins);
+  }
 };
 
 /*
@@ -60,12 +71,6 @@ game.move = function(car) {
  */
 game.register = function(car) {
   console.log('GOT CAR');
-  // Build a new car model
-  //var carBody = Bodies.rectangle(car.position.x, car.position.y, GAME_FEATURES.CAR_DIMENSIONS.w, GAME_FEATURES.CAR_DIMENSIONS.h, GAME_FEATURES.CAR_FEATURES);
-  //Body.setVelocity(carBody, car.velocity);
-  //Body.setAngle(carBody, car.angle);
-  // Keep track of the body and raw car data
-  //carBodies[car.id] = carBody;
   cars[car.id] = car;
 };
 

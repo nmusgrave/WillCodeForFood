@@ -30,7 +30,7 @@ socket.on('move', function(data) {
 /*
  * Steer this client's car using key input
  */
-var steerLocal = function(car) {
+var handleSteering = function(car) {
   // Store current state of car
   var carData = {
     angle: car.angle,
@@ -80,9 +80,6 @@ var steerLocal = function(car) {
   socket.emit('move', carData);
 };
 
-var handleSteering = function(car) {
-  steerLocal(car);
-};
 
 var isInIce = function(car) {
   for (var ice of Game.iceBodies) {

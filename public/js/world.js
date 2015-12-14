@@ -21,7 +21,8 @@ var render;
 // Game instance for this client
 var Game = {
   // clients: (socket.id) -> (car data), including this client's car
-  clients: {}
+  clients: {},
+  penguins: []
 };
 // Stores current keypress states
 var keypresses = {};
@@ -89,15 +90,16 @@ var register = function(car) {
  *  to ensure correct positioning)
  */
 socket.on('tick', function(data) {
-  // Get updates from server, and change the
-  // Update all the cars
+  // Get updates from server
   if (!GAME_FEATURES) {
     return;
   }
+  // Update all client cars
   var examinedIDs = new Set();
   examinedIDs.add(socket.id);
-  for (var id in data) {
-    var carUpdate = data[id];
+  var cars = data.cars;
+  for (var id in cars) {
+    var carUpdate = cars[id];
 
     // Don't update our own car position, velocity and angle.
     var carBody;
@@ -105,7 +107,7 @@ socket.on('tick', function(data) {
       examinedIDs.add(id);
       if (!Game.clients[id]) {
         // Car seen for the first time, so make a new body
-        var clientCar = carFactory(data[id].position, false);
+        var clientCar = carFactory(cars[id].position, false);
         World.add(world, clientCar);
         carBody = clientCar;
         Game.clients[id] = {
@@ -123,7 +125,6 @@ socket.on('tick', function(data) {
       handleAnimation(carBody, id);
     }
   }
-
   // Remove bodies from the world that are no longer used
   for (id in Game.clients) {
     if (!examinedIDs.has(id)) {
@@ -131,6 +132,10 @@ socket.on('tick', function(data) {
       delete Game.clients[id];
     }
   }
+
+  // TODO update penguin positions
+  var penguinUpdates = data.penguins;
+  console.log(penguinUpdates);
 });
 
 /* ------------------------------------------------------------
