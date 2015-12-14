@@ -21,7 +21,8 @@ var render;
 // Game instance for this client
 var Game = {
   // clients: (socket.id) -> (car data), including this client's car
-  clients: {}
+  clients: {},
+  penguins: []
 };
 // Stores current keypress states
 var keypresses = {};
@@ -89,15 +90,16 @@ var register = function(car) {
  *  to ensure correct positioning)
  */
 socket.on('tick', function(data) {
-  // Get updates from server, and change the
-  // Update all the cars
+  // Get updates from server
   if (!GAME_FEATURES) {
     return;
   }
+  // Update all client cars
   var examinedIDs = new Set();
   examinedIDs.add(socket.id);
-  for (var id in data) {
-    var carUpdate = data[id];
+  var cars = data.cars;
+  for (var id in cars) {
+    var carUpdate = cars[id];
 
     // Don't update our own car position, velocity and angle.
     var carBody;
@@ -123,7 +125,6 @@ socket.on('tick', function(data) {
       handleAnimation(carBody, id);
     }
   }
-
   // Remove bodies from the world that are no longer used
   for (id in Game.clients) {
     if (!examinedIDs.has(id)) {
@@ -133,7 +134,54 @@ socket.on('tick', function(data) {
       delete Game.clients[id];
     }
   }
+
+  // TODO update penguin positions
+  var penguinUpdates = data.penguins;
+  console.log(penguinUpdates);
 });
+
+/* ------------------------------------------------------------
+ * do when collision happen to penguin
+ * ------------------------------------------------------------
+ */
+ Events.on(engine, 'collisionEnd', function(data) {
+   var i, pair, length = data.pairs.length, allPenguins = {};
+
+   for(i = 0; i < length; i++) {
+     pair = event.pairs[i];
+     if(pair.bodyA.label === 'myCar'){
+       if(pair.bodyB.label === 'penguinA' ||
+          pair.bodyB.label === 'penguinB' ||
+          pair.bodyB.label === 'penguinC'){
+          var penguinData = {
+            angle: pair.bodyB.angle,
+            angularVelocity: pair.bodyB.angularVelocity,
+            force: pair.bodyB.force,
+            label: pair.bodyB.label,
+            position: pair.bodyB.position,
+            velocity: pair.bodyB.velocity
+          };
+          allPenguins[pair.bodyB.label] = penguinData;
+       }
+     }
+     if(pair.bodyB.label === 'myCar'){
+       if(pair.bodyA.label === 'penguinA' ||
+          pair.bodyA.label === 'penguinB' ||
+          pair.bodyA.label === 'penguinC'){
+            var penguinData = {
+              angle: pair.bodyA.angle,
+              angularVelocity: pair.bodyA.angularVelocity,
+              force: pair.bodyA.force,
+              label: pair.bodyA.label,
+              position: pair.bodyA.position,
+              velocity: pair.bodyA.velocity
+            };
+            allPenguins[pair.bodyA.label] = penguinData;
+       }
+     }
+   }
+    socket.emit('penguin', allPenguins);
+ }
 
 /* ------------------------------------------------------------
  * Initialize objects, map, canvas, and events within the game

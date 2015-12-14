@@ -11,7 +11,7 @@ var movements = function(socket) {
    */
   socket.on('move', function (car) {
     car.id = socket.id;
-    game.move(car);
+    game.move('car', car);
   });
 
   /*
@@ -26,6 +26,11 @@ var movements = function(socket) {
 
   socket.on('startGame', function(data) {
     socket.emit('startGame', gameFeatures);
+  });
+
+  socket.on('penguin', function(penguins) {
+    penguins.id = socket.id;
+    game.move('penguin', penguins);
   });
 };
 

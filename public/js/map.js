@@ -11,17 +11,7 @@ Game.initMap = function() {
   drawWallDecorations();
   drawForest();
   drawIcerock();
-  drawPenguin();
-
-  // Draw texture
-  for (var i = 0; i < 1000; ++i) {
-    var xdif = Math.random() * (30000) - 1500;
-    var ydif = Math.random() * (2000) - 1000;
-    var flakePosition = {x: xdif,y: ydif};
-    var flake = factory('snowflake', flakePosition);
-    flake.groupId = myGroupId;
-    //World.add(world, flake);
-  }
+  drawPenguin(this);
 };
 
 var drawStartingLine = function() {
@@ -73,21 +63,42 @@ var drawIcerock = function() {
   World.add(world, icerock);
 };
 
-var drawPenguin = function() {
+var drawPenguin = function(Game) {
   var penguinPosition;
   var penguin;
 
   penguinPosition = {x:0 ,y:-780};
   penguin = factory('penguin', penguinPosition);
+  penguin.label = 'penguinA';
   World.add(world, penguin);
+  Game.penguins.push(penguin);
 
   penguinPosition = {x:60 ,y:-810};
   penguin = factory('penguin', penguinPosition);
+  penguin.label = 'penguinB';
   World.add(world, penguin);
+  Game.penguins.push(penguin);
 
   penguinPosition = {x:80 ,y:-780};
   penguin = factory('penguin', penguinPosition);
+  penguin.label = 'penguinC';
   World.add(world, penguin);
+  Game.penguins.push(penguin);
+
+  // Notify server about all penguins initial position
+  var allPenguins = {};
+  for (var p in Game.penguins) {
+    var penguin = Game.penguins[p];
+    allPenguins[penguin.label] = {
+      angle: penguin.angle,
+      angularVelocity: penguin.angularVelocity,
+      force: penguin.force,
+      label: penguin.label,
+      position: penguin.position,
+      velocity: penguin.velocity
+    };
+  }
+  socket.emit('penguin', allPenguins);
 };
 
 var drawForest = function() {
