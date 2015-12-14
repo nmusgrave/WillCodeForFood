@@ -12,6 +12,7 @@ var Engine = Matter.Engine;
 var engine;
 var world;
 var cars;
+var penguins;
 var io;
 
 var game = {};
@@ -47,7 +48,7 @@ game.start = function(i) {
   cars = {};
   penguins = {};
   console.log('Starting game...');
-}; 
+};
 
 /**
  * Update a car position
@@ -73,6 +74,13 @@ game.register = function(car) {
 
 game.reset = function() {
   cars = {};
+};
+
+game.toJSON = function() {
+  return {
+    cars: cars,
+    penguins: penguins
+  };
 };
 
 /*

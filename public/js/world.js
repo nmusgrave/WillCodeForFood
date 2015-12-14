@@ -13,6 +13,7 @@ var Engine = Matter.Engine,
     Vector = Matter.Vector,
     Bounds = Matter.Bounds,
     Bodies = Matter.Bodies,
+    Axes = Matter.Axes,
     Vertices = Matter.Vertices;
 
 var engine;
@@ -107,7 +108,8 @@ socket.on('tick', function(data) {
       examinedIDs.add(id);
       if (!Game.clients[id]) {
         // Car seen for the first time, so make a new body
-        var clientCar = carFactory(cars[id].position, false);
+        console.log('New car: ' + id);
+        var clientCar = carFactory(carUpdate.position, false);
         addCarToWorld(clientCar);
         carBody = clientCar;
         Game.clients[id] = {
@@ -120,7 +122,7 @@ socket.on('tick', function(data) {
         var carChassis = carBody.bodies.filter(function(body) { return body.label === 'body'; })[0];
         setPosition(carChassis, carUpdate.position);
         setVelocity(carChassis, carUpdate.velocity);
-        carChassis.angle = carUpdate.angle;
+        setAngle(carChassis, carUpdate.angle);
       }
       handleAnimation(carBody, id);
     }
