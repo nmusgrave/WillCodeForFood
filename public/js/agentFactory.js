@@ -175,8 +175,7 @@ var carFactory = function(carCenter, isClient) {
   // Offset between car's angle and the steering wheel
   carBody.rotationAngle = 0;
   var randomGroupId = Math.floor(Math.random() * 100000);
-  // carBody.groupId = isClient ? myGroupId : randomGroupId;
-  carBody.groupId = myGroupId;
+  carBody.groupId = isClient ? myGroupId : randomGroupId;
 
   // Car image
   var imageSize = 2;
@@ -195,8 +194,7 @@ var carFactory = function(carCenter, isClient) {
       }
     }, GAME_FEATURES.CAR_FEATURES)
   );
-  // carImage.groupId = isClient ? myGroupId : randomGroupId;
-  carImage.groupId = myGroupId;
+  carImage.groupId = isClient ? myGroupId : randomGroupId;
 
   // Car shadow
   var carShadow = Bodies.rectangle(
@@ -214,8 +212,7 @@ var carFactory = function(carCenter, isClient) {
       }
     }, GAME_FEATURES.CAR_FEATURES)
   );
-  // carShadow.groupId = isClient ? myGroupId : randomGroupId;
-  carShadow.groupId = myGroupId;
+  carShadow.groupId = isClient ? myGroupId : randomGroupId;
 
   var carComposite = Composite.create();
   Composite.addBody(carComposite, carBody);

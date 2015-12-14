@@ -113,7 +113,7 @@ socket.on('tick', function(data) {
       if (!Game.clients[id]) {
         // Car seen for the first time, so make a new body
         console.log('New car: ' + id);
-        var clientCar = carFactory(carUpdate.position, true);
+        var clientCar = carFactory(carUpdate.position, false);
         addCarToWorld(clientCar);
         carBody = clientCar;
         Game.clients[id] = {
