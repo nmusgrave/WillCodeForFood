@@ -11,7 +11,7 @@ Game.initMap = function() {
   drawWallDecorations();
   drawForest();
   drawIcerock();
-  drawPenguin(this);
+  //drawPenguin(this);
 };
 
 var drawStartingLine = function() {
@@ -76,13 +76,11 @@ var drawPenguin = function(Game) {
   var penguin;
 
   
-  makePenguin({x:430 ,y:300}, 'penguinA');
-  //makePenguin({x:0 ,y:-780}, 'penguinA');
+  //makePenguin({x:430 ,y:300}, 'penguinA');
+  makePenguin({x:0 ,y:-780}, 'penguinA');
   makePenguin({x:60 ,y:-810}, 'penguinB');
   makePenguin({x:80 ,y:-780}, 'penguinC');
   
-  //makePenguin({x:430, y:300}, 'penguinA');
-
   // Notify server about all penguins initial position
   var allPenguins = {};
   for (var p in Game.penguins) {
