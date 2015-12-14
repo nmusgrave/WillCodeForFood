@@ -106,7 +106,7 @@ socket.on('tick', function(data) {
       if (!Game.clients[id]) {
         // Car seen for the first time, so make a new body
         var clientCar = carFactory(data[id].position, false);
-        World.add(world, clientCar);
+        addCarToWorld(clientCar);
         carBody = clientCar;
         Game.clients[id] = {
           body: carBody,
@@ -127,7 +127,9 @@ socket.on('tick', function(data) {
   // Remove bodies from the world that are no longer used
   for (id in Game.clients) {
     if (!examinedIDs.has(id)) {
-      World.remove(world, Game.clients[id].body);
+      for (var i in Game.clients[id].body.bodies) {
+        World.remove(world, Game.clients[id].body.bodies[i]);
+      }
       delete Game.clients[id];
     }
   }
@@ -166,7 +168,7 @@ Game.initBodies = function() {
   }, 1000);
 
   // Add the car
-  World.add(world, car);
+  addCarToWorld(car);
   this.clients[socket.id] = {
     body: car,
     frameNum: 0
@@ -174,6 +176,12 @@ Game.initBodies = function() {
   // Register this car with server, and all cars
   register(car);
 };
+
+function addCarToWorld(car) {
+  for (var i in car.bodies) {
+    World.add(world, car.bodies[i]);
+  }
+}
 
 Game.initEvents = function() {
   var car = this.clients[socket.id].body;

@@ -7,7 +7,6 @@
  *    http://iconsparadise.com/flat-icons/flat-christmas/
  */
 
-var caribou_colors = [ 'pink', 'red', 'blue', 'green', 'cyan', 'purple', 'yellow'];
 var myGroupId = Math.floor(Math.random() * 100000);
 var iceDimensions = [
   {x:320, y:198},
@@ -145,18 +144,10 @@ var setAngularVelocity = function(body, velocity) {
 /*
  * -------------------------------
  * Agent factory
- * @return {composite} if wheels are requested, contains the car body and wheels
- *    or {body} if none requested
+ * @return an array of bodies
  * -------------------------------
  */
 var carFactory = function(carCenter, isClient) {
-  var color;
-  if (isClient) {
-    color = 'santa';
-  } else {
-    color = caribou_colors[Math.floor(Math.random()*caribou_colors.length)];
-  }
-
   // Car body
   var carBody = Bodies.rectangle(
     carCenter.x,
@@ -172,7 +163,7 @@ var carFactory = function(carCenter, isClient) {
   );
   // Offset between car's angle and the steering wheel
   carBody.rotationAngle = 0;
-  carBody.groupId = myGroupId;
+  carBody.groupId = isClient ? myGroupId : 0;
 
   // Car image
   var imageSize = 2;
@@ -191,7 +182,7 @@ var carFactory = function(carCenter, isClient) {
       }
     }, GAME_FEATURES.CAR_FEATURES)
   );
-  carImage.groupId = myGroupId;
+  carImage.groupId = isClient ? myGroupId : 0;
 
   // Car shadow
   var carShadow = Bodies.rectangle(
@@ -209,13 +200,11 @@ var carFactory = function(carCenter, isClient) {
       }
     }, GAME_FEATURES.CAR_FEATURES)
   );
-  carShadow.groupId = myGroupId;
+  carShadow.groupId = isClient ? myGroupId : 0;
 
-  var carComposite = Composite.create();
-  Composite.addBody(carComposite, carBody);
-  Composite.addBody(carComposite, carShadow);
-  Composite.addBody(carComposite, carImage);
-  return carComposite;
+  return {
+    bodies: [carBody, carShadow, carImage]
+  };
 };
 
 
