@@ -172,7 +172,7 @@ var carFactory = function(carCenter, isClient) {
   );
   // Offset between car's angle and the steering wheel
   carBody.rotationAngle = 0;
-  carBody.groupId = myGroupId;
+  carBody.groupId = isClient ? myGroupId : 0;
 
   // Car image
   var imageSize = 2;
@@ -191,7 +191,7 @@ var carFactory = function(carCenter, isClient) {
       }
     }, GAME_FEATURES.CAR_FEATURES)
   );
-  carImage.groupId = myGroupId;
+  carImage.groupId = isClient ? myGroupId : 0;
 
   // Car shadow
   var carShadow = Bodies.rectangle(
@@ -209,7 +209,7 @@ var carFactory = function(carCenter, isClient) {
       }
     }, GAME_FEATURES.CAR_FEATURES)
   );
-  carShadow.groupId = myGroupId;
+  carShadow.groupId = isClient ? myGroupId : 0;
 
   var carComposite = Composite.create();
   Composite.addBody(carComposite, carBody);
