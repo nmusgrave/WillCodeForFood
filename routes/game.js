@@ -29,7 +29,6 @@ var movements = function(socket) {
   });
 
   socket.on('penguin', function(penguins) {
-    penguins.id = socket.id;
     game.move('penguin', penguins);
   });
 };

@@ -23,7 +23,7 @@ var render;
 var Game = {
   // clients: (socket.id) -> (car data), including this client's car
   clients: {},
-  penguins: []
+  penguins: {}
 };
 // Stores current keypress states
 var keypresses = {};
@@ -135,8 +135,18 @@ socket.on('tick', function(data) {
     }
   }
 
-  // TODO update penguin positions
+  // Update penguin positions
   var penguinUpdates = data.penguins;
+  var penguinBody;
+  // skip updating position if we're colliding with it
+  console.log(penguinUpdates);
+  for (var p in penguinUpdates) {
+    penguinBody = Game.penguins[penguinUpdates[p].label];
+    if (!penguinBody.colliding) {
+      setPosition(penguinBody, penguinUpdates[p].position);
+      setVelocity(penguinBody, penguinUpdates[p].velocity);
+    }
+  }
 });
 
 /* ------------------------------------------------------------
@@ -197,7 +207,7 @@ Game.initEvents = function() {
   Events.on(engine, 'beforeTick', function() {
     Bounds.translate(render.bounds, Vector.sub(carBody.position, oldcar));
     oldcar = {x : carBody.position.x , y : carBody.position.y};
-    handleSteering(carBody);
+    handleClientSteering(carBody);
     handleAnimation(car, socket.id);
     var carImage = car.bodies.filter(function(body) { return body.label === 'body'; })[0];
     setPosition(carImage, carBody.position);
@@ -211,38 +221,45 @@ Game.initEvents = function() {
     var i, pair, length = data.pairs.length, allPenguins = {};
     for(i = 0; i < length; i++) {
       pair = data.pairs[i];
-      if(pair.bodyA.label === 'myCar'){
-        if(pair.bodyB.label === 'penguinA' ||
-          pair.bodyB.label === 'penguinB' ||
-          pair.bodyB.label === 'penguinC'){
-          var penguinData = {
-            angle: pair.bodyB.angle,
-            angularVelocity: pair.bodyB.angularVelocity,
-            force: pair.bodyB.force,
-            label: pair.bodyB.label,
-            position: pair.bodyB.position,
-            velocity: pair.bodyB.velocity
-          };
-          allPenguins[pair.bodyB.label] = penguinData;
-        }
+      if(pair.bodyA.label === 'body' && pair.bodyB.label.indexOf('penguin') > -1) {
+        var penguinData = {
+          angle: pair.bodyB.angle,
+          angularVelocity: pair.bodyB.angularVelocity,
+          force: pair.bodyB.force,
+          label: pair.bodyB.label,
+          position: pair.bodyB.position,
+          velocity: pair.bodyB.velocity
+        };
+        allPenguins[pair.bodyB.label] = penguinData;
+        Game.penguins[pair.bodyB.label].colliding = false;
       }
-      if(pair.bodyB.label === 'myCar'){
-        if(pair.bodyA.label === 'penguinA' ||
-          pair.bodyA.label === 'penguinB' ||
-          pair.bodyA.label === 'penguinC'){
-            var penguinData = {
-              angle: pair.bodyA.angle,
-              angularVelocity: pair.bodyA.angularVelocity,
-              force: pair.bodyA.force,
-              label: pair.bodyA.label,
-              position: pair.bodyA.position,
-              velocity: pair.bodyA.velocity
-            };
-            allPenguins[pair.bodyA.label] = penguinData;
-        }
+      if(pair.bodyB.label === 'body' && pair.bodyA.label.indexOf('penguin') > -1) {
+        var penguinData = {
+          angle: pair.bodyA.angle,
+          angularVelocity: pair.bodyA.angularVelocity,
+          force: pair.bodyA.force,
+          label: pair.bodyA.label,
+          position: pair.bodyA.position,
+          velocity: pair.bodyA.velocity
+        };
+        allPenguins[pair.bodyA.label] = penguinData;
+        Game.penguins[pair.bodyA.label].colliding = false;
       }
     }
     socket.emit('penguin', allPenguins);
+  });
+  // Mark penguins you're colliding with
+  Events.on(engine, 'collisionStart', function(data) {
+    var i, pair, length = data.pairs.length;
+    for(i = 0; i < length; i++) {
+      pair = data.pairs[i];
+      if (pair.bodyA.label === 'body' && pair.bodyB.label.indexOf('penguin') > -1) {
+        Game.penguins[pair.bodyB.label].colliding = true;
+      }
+      if (pair.bodyB.label === 'body' && pair.bodyA.label.indexOf('penguin') > -1) {
+        Game.penguins[pair.bodyA.label].colliding = true;
+      }
+    }
   });
 
   var renderOptions = engine.render.options;

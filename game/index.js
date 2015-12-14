@@ -37,7 +37,6 @@ game.start = function(i) {
         velocity: cars[id].velocity
       };
     }
-
     io.emit('tick', {cars: carData, penguins: penguins});
   });
 
