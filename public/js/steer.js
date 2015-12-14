@@ -46,6 +46,7 @@ var handleClientSteering = function(car) {
   var acceleration = ACCELERATION;
   /*
   if (isInIce(car)) {
+    console.log('ICEY');
     acceleration *= ICE_SLOWDOWN;
     car.frictionAir = 0.000001;
   } else {
