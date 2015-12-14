@@ -215,7 +215,7 @@ Game.initEvents = function() {
    * do when collision happen to penguin
    * ------------------------------------------------------------
    */
-  Events.on(engine, 'collisionEnd', function(data) {
+  Events.on(engine, 'collisionActive', function(data) {
     var i, pair, length = data.pairs.length, allPenguins = {};
     for(i = 0; i < length; i++) {
       pair = data.pairs[i];
@@ -245,6 +245,18 @@ Game.initEvents = function() {
       }
     }
     socket.emit('penguin', allPenguins);
+  });
+  Events.on(engine, 'collisionActive', function(data) {
+    var i, pair, length = data.pairs.length, allPenguins = {};
+    for(i = 0; i < length; i++) {
+      pair = data.pairs[i];
+      if(pair.bodyA.label === 'body' && pair.bodyB.label.indexOf('penguin') > -1) {
+        Game.penguins[pair.bodyB.label].colliding = false;
+      }
+      if(pair.bodyB.label === 'body' && pair.bodyA.label.indexOf('penguin') > -1) {
+        Game.penguins[pair.bodyA.label].colliding = false;
+      }
+    }
   });
   // Mark penguins you're colliding with
   Events.on(engine, 'collisionStart', function(data) {
