@@ -219,8 +219,8 @@ var carFactory = function(carCenter, isClient) {
 
   var carComposite = Composite.create();
   Composite.addBody(carComposite, carBody);
-  // Composite.addBody(carComposite, carShadow);
-  // Composite.addBody(carComposite, carImage);
+  Composite.addBody(carComposite, carShadow);
+  Composite.addBody(carComposite, carImage);
   return carComposite;
 };
 
