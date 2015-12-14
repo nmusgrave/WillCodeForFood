@@ -136,9 +136,14 @@ socket.on('tick', function(data) {
   // Update penguin positions
   var penguinUpdates = data.penguins;
   var penguinBody;
+  // skip updating position if we're colliding with it
+  console.log(penguinUpdates);
   for (var p in penguinUpdates) {
-    setPosition(Game.penguins[penguinUpdates[p].label], penguinUpdates[p].position);
-    setVelocity(Game.penguins[penguinUpdates[p].label], penguinUpdates[p].velocity);
+    penguinBody = Game.penguins[penguinUpdates[p].label];
+    if (!penguinBody.colliding) {
+      setPosition(penguinBody, penguinUpdates[p].position);
+      setVelocity(penguinBody, penguinUpdates[p].velocity);
+    }
   }
 });
 
@@ -214,39 +219,45 @@ Game.initEvents = function() {
     var i, pair, length = data.pairs.length, allPenguins = {};
     for(i = 0; i < length; i++) {
       pair = data.pairs[i];
-      if(pair.bodyA.label === 'myCar'){
-        if(pair.bodyB.label === 'penguinA' ||
-          pair.bodyB.label === 'penguinB' ||
-          pair.bodyB.label === 'penguinC'){
-          var penguinData = {
-            angle: pair.bodyB.angle,
-            angularVelocity: pair.bodyB.angularVelocity,
-            force: pair.bodyB.force,
-            label: pair.bodyB.label,
-            position: pair.bodyB.position,
-            velocity: pair.bodyB.velocity
-          };
-          allPenguins[pair.bodyB.label] = penguinData;
-        }
+      if(pair.bodyA.label === 'body' && pair.bodyB.label.indexOf('penguin') > -1) {
+        var penguinData = {
+          angle: pair.bodyB.angle,
+          angularVelocity: pair.bodyB.angularVelocity,
+          force: pair.bodyB.force,
+          label: pair.bodyB.label,
+          position: pair.bodyB.position,
+          velocity: pair.bodyB.velocity
+        };
+        allPenguins[pair.bodyB.label] = penguinData;
+        Game.penguins[pair.bodyB.label].colliding = false;
       }
-      if(pair.bodyB.label === 'myCar'){
-        if(pair.bodyA.label === 'penguinA' ||
-          pair.bodyA.label === 'penguinB' ||
-          pair.bodyA.label === 'penguinC'){
-            var penguinData = {
-              angle: pair.bodyA.angle,
-              angularVelocity: pair.bodyA.angularVelocity,
-              force: pair.bodyA.force,
-              label: pair.bodyA.label,
-              position: pair.bodyA.position,
-              velocity: pair.bodyA.velocity
-            };
-            allPenguins[pair.bodyA.label] = penguinData;
-        }
+      if(pair.bodyB.label === 'body' && pair.bodyA.label.indexOf('penguin') > -1) {
+        var penguinData = {
+          angle: pair.bodyA.angle,
+          angularVelocity: pair.bodyA.angularVelocity,
+          force: pair.bodyA.force,
+          label: pair.bodyA.label,
+          position: pair.bodyA.position,
+          velocity: pair.bodyA.velocity
+        };
+        allPenguins[pair.bodyA.label] = penguinData;
+        Game.penguins[pair.bodyA.label].colliding = false;
       }
     }
-    console.log(allPenguins);
     socket.emit('penguin', allPenguins);
+  });
+  // Mark penguins you're colliding with
+  Events.on(engine, 'collisionStart', function(data) {
+    var i, pair, length = data.pairs.length;
+    for(i = 0; i < length; i++) {
+      pair = data.pairs[i];
+      if (pair.bodyA.label === 'body' && pair.bodyB.label.indexOf('penguin') > -1) {
+        Game.penguins[pair.bodyB.label].colliding = true;
+      }
+      if (pair.bodyB.label === 'body' && pair.bodyA.label.indexOf('penguin') > -1) {
+        Game.penguins[pair.bodyA.label].colliding = true;
+      }
+    }
   });
 
   var renderOptions = engine.render.options;
