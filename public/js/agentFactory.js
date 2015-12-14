@@ -168,7 +168,7 @@ var carFactory = function(carCenter, isClient) {
     $.extend({
       label: 'body',
       render: {
-        visible: true
+        visible: false
       }
     }, GAME_FEATURES.CAR_FEATURES)
   );
