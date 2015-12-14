@@ -42,13 +42,17 @@ var handleAnimation = function(car, id) {
   // Set car image
   var imageFrameNumString = frameNum < 10 ? '0' + frameNum : frameNum;
   var carImage = car.bodies.filter(function(body) { return body.label === 'image'; })[0];
-  carImage.render.sprite.texture = '/images/reindeer/reindeer_' + imageFrameNumString + '.gif';
-  setPosition(carImage, carChassis.position);
+  if (carImage) {
+    carImage.render.sprite.texture = '/images/reindeer/reindeer_' + imageFrameNumString + '.gif';
+    setPosition(carImage, carChassis.position);
+  }
 
   // Set car shadow
   var shadowFrameNum = rotationFrameNumber + NUM_FRAME_ROTATIONS * 3;
   var shadowFrameNumString = shadowFrameNum < 10 ? '0' + shadowFrameNum : shadowFrameNum;
   var carShadow = car.bodies.filter(function(body) { return body.label === 'shadow'; })[0];
-  carShadow.render.sprite.texture = '/images/reindeer/reindeer_' + shadowFrameNumString + '.gif';
-  setPosition(carShadow, carChassis.position);
+  if (carShadow) {
+    carShadow.render.sprite.texture = '/images/reindeer/reindeer_' + shadowFrameNumString + '.gif';
+    setPosition(carShadow, carChassis.position);
+  }
 };

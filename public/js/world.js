@@ -139,7 +139,6 @@ socket.on('tick', function(data) {
   var penguinUpdates = data.penguins;
   var penguinBody;
   // skip updating position if we're colliding with it
-  console.log(penguinUpdates);
   for (var p in penguinUpdates) {
     penguinBody = Game.penguins[penguinUpdates[p].label];
     if (!penguinBody.colliding) {

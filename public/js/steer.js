@@ -3,8 +3,8 @@
  * ------------------------------------------------------------
  */
 
-var ACCELERATION = 0.005;
-var ICE_SLOWDOWN = 0.1;
+var ACCELERATION = 0.002;
+var ICE_SLOWDOWN = 0.2;
 var ANGLE = 0.06;
 var ANGLE_MAX = Math.PI / 6;
 var ICE_SPIN_SPEEDUP = 0.003;
