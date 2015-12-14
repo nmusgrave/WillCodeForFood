@@ -157,7 +157,7 @@ var carFactory = function(carCenter, isClient) {
     $.extend({
       label: 'body',
       render: {
-        visible: false
+        visible: true
       }
     }, GAME_FEATURES.CAR_FEATURES)
   );
@@ -202,9 +202,11 @@ var carFactory = function(carCenter, isClient) {
   );
   carShadow.groupId = isClient ? myGroupId : 0;
 
-  return {
-    bodies: [carBody, carShadow, carImage]
-  };
+  var carComposite = Composite.create();
+  Composite.addBody(carComposite, carBody);
+  Composite.addBody(carComposite, carShadow);
+  Composite.addBody(carComposite, carImage);
+  return carComposite;
 };
 
 
