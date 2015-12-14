@@ -71,6 +71,14 @@ Game.run = function() {
     }
   });
   Engine.run(engine);
+
+  setInterval(function() {
+    var keys = Object.keys(Game.clients);
+    for (var i = 0; i < keys.length; ++i) {
+      setAngle(Game.clients[keys[i]].body.bodies[1], 0);
+      setAngle(Game.clients[keys[i]].body.bodies[2], 0);
+    }
+  }, 100);
 };
 
 /*
