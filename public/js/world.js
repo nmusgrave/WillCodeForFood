@@ -107,8 +107,8 @@ socket.on('tick', function(data) {
       examinedIDs.add(id);
       if (!Game.clients[id]) {
         // Car seen for the first time, so make a new body
-        var clientCar = carFactory(cars[id].position, false);
-        World.add(world, clientCar);
+        var clientCar = carFactory(data[id].position, false);
+        addCarToWorld(clientCar);
         carBody = clientCar;
         Game.clients[id] = {
           body: carBody,
@@ -128,7 +128,9 @@ socket.on('tick', function(data) {
   // Remove bodies from the world that are no longer used
   for (id in Game.clients) {
     if (!examinedIDs.has(id)) {
-      World.remove(world, Game.clients[id].body);
+      for (var i in Game.clients[id].body.bodies) {
+        World.remove(world, Game.clients[id].body.bodies[i]);
+      }
       delete Game.clients[id];
     }
   }
@@ -175,7 +177,7 @@ Game.initBodies = function() {
   }, 1000);
 
   // Add the car
-  World.add(world, car);
+  addCarToWorld(car);
   this.clients[socket.id] = {
     body: car,
     frameNum: 0
@@ -183,6 +185,12 @@ Game.initBodies = function() {
   // Register this car with server, and all cars
   register(car);
 };
+
+function addCarToWorld(car) {
+  for (var i in car.bodies) {
+    World.add(world, car.bodies[i]);
+  }
+}
 
 Game.initEvents = function() {
   var car = this.clients[socket.id].body;
@@ -197,6 +205,50 @@ Game.initEvents = function() {
     var carImage = car.bodies.filter(function(body) { return body.label === 'body'; })[0];
     setPosition(carImage, carBody.position);
   });
+
+  /* ------------------------------------------------------------
+   * do when collision happen to penguin
+   * ------------------------------------------------------------
+   */
+  Events.on(engine, 'collisionEnd', function(data) {
+    var i, pair, length = data.pairs.length, allPenguins = {};
+    for(i = 0; i < length; i++) {
+      pair = data.pairs[i];
+      if(pair.bodyA.label === 'myCar'){
+        if(pair.bodyB.label === 'penguinA' ||
+          pair.bodyB.label === 'penguinB' ||
+          pair.bodyB.label === 'penguinC'){
+          var penguinData = {
+            angle: pair.bodyB.angle,
+            angularVelocity: pair.bodyB.angularVelocity,
+            force: pair.bodyB.force,
+            label: pair.bodyB.label,
+            position: pair.bodyB.position,
+            velocity: pair.bodyB.velocity
+          };
+          allPenguins[pair.bodyB.label] = penguinData;
+        }
+      }
+      if(pair.bodyB.label === 'myCar'){
+        if(pair.bodyA.label === 'penguinA' ||
+          pair.bodyA.label === 'penguinB' ||
+          pair.bodyA.label === 'penguinC'){
+            var penguinData = {
+              angle: pair.bodyA.angle,
+              angularVelocity: pair.bodyA.angularVelocity,
+              force: pair.bodyA.force,
+              label: pair.bodyA.label,
+              position: pair.bodyA.position,
+              velocity: pair.bodyA.velocity
+            };
+            allPenguins[pair.bodyA.label] = penguinData;
+        }
+      }
+    }
+    console.log(allPenguins);
+    socket.emit('penguin', allPenguins);
+  });
+
   var renderOptions = engine.render.options;
   renderOptions.hasBounds = true;
   renderOptions.wireframes = false;
