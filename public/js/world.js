@@ -107,7 +107,7 @@ socket.on('tick', function(data) {
       examinedIDs.add(id);
       if (!Game.clients[id]) {
         // Car seen for the first time, so make a new body
-        var clientCar = carFactory(data[id].position, false);
+        var clientCar = carFactory(cars[id].position, false);
         addCarToWorld(clientCar);
         carBody = clientCar;
         Game.clients[id] = {
@@ -128,9 +128,7 @@ socket.on('tick', function(data) {
   // Remove bodies from the world that are no longer used
   for (id in Game.clients) {
     if (!examinedIDs.has(id)) {
-      for (var i in Game.clients[id].body.bodies) {
-        World.remove(world, Game.clients[id].body.bodies[i]);
-      }
+      removeCarFromWorld(Game.clients[id].body);
       delete Game.clients[id];
     }
   }
@@ -187,9 +185,11 @@ Game.initBodies = function() {
 };
 
 function addCarToWorld(car) {
-  for (var i in car.bodies) {
-    World.add(world, car.bodies[i]);
-  }
+  World.add(world, car);
+}
+
+function removeCarFromWorld(car) {
+  World.remove(world, car);
 }
 
 Game.initEvents = function() {
