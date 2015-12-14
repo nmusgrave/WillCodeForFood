@@ -127,6 +127,10 @@ socket.on('tick', function(data) {
         setPosition(carChassis, carUpdate.position);
         setVelocity(carChassis, carUpdate.velocity);
         setAngle(carChassis, carUpdate.angle);
+        var sprite = carBody.bodies.filter(function(body) { return body.label === 'image'; })[0];
+        setAngle(sprite, 0);
+        var shadow = carBody.bodies.filter(function(body) { return body.label === 'shadow'; })[0];
+        setAngle(shadow, 0);
       }
       handleAnimation(carBody, id);
     }
