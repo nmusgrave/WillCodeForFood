@@ -64,15 +64,13 @@ function drawBulletChat() {
 
 // Display updates from other users
 socket.on('update', function (data) {
-  console.log('update: ' + data.update.text);
   if (!socketIDs.has(data.id)) {
     // Save this new ID and create an html list item
     socketIDs.add(data.id);
     $('ul').append($('<li>').attr('id', data.id).text(''));
   }
   // Update the text of the list item
-  console.log(data.color);
-  $('#' + data.id).css('color', data.color).text(data.update.text);
+  $('#' + data.id).css('color', 'blue').text(data.update.text);
 });
 
 // Create and start the game
