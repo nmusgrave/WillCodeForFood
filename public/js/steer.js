@@ -4,9 +4,11 @@
  */
 
 var ACCELERATION = 0.005;
-var ICE_SPEEDUP = 0.1;
+var ICE_SLOWDOWN = 0.1;
 var ANGLE = 0.06;
 var ANGLE_MAX = Math.PI / 6;
+var ICE_SPIN_SPEEDUP = 0.003;
+var MAX_ICE_SPIN_SPEEDUP = ICE_SPIN_SPEEDUP * 100;
 
 var KEY_UP = 'w';
 var KEY_DOWN = 's';
@@ -43,7 +45,7 @@ var steerLocal = function(car) {
   // Determine ice effects: turn off friction, and reduce acceleration
   var acceleration = ACCELERATION;
   if (isInIce(car)) {
-    acceleration *= ICE_SPEEDUP;
+    acceleration *= ICE_SLOWDOWN;
     car.frictionAir = 0.000001;
   } else {
     car.frictionAir = GAME_FEATURES.CAR_FEATURES.frictionAir;
@@ -52,7 +54,13 @@ var steerLocal = function(car) {
   // Apply user's action to the car's motion
   var forceVector;
   if (keypresses[KEY_LEFT] || keypresses[KEY_RIGHT]) {
-    setAngularVelocity(car, 0);
+    if (isInIce(car)) {
+      var newAv = car.angularVelocity + (keypresses[KEY_LEFT] ? -ICE_SPIN_SPEEDUP : ICE_SPIN_SPEEDUP);
+      newAv = Math.max(-MAX_ICE_SPIN_SPEEDUP, Math.min(MAX_ICE_SPIN_SPEEDUP, newAv));
+      setAngularVelocity(car, newAv);
+    } else {
+      setAngularVelocity(car, 0);
+    }
     car.rotationAngle += keypresses[KEY_LEFT] ? -ANGLE : ANGLE;
     if (car.rotationAngle >= ANGLE_MAX) {
       car.rotationAngle = ANGLE_MAX;
@@ -92,7 +100,7 @@ var isInIce = function(car) {
     var down = ice.position.y + (ice.dimensions.y/2);
     if (car.position.x >= left && car.position.x <= right && car.position.y >= up && car.position.y <= down) {
       return true;
-   }
+    }
   }
   return false;
 };
