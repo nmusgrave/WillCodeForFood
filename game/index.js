@@ -36,7 +36,6 @@ game.start = function(i) {
         velocity: cars[id].velocity
       };
     }
-
     io.emit('tick', {cars: carData, penguins: penguins});
   });
 
@@ -62,7 +61,6 @@ game.move = function(type, data) {
     for (var i in data) {
       penguins[data[i].label] = data[i];
     }
-    console.log(penguins);
   }
 };
 

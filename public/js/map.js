@@ -63,27 +63,20 @@ var drawIcerock = function() {
   World.add(world, icerock);
 };
 
+var makePenguin = function(position, label) {
+  penguin = factory('penguin', position);
+  penguin.label = label;
+  World.add(world, penguin);
+  Game.penguins[label] = penguin;
+};
+
 var drawPenguin = function(Game) {
   var penguinPosition;
   var penguin;
 
-  penguinPosition = {x:0 ,y:-780};
-  penguin = factory('penguin', penguinPosition);
-  penguin.label = 'penguinA';
-  World.add(world, penguin);
-  Game.penguins.push(penguin);
-
-  penguinPosition = {x:60 ,y:-810};
-  penguin = factory('penguin', penguinPosition);
-  penguin.label = 'penguinB';
-  World.add(world, penguin);
-  Game.penguins.push(penguin);
-
-  penguinPosition = {x:80 ,y:-780};
-  penguin = factory('penguin', penguinPosition);
-  penguin.label = 'penguinC';
-  World.add(world, penguin);
-  Game.penguins.push(penguin);
+  makePenguin({x:0 ,y:-780}, 'penguinA');
+  makePenguin({x:60 ,y:-810}, 'penguinB');
+  makePenguin({x:80 ,y:-780}, 'penguinC');
 
   // Notify server about all penguins initial position
   var allPenguins = {};

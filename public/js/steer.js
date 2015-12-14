@@ -32,7 +32,7 @@ socket.on('move', function(data) {
 /*
  * Steer this client's car using key input
  */
-var handleSteering = function(car) {
+var handleClientSteering = function(car) {
   // Store current state of car
   var carData = {
     angle: car.angle,

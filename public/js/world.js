@@ -22,7 +22,7 @@ var render;
 var Game = {
   // clients: (socket.id) -> (car data), including this client's car
   clients: {},
-  penguins: []
+  penguins: {}
 };
 // Stores current keypress states
 var keypresses = {};
@@ -133,9 +133,13 @@ socket.on('tick', function(data) {
     }
   }
 
-  // TODO update penguin positions
+  // Update penguin positions
   var penguinUpdates = data.penguins;
-  console.log(penguinUpdates);
+  var penguinBody;
+  for (var p in penguinUpdates) {
+    setPosition(Game.penguins[penguinUpdates[p].label], penguinUpdates[p].position);
+    setVelocity(Game.penguins[penguinUpdates[p].label], penguinUpdates[p].velocity);
+  }
 });
 
 /* ------------------------------------------------------------
@@ -188,7 +192,7 @@ Game.initEvents = function() {
   Events.on(engine, 'beforeTick', function() {
     Bounds.translate(render.bounds, Vector.sub(carBody.position, oldcar));
     oldcar = {x : carBody.position.x , y : carBody.position.y};
-    handleSteering(carBody);
+    handleClientSteering(carBody);
     handleAnimation(car, socket.id);
     var carImage = car.bodies.filter(function(body) { return body.label === 'body'; })[0];
     setPosition(carImage, carBody.position);
