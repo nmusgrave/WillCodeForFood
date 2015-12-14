@@ -141,6 +141,17 @@ var setAngularVelocity = function(body, velocity) {
   body.angularSpeed = Math.abs(body.angularVelocity);
 };
 
+var setAngle = function(body, angle) {
+  var delta = angle - body.angle;
+
+  body.angle = angle;
+  body.anglePrev += delta;
+
+  Vertices.rotate(body.vertices, delta, body.position);
+  Axes.rotate(body.axes, delta);
+  Bounds.update(body.bounds, body.vertices, body.velocity);
+};
+
 /*
  * -------------------------------
  * Agent factory

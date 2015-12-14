@@ -11,6 +11,10 @@ router.get('/', function(req, res, next) {
   res.render('index');
 });
 
+router.get('/api', function(req, res, next) {
+  res.send(game.toJSON());
+});
+
 router.post('/reset', function(req, res, next) {
   setTimeout(function() {
     game.reset();
