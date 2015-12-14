@@ -57,6 +57,7 @@ var handleClientSteering = function(car) {
     if (isInIce(car)) {
       var newAv = car.angularVelocity + (keypresses[KEY_LEFT] ? -ICE_SPIN_SPEEDUP : ICE_SPIN_SPEEDUP);
       newAv = Math.max(-MAX_ICE_SPIN_SPEEDUP, Math.min(MAX_ICE_SPIN_SPEEDUP, newAv));
+      newAv = 0;
       setAngularVelocity(car, newAv);
     } else {
       setAngularVelocity(car, 0);
