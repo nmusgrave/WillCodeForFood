@@ -6,7 +6,7 @@
 
 Game.initMap = function() {
   drawRoads();
-  //drawIcePatches(this);
+  drawIcePatches(this);
   drawStartingLine();
   drawWallDecorations();
   drawForest();

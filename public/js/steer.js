@@ -45,7 +45,7 @@ var handleClientSteering = function(car) {
   // Determine ice effects: turn off friction, and reduce acceleration
   var acceleration = ACCELERATION;
   if (isInIce(car)) {
-    acceleration *= ICE_SLOWDOWN;
+    //acceleration *= ICE_SLOWDOWN;
     car.frictionAir = 0.000001;
   } else {
     car.frictionAir = GAME_FEATURES.CAR_FEATURES.frictionAir;
